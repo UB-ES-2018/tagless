@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  - var comments = [];
+  - comments.push({  name: "Esto es un comentario que esta fijo de momento", });
+  h1= title
+  p Welcome to #{title}
+  include login
+  h3 Comments
+  include comment_submit
+  each comment in comments
+    li #{comment.name}
+  else
+    li There are no comments
