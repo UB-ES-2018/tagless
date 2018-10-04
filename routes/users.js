@@ -1,5 +1,28 @@
 var express = require('express');
 var router = express.Router();
+const dbConnection = require('../config/dbConnection');
+
+
+module.exports = app => {
+
+  const connection = dbConnection();
+
+
+    /* GET user singup. */
+    app.get('/signup', function(req, res, next) {
+
+      connection.query('SELECT * FROM tagless', (err, result)=> {
+        res.render('signup',)
+      })
+        //TODO
+        //Get data from request and create user
+        //res.render('signup');
+    });
+
+
+
+
+};
 
 /* POST user login. */
 router.post('/login', function(req, res, next) {
@@ -12,15 +35,13 @@ router.post('/login', function(req, res, next) {
 router.post('/signup', function(req, res, next) {
   //TODO
   //Get data from request and log user
+
+
+
+
+
   res.send("Registered");
 });
 
-/* GET user singup. */
-router.get('/signup', function(req, res, next) {
-  //TODO
-  //Get data from request and create user
-  res.render('signup');
-});
 
-
-module.exports = router;
+//module.exports = router;
