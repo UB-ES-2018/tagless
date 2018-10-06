@@ -2,14 +2,6 @@ var express = require('express');
 var router = express.Router();
 var ctl_user = require('../controllers/user_controller');
 
-/* GET user singup. */
-router.get('/signup', function(req, res, next) {
-
-        res.render('signup');
-    //TODO
-    //Get data from request and create user
-    //res.render('signup');
-});
 
 /* POST user login. */
 router.post('/login', function(req, res, next) {
@@ -36,6 +28,16 @@ router.post('/signup', function(req, res, next) {
   ctl_user.userController_Signup(req.body['email'],req.body['username'], req.body['password']);
 
   res.send("Registered");
+});
+
+
+/* GET user singup. */
+router.get('/signup', function(req, res, next) {
+
+  res.render('signup');
+//TODO
+//Get data from request and create user
+//res.render('signup');
 });
 
 

@@ -4,13 +4,16 @@ exports.userController_Signup = function(u_email,u_name,u_pass) {
 
     //create user into database.
 
-        var connection = dbconnection();
+    var connection = dbconnection();
 
-        connection.query('USE tagless;');
-
-        connection.query('INSERT INTO _user(email, username, pass) VALUES  ( '+ u_email +' , ' + u_name + ' , ' + u_pass + ' );', function(err, result) {
-            if (err) throw err;
-        });
+    connection.query('USE tagless;');
+    var sql = "INSERT INTO _user (email,username,pass) VALUES (?,?,?)";
+    var params = [u_email, u_name, u_pass ];
+    console.log(sql + params);
+    connection.query(sql, params ,function(err, result) {
+        if (err) throw err;
+    });
+    
 
 };
 
