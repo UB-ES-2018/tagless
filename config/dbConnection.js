@@ -1,4 +1,4 @@
-const mysql = require('mysql');
+var mysql = require('mysql');
 
 module.exports = () => {
     return mysql.createConnection({
@@ -8,3 +8,4 @@ module.exports = () => {
         database: 'tagless'
     });
 }
+
