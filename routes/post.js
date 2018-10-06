@@ -1,3 +1,4 @@
+
 var express = require('express');
 var router = express.Router();
 
@@ -7,7 +8,6 @@ router.post('/submit', function(req, res, next) {
   //Requires to be login
   res.send("Posted");
 });
-
 
 router.get('/:post_id/comments/', function(req, res, next) {
   var post_id = req.params.post_id;

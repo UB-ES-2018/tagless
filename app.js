@@ -10,7 +10,6 @@ var usersRouter = require('./routes/users');
 var postRouter = require('./routes/post');
 
 var app = express();
-
 var mod = models();
 
 // view engine setup
