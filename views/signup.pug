@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  h3 Sign up
+    form(method='POST')
+        div.form-group
+            input#email.form-control(type='email', placeholder='Email' name='email')
+        div.form-group
+            input#username.form-control(type='text', placeholder='Username' name='username')
+        div.form-group
+            input#password.form-control(type='password', placeholder='Shhh' name='password')
+        div.form-group
+            button(type='submit') Login
