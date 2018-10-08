@@ -8,13 +8,14 @@ exports.userController_Signup = function(u_email,u_name,u_pass) {
 
     connection.query('USE tagless;');
     
-
+    console.log("hasta aquí he llegado");
     userController_OnBD(u_email, u_name,function(err, content) {
         if (err) {
             return next("Mysql error, check your query");
         } else {
-            if (content){
-                console.log("El usuario ya está dentro");
+            console.log(content);
+            if (content == true){
+                console.log("El usuario ya esta en la lista");
             }
             else{
                 var sql = "INSERT INTO _user (email,username,pass) VALUES (?,?,?)";
@@ -34,23 +35,38 @@ exports.userController_Login = function(u_name, u_pass) {
 
 };
 
-userController_OnBD =  function(u_email, u_name,callback){
+function userController_OnBD(u_email, u_name, callback){
 
     var connection = dbconnection();
+
 
     connection.query('USE tagless;');
     
 
     connection.query('SELECT count(*) AS count FROM _user WHERE (_user.username = (?) OR _user.email = (?))',[u_name,u_email],function (err, result, fields){
         if (err) throw err;
-        /*
-        if (result[0]['count'] > 0){
-            console.log("me rio en tu cara pedro");
-            userExist = true;
-        }
-        */
+        
         callback(null,result[0]['count']>0);
     });
 
 
 };
+
+exports.getUser = function(u_name,u_pass,callback){
+    
+    var connection = dbconnection();
+
+    connection.query('USE tagless;');
+
+    connection.query('SELECT userid FROM _user WHERE (_user.username = (?) OR _user.pass = (?))',[u_name,u_pass],function (err, result, fields){
+        if (err) throw err;
+
+
+        if (result[0]['userid']){
+            callback(null,result[0]['userid']);
+        }
+        else{
+            callback(null,null);
+        }
+    });
+}
