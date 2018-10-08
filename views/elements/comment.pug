@@ -1,21 +1,20 @@
 // Single Comment
-mixin subcoment(reply)
+mixin subcomment(subcomment)
     .media.mt-4
         img.d-flex.mr-3.rounded-circle(src='http://placehold.it/50x50' alt='')
         .media-body
-            h5.mt-0 Commenter Name
-            | #{reply.text}
-            if reply.reply
-                each subreply in reply.reply
-                    +subcoment(subreply)
+            h5.mt-0 #{subcomment.autor.username}
+            | #{subcomment.text}
+            if subcomment.reply
+                each subreply in subcomment.reply
+                    +subcomment(subreply)
             
-
-- var coments = [{"text":"this is a comment", "reply":[{"text":"this is a nexted coment","reply":[{"text":"this is a comment", "reply":[{"text":"this is a nexted coment"}]}]},{"text":"this is a comment", "reply":[{"text":"this is a nexted coment"}]}]}]
-each coment in coments
+mixin comment(comment)
     .media.mb-4
         img.d-flex.mr-3.rounded-circle(src='http://placehold.it/50x50' alt='')
         .media-body
-            h5.mt-0 Commenter Name
-            | #{coment.text}
-            each subcoment in coment["reply"]
-                +subcoment(subcoment)
+            h5.mt-0 #{comment.autor.username}
+            | #{comment.text}
+            if comment.reply
+                each subcomment in comment["reply"]
+                    +subcomment(subcomment)

@@ -38,10 +38,12 @@ block main
         .form-group
           textarea.form-control(rows='3', name="text")
         button.btn.btn-primary(type='submit') Submit
-  - var comments = [];
+  
+  include elements/comment
   each comment in comments
-    li COMENT
+    +comment(comment)
   else
-    include elements/comment
-      // Comment with nested comments
+    - var comment = {"text":"this is a comment", "autor":{"username":"Anonimous"}, "reply":[{"text":"this is a nexted coment", "autor":{"username":"Anonimous"},"reply":[]}]}
+    +comment(comment)
+    // Comment with nested comments
 
