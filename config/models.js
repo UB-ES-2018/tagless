@@ -12,4 +12,3 @@ module.exports = () => {
     'pass VARCHAR(20))ENGINE=InnoDB DEFAULT CHARSET=utf8;', function(err, result) {
     if (err) throw err
     });
-};
