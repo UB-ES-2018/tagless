@@ -1,10 +1,15 @@
 extends layout_complex
 block main
-  include elements/post_element
+  include elements/post_preview
   //include post_submit
   each post in posts
-    +post(post)
+    //+post(post)
   else
+    +post({'title':'Post Title',
+       'text':'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!',
+       'id':1,
+       'date': 'Posted on January 1, 2017 by',
+       'autor': {'id':'1', 'username':'Anonimous'}})
     +post({'title':'Post Title',
        'text':'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!',
        'id':1,
