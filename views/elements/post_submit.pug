@@ -1,7 +1,10 @@
-form(method='POST' action='/post/submit')
-  div.form-group
-    input#title.form-control(type='text', placeholder='title' name='title')
-  div.form-group
-    input#text.form-control(type='text', placeholder='Post whatever you want' name='text')
-  div.form-group
-    button(type='submit') Post!
+div.card.my-4
+  h5.card-header Make a thread:
+  div.card-body
+    form(method='POST' action='/post/submit')
+    div.form-group
+      input#title.form-control(type='text', placeholder='Title' name='title')
+    div.form-group
+      textarea#text.form-control(type='text', rows=5,  placeholder='Post whatever you want' name='text')
+    div.form-group
+      button.btn.btn-primary(type='submit') Submit

@@ -30,14 +30,7 @@ block main
   p
     | Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum, dolor quis. Sunt, ut, explicabo, aliquam tenetur ratione tempore quidem voluptates cupiditate voluptas illo saepe quaerat numquam recusandae? Qui, necessitatibus, est!
   hr
-  // Comments Form
-  .card.my-4
-    h5.card-header Leave a Comment:
-    .card-body
-      form(method='POST' action='/post/submit')
-        .form-group
-          textarea.form-control(rows='3', name="text")
-        button.btn.btn-primary(type='submit') Submit
+  include elements/comment_submit
   
   include elements/comment
   each comment in comments
