@@ -1,5 +1,8 @@
-form(method='POST' action='/post/submit')
-  div.form-group
-    input#text.form-control(type='text', placeholder='Say something' name='text')
-  div.form-group
-    button(type='submit') Comment!
+// Comments Form
+.card.my-4
+  h5.card-header Leave a Comment:
+  .card-body
+    form(method='POST' action='/post/submit')
+      .form-group
+        textarea.form-control(rows='3', name="text")
+      button.btn.btn-primary(type='submit') Submit
