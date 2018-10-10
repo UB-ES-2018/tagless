@@ -1,14 +1,49 @@
-extends layout
+extends layout_complex
+block main
 
-block content
-  - var comments = [];
-  - comments.push({  name: "Esto es un comentario que esta fijo de momento", });
-  h1= title
-  p Welcome to #{title}
-  include login
-  h3 Comments
-  include comment_submit
+  // Author
+  p.lead
+    | by
+    a(href='#') Start Bootstrap
+  hr
+  // Date/Time
+  p Posted on January 1, 2018 at 12:00 PM
+  hr
+  // Preview Image
+  img.img-fluid.rounded(src='http://placehold.it/900x300' alt='')
+  hr
+  // Post Content
+  p.lead
+    | Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus, vero, obcaecati, aut, error quam sapiente nemo saepe quibusdam sit excepturi nam quia corporis eligendi eos magni recusandae laborum minus inventore?
+  p
+    | Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut, tenetur natus doloremque laborum quos iste ipsum rerum obcaecati impedit odit illo dolorum ab tempora nihil dicta earum fugiat. Temporibus, voluptatibus.
+  p
+    | Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos, doloribus, dolorem iusto blanditiis unde eius illum consequuntur neque dicta incidunt ullam ea hic porro optio ratione repellat perspiciatis. Enim, iure!
+  blockquote.blockquote
+    p.mb-0
+      | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.
+    footer.blockquote-footer
+      | Someone famous in
+      cite(title='Source Title') Source Title
+  p
+    | Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error, nostrum, aliquid, animi, ut quas placeat totam sunt tempora commodi nihil ullam alias modi dicta saepe minima ab quo voluptatem obcaecati?
+  p
+    | Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum, dolor quis. Sunt, ut, explicabo, aliquam tenetur ratione tempore quidem voluptates cupiditate voluptas illo saepe quaerat numquam recusandae? Qui, necessitatibus, est!
+  hr
+  // Comments Form
+  .card.my-4
+    h5.card-header Leave a Comment:
+    .card-body
+      form(method='POST' action='/post/submit')
+        .form-group
+          textarea.form-control(rows='3', name="text")
+        button.btn.btn-primary(type='submit') Submit
+  
+  include elements/comment
   each comment in comments
-    li #{comment.name}
+    //+comment(comment)
   else
-    li There are no comments
+    - var comment = {"text":"this is a comment", "autor":{"username":"Anonimous"}, "reply":[{"text":"this is a nexted coment", "autor":{"username":"Anonimous"},"reply":[]}]}
+    +comment(comment)
+    // Comment with nested comments
+

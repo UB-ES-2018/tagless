@@ -1,13 +1,17 @@
 extends layout
+block stylesheets
+    link(href='/static/stylesheets/bootstrap.min.css', rel='stylesheet')
+    link(href='/static/stylesheets/sign-up.css', rel='stylesheet')
 
 block content
-  h3 Sign up
-    form(method='POST')
+    form(id="login-form" method='POST')
+        h3.signup TagLess
         div.form-group
-            input#email.form-control(type='email', placeholder='Email' name='email')
+            input#email.form-control(type='email', placeholder='Email' name='email', class='tex')
         div.form-group
             input#username.form-control(type='text', placeholder='Username' name='username')
         div.form-group
             input#password.form-control(type='password', placeholder='Shhh' name='password')
         div.form-group
             button(type='submit') Login
+                    
