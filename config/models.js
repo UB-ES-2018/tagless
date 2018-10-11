@@ -5,7 +5,7 @@ module.exports = () => {
 
     connection.query('USE tagless;');
 
-    connection.query('CREATE TABLE IF NOT EXISTS _user( '+
+    /*connection.query('CREATE TABLE IF NOT EXISTS _user( '+
     'userid INT(10) NOT NULL PRIMARY KEY AUTO_INCREMENT,'+
     'email VARCHAR(50) , '+
     'username VARCHAR(20), '+
@@ -19,7 +19,8 @@ module.exports = () => {
     'text VARCHAR(200), '+
     'FOREIGN KEY (userid) REFERENCES _user(userid))ENGINE=InnoDB DEFAULT CHARSET=utf8;', function(err, result) {
     if (err) throw err
-    });
+    });*/
+
 
 
 };

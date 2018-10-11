@@ -27,8 +27,9 @@ router.get('/:post_id/comments/', function(req, res, next) {
     } else {
         res.render('post', { title: 'Express', 'comments': content });
     }
-
+  })
 });
+
 /* POST Create a comment */
 router.post('/:post_id/comment/submit', function(req, res, next) {
   var post_id = request.params.post_id;

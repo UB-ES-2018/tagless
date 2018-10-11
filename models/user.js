@@ -1,19 +1,21 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const Thread = sequelize.define('Thread', {
+  const User = sequelize.define('User', {
       id: {
           allowNull: false,
           autoIncrement: true,
           primaryKey: true,
           type: Sequelize.INTEGER
       },
-    title: DataTypes.STRING,
-    description: DataTypes.STRING,
+    userid: DataTypes.INTEGER,
+    email: DataTypes.STRING,
+    username: DataTypes.STRING,
+    pass: DataTypes.STRING,
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
   }, {});
-  Thread.associate = function(models) {
+  User.associate = function(models) {
     // associations can be defined here
   };
-  return Thread;
+  return User;
 };
