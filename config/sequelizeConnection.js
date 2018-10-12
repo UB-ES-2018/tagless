@@ -1,8 +1,9 @@
 const Sequelize = require('sequelize');
 
-module.exports.sequelize = new Sequelize('database', 'username', 'password', {
+module.exports.sequelize = new Sequelize('tagless', 'root', '1234', {
     host: 'localhost',
     dialect: 'mysql',
+    logging: function() {},
     operatorsAliases: false,
 
     pool: {
