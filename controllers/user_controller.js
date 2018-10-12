@@ -1,20 +1,21 @@
 var sequelizeConnection = require("../config/sequelizeConnection");
+var Sequelize = require('sequelize');
 
 exports.userController_Signup = function(u_email,u_name,u_pass) {
 
     //create user into database.
 
     var sequelize = sequelizeConnection.sequelize;
-
+    
     const User = sequelize.define('User',{
-        userId : sequelize.INTEGER, 
-        email: sequelize.STRING,
-        username: sequelize.STRING,
-        pass: sequelize.STRING,
+        userId : Sequelize.INTEGER, 
+        email: Sequelize.STRING,
+        username: Sequelize.STRING,
+        pass: Sequelize.STRING,
         createdAt: Sequelize.DATE,
         updatedAt: Sequelize.DATE,
-    })
-    /*
+      });
+
     console.log("hasta aquí he llegado");
     userController_OnBD(u_email, u_name,function(err, content) {
         if (err) {
@@ -33,7 +34,6 @@ exports.userController_Signup = function(u_email,u_name,u_pass) {
             }
         }
     });
-    */
     
 
 };
@@ -48,14 +48,13 @@ function userController_OnBD(u_email, u_name, callback){
     var sequelize = sequelizeConnection.sequelize;
     
 
-    sequelize.query('SELECT count(*) AS count FROM Users WHERE (Users.username = (?) OR Users.email = (?))',[u_name,u_email],function (err, result, fields){
-        if(u_emsil=result0) {
-            
-        }
-        if (err) throw err;
-        
-        callback(null,result[0]['count']>0);
-    });
+
+    sequelize.query('SELECT count(*) AS count FROM Users WHERE (Users.username = (?) OR Users.email = (?))',
+    { replacements: [u_name,u_email], type: sequelize.QueryTypes.SELECT })
+    .then(result => {
+        callback(null,result[0]['count'] > 0);
+      }
+    );
 
 
 };
@@ -64,15 +63,17 @@ exports.getUser = function(u_name,u_pass,callback){
     
     var sequelize = sequelizeConnection.sequelize;
 
-    sequelize.query('SELECT id FROM Users WHERE (Users.username = (?) OR Users.pass = (?))',[u_name,u_pass],function (err, result, fields){
-        if (err) throw err;
+    sequelize.query('SELECT id FROM Users WHERE (Users.username = (?) OR Users.pass = (?))',
+     { replacements: [u_name,u_pass], type: sequelize.QueryTypes.SELECT })
+    .then(result => {
 
+        if (result[0]['id']){
+            callback(null,result[0]['id']);
 
-        if (result[0]['userid']){
-            callback(null,result[0]['userid']);
         }
         else{
             callback(null,null);
         }
-    });
+    }
+    );
 }
