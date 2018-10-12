@@ -1,4 +1,4 @@
-var dbconnection = require('../config/dbConnection');
+var sequelizeConnection = require("../config/sequelizeConnection");
 var userController = require('./user_controller');
 
 
@@ -7,9 +7,8 @@ exports.thread_getThread = function(t_title,t_text) {
 
     //create thread into database.
 
-    var connection = dbconnection();
+    var sequelize = sequelizeConnection.sequelize; //instance to query
 
-    connection.query('USE tagless;');
 
 
 
@@ -28,7 +27,7 @@ exports.thread_getThread = function(t_title,t_text) {
             if (content){
                 var sql = "INSERT INTO _thread (userid, title ,text) VALUES (?,?,?)";
                 var params = [content,t_title, t_text];
-                connection.query(sql, params ,function(err, result) {
+                sequelize.query(sql, params ,function(err, result) {
                     if (err) throw err;
                 });
             }
@@ -50,11 +49,9 @@ exports.thread_postThread = function() {
 
  function getAllThreads(callback){
 
-    var connection = dbconnection();
+    var sequelize = sequelizeConnection.sequelize;
 
-    connection.query('USE tagless;');
-
-    connection.query('SELECT title,text FROM _thread ;',function (err, row, fields){
+    sequelize.query('SELECT title,text FROM _thread ;',function (err, row, fields){
         if (err) throw err;
         var list = [];
         for (i in row){
