@@ -7,11 +7,12 @@ module.exports = (sequelize, DataTypes) => {
           primaryKey: true,
           type: Sequelize.INTEGER
       },
-    creationDate: DataTypes.DATE,
-    body: DataTypes.STRING,
-    createdAt: DataTypes.DATE,
-    updatedAt: DataTypes.DATE,
-    testAttr: DataTypes.STRING,
+      userId: DataTypes.INTEGER,
+      creationDate: DataTypes.DATE,
+      body: DataTypes.STRING,
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
+      testAttr: DataTypes.STRING,
   }, {});
   Comment.associate = function(models) {
     // associations can be defined here
