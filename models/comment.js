@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       userId: DataTypes.INTEGER,
       replyId: DataTypes.INTEGER,
+      threadId: DataTyes.INTEGER,
       creationDate: DataTypes.DATE,
       body: DataTypes.STRING,
       createdAt: DataTypes.DATE,

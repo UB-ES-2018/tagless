@@ -10,6 +10,7 @@ var sequelizeConnection = require("./config/sequelizeConnection");
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var postRouter = require('./routes/post');
+var commentsRouter = require('./routes/comments');
 
 var app = express();
 var mod = models();
@@ -50,6 +51,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/post', postRouter);
+app.use('/comments', commentsRouter);
 app.use('/static', express.static('public'));
 
 

@@ -1,5 +1,6 @@
 
-var express = require('express');
+const express = require('express');
+const app = express();
 var router = express.Router();
 var comment_ctl = require('../controllers/comment_controller');
 
@@ -8,4 +9,7 @@ var comment_ctl = require('../controllers/comment_controller');
 /*
  GET AllCommentByThread
  */
-router.get('/Comments/:threadId/All', comment_ctl.getAllByThreadId(req,res));
+router.get('/:threadId/all', comment_ctl.getAllByThreadId);
+//router.get('/', comment_ctl.getAllByThreadId);
+
+module.exports = router;
