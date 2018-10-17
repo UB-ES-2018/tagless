@@ -16,6 +16,7 @@ exports.userController_Signup = function(u_email,u_name,u_pass) {
         updatedAt: Sequelize.DATE,
       });
 
+    
     console.log("hasta aquí he llegado");
     userController_OnBD(u_email, u_name,function(err, content) {
         if (err) {
