@@ -3,6 +3,7 @@ var express = require('express');
 var router = express.Router();
 var ctl_thread = require('../controllers/thread_controller');
 
+
 /* POST Create a post */
 router.post('/submit', function(req, res, next) {
 
