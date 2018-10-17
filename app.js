@@ -12,18 +12,20 @@ var usersRouter = require('./routes/users');
 var postRouter = require('./routes/post');
 
 var app = express();
-var mod = models();
 var sequelize = sequelizeConnection.sequelize; //instance to query
 
 //test ----
 const User = sequelize.define('User',{
-  userId : Sequelize.INTEGER,
+  userId : Sequelize.INTEGER, 
   email: Sequelize.STRING,
   username: Sequelize.STRING,
   pass: Sequelize.STRING,
   createdAt: Sequelize.DATE,
   updatedAt: Sequelize.DATE,
 })
+
+
+
 
 sequelize.query('SELECT * FROM Users')
     .then(user => console.log(user));
