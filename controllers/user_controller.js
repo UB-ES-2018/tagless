@@ -1,5 +1,6 @@
 var sequelizeConnection = require("../config/sequelizeConnection");
 var Sequelize = require('sequelize');
+const bcrypt = require('bcrypt');
 
 exports.userController_Signup = function(u_email,u_name,u_pass) {
 
@@ -14,9 +15,10 @@ exports.userController_Signup = function(u_email,u_name,u_pass) {
         pass: Sequelize.STRING,
         createdAt: Sequelize.DATE,
         updatedAt: Sequelize.DATE,
-      });
+    });
 
-    
+    var saltRounds = 10;
+
     console.log("hasta aquí he llegado");
     userController_OnBD(u_email, u_name,function(err, content) {
         if (err) {
@@ -27,10 +29,12 @@ exports.userController_Signup = function(u_email,u_name,u_pass) {
                 console.log("El usuario ya esta en la lista");
             }
             else{
-                User.create({
-                    email : u_email,
-                    username : u_name,
-                    pass : u_pass,
+                bcrypt.hash(u_pass, saltRounds, function(err, hash) {
+                    User.create({
+                        email : u_email,
+                        username : u_name,
+                        pass : hash,
+                    });
                 });
             }
         }
@@ -53,6 +57,7 @@ function userController_OnBD(u_email, u_name, callback){
     sequelize.query('SELECT count(*) AS count FROM Users WHERE (Users.username = (?) OR Users.email = (?))',
     { replacements: [u_name,u_email], type: sequelize.QueryTypes.SELECT })
     .then(result => {
+
         callback(null,result[0]['count'] > 0);
       }
     );

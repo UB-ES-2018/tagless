@@ -6,6 +6,7 @@ var logger = require('morgan');
 var Sequelize = require('sequelize');
 var models = require('./config/models')
 var sequelizeConnection = require("./config/sequelizeConnection");
+const bcrypt = require('bcrypt');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -37,6 +38,9 @@ var data = User.findAll({
 console.log(data.valueOf());
 
 //test ----
+
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
