@@ -12,27 +12,4 @@
 			//hay que ver donde se pone el style
 			p(style="margin-top:0;margin-bottom:14px;font-size:12px;line-height:18px;color:#222;") #{description}
 
-			.input-group
-				input(type="button" value="Browse..." onclick="document.getElementById('fileuploader').click();")
-				input(type="file" id="fileuploader" style="display: none;" accept=".png, .jpg, .jpeg")
-				input(type="button" value="Upload" onclick="changeFile();")
-			
-			.input-group
-				input.form-control(type='text' placeholder='Image URL' id="urluploader")
-				span.input-group-btn
-					button.btn.btn-secondary(type='button' onclick="changeURL()" id="urluploader") SET
-script.
-	function changeFile(){
-		var image = document.getElementById("fileuploader");
-		var oldimage = document.getElementById("profilePicture");
-
-		oldimage.src = image.value;
-	}
-
-script.
-	function changeURL(){
-		var image = document.getElementById("urluploader");
-		var oldimage = document.getElementById("profilePicture");
-
-		oldimage.src = image.value;
-	}
+			button.btn.btn-secondary(type='button' onclick="window.location.href='profile/settings'" id="urluploader") SET
