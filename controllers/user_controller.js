@@ -1,5 +1,8 @@
 var sequelizeConnection = require("../config/sequelizeConnection");
 var Sequelize = require('sequelize');
+var User = require('../models/user');
+var DataTypes = require('sequelize/lib/data-types');
+
 
 exports.userController_Signup = function(u_email,u_name,u_pass) {
 
@@ -77,4 +80,44 @@ exports.getUser = function(u_name,u_pass,callback){
         }
     }
     );
+}
+
+exports.updateProfile = function(req, res){
+
+  var sequelize = sequelizeConnection.sequelize;
+
+  var UserModel = User(sequelize, DataTypes);
+
+  UserModel.find({ where : { id: req.params.userId } })
+      .then(function(user){
+          if (user){
+              user.updateAttributes({
+                pictureLink: req.body.pictureLink,
+                description: req.body.description
+              })
+              res.status(200).send();
+          }else{
+              console.log("User not found");
+              res.status(500).send("User not found");
+          }
+        })
+}
+
+exports.getUserById = function(req, res){
+
+    var sequelize = sequelizeConnection.sequelize;
+
+    var UserModel = User(sequelize, DataTypes);
+
+    UserModel.find({ where : { id: req.params.userId } })
+        .then(function(user){
+            if (user){
+                console.log("User found");
+                console.log(user.dataValues);
+                res.json(user.dataValues);
+            }else{
+                console.log("User not founded");
+                res.status(500).send("User not found");
+            }
+        })
 }
