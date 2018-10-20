@@ -10,8 +10,14 @@ exports.thread_getThread = function(t_title,t_text) {
     var sequelize = sequelizeConnection.sequelize; //instance to query
 
 
+    const Thread = sequelize.define('Thread',{
+        title: DataTypes.STRING,
+        description: DataTypes.STRING,
+        createdAt: DataTypes.DATE,
+        updatedAt: DataTypes.DATE,
+    });
 
-
+    
     getAllThreads(function(err, content) {
         if (err) {
             return next("Mysql error, check your query");
@@ -24,11 +30,10 @@ exports.thread_getThread = function(t_title,t_text) {
         if (err) {
             return next("Mysql error, check your query");
         } else {
-            if (content){
-                var sql = "INSERT INTO _thread (userid, title ,text) VALUES (?,?,?)";
-                var params = [content,t_title, t_text];
-                sequelize.query(sql, params ,function(err, result) {
-                    if (err) throw err;
+            if (content){                
+                Thread.create({
+                    title: t_title,
+                    description: t_text,
                 });
             }
             else{
