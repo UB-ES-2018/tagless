@@ -11,11 +11,6 @@ router.post('/login', function(req, res, next) {
   console.log(req.body);
   console.log(req.body['username']);
   console.log(req.body['password']);
-  controlador.login(password, user, function(success) {
-    if (success) {
-      res.send("Loged");
-    }
-  });
   res.send("Loged");
 });
 
