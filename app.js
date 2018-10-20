@@ -4,8 +4,12 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var Sequelize = require('sequelize');
-var models = require('./config/models')
+var models = require('./config/models');
 var sequelizeConnection = require("./config/sequelizeConnection");
+
+var session = require('express-session');
+var uuid = require('uuid/v4');
+
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -23,10 +27,7 @@ const User = sequelize.define('User',{
   pass: Sequelize.STRING,
   createdAt: Sequelize.DATE,
   updatedAt: Sequelize.DATE,
-})
-
-
-
+});
 
 sequelize.query('SELECT * FROM Users')
     .then(user => console.log(user));
@@ -49,14 +50,17 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true
+}));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/post', postRouter);
 app.use('/comments', commentsRouter);
 app.use('/static', express.static('public'));
-
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

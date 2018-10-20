@@ -57,7 +57,6 @@ function userController_OnBD(u_email, u_name, callback){
       }
     );
 
-
 };
 
 exports.getUser = function(u_name,u_pass,callback){
@@ -77,4 +76,4 @@ exports.getUser = function(u_name,u_pass,callback){
         }
     }
     );
-}
+};
