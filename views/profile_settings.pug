@@ -1,0 +1,61 @@
+extends layout
+block stylesheets
+	link(href='/static/stylesheets/bootstrap.min.css', rel='stylesheet')
+	link(href='/static/stylesheets/blog-home.css', rel='stylesheet')
+
+block content
+	include elements/navbar
+	.col-md-4
+		.card.my-4
+			.card-body
+				.image-block
+					img.className#profilePicture(src=imageURL 
+										width="79"
+										height="79"
+										onerror="this.onerror=null;this.src='https://www.redditstatic.com/avatars/avatar_default_11_FFD635.png';")
+
+				| #{username}
+
+				//hay que ver donde se pone el style
+				p(style="margin-top:0;margin-bottom:14px;font-size:12px;line-height:18px;color:#222;") #{description}
+
+				form(method='POST' action='/profile')
+					div.form-group
+						input#changeDescription.form-control(type='text', placeholder=description name='changeDescription' onPaste="" onkeydown="if (event.keyCode == 13) return false;")
+
+					div.form-group
+						input(type="button" value="Browse..." onclick="document.getElementById('fileuploader').click();")
+						input(type="file" id="fileuploader" style="display: none;" accept=".png, .jpg, .jpeg")
+						input(type="button" value="Upload" onclick="changeFile();")
+						
+					div.form-group
+						.input-group
+							input.form-control(type='text' placeholder='Image URL' id="urluploader" onPaste="" onkeydown="if (event.keyCode == 13) return false;")
+							span.input-group-btn
+								button.btn.btn-secondary(type='button' onclick="changeURL()" id="urluploader") SET
+
+					button.btn.btn-secondary(type='submit') Save
+
+	footer.py-5.bg-dark
+		.container
+			p.m-0.text-center.text-white Copyright &copy; Your Website 2018
+
+	script.
+		function changeFile(){
+			var image = document.getElementById("fileuploader");
+			var oldimage = document.getElementById("profilePicture");
+
+			oldimage.src = image.value;
+		}
+
+	script.
+		function changeURL(){
+			var image = document.getElementById("urluploader");
+			var oldimage = document.getElementById("profilePicture");
+
+			oldimage.src = image.value;
+		}
+block script
+	// Bootstrap core JavaScript
+	script(src='/static/javascripts/jquery.min.js')
+	script(src='/static/javascripts/bootstrap.bundle.min.js')

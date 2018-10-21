@@ -5,14 +5,29 @@ module.exports = (sequelize, DataTypes) => {
           allowNull: false,
           autoIncrement: true,
           primaryKey: true,
-          type: Sequelize.INTEGER
+          type: DataTypes.INTEGER
       },
-    userid: DataTypes.INTEGER,
-    email: DataTypes.STRING,
-    username: DataTypes.STRING,
-    pass: DataTypes.STRING,
-    createdAt: DataTypes.DATE,
-    updatedAt: DataTypes.DATE,
+      email: {
+        type: DataTypes.STRING
+      },
+      username: {
+        type: DataTypes.STRING
+      },
+      pass: {
+        type: DataTypes.STRING
+      },
+      createdAt: {
+        type: DataTypes.DATE
+      },
+      updatedAt: {
+        type: DataTypes.DATE
+      },
+      pictureLink: {
+        type: DataTypes.STRING
+      },
+      description: {
+        type: DataTypes.STRING
+      },
   }, {});
   User.associate = function(models) {
     // associations can be defined here

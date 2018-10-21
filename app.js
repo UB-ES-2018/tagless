@@ -11,20 +11,23 @@ var sequelizeConnection = require("./config/sequelizeConnection");
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var postRouter = require('./routes/post');
+var commentsRouter = require('./routes/comments');
 
 var app = express();
-var mod = models();
 var sequelize = sequelizeConnection.sequelize; //instance to query
 
 //test ----
 const User = sequelize.define('User',{
-  userId : Sequelize.INTEGER,
+  userId : Sequelize.INTEGER, 
   email: Sequelize.STRING,
   username: Sequelize.STRING,
   pass: Sequelize.STRING,
   createdAt: Sequelize.DATE,
   updatedAt: Sequelize.DATE,
 })
+
+
+
 
 sequelize.query('SELECT * FROM Users')
     .then(user => console.log(user));
@@ -51,6 +54,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/post', postRouter);
+app.use('/profile', profileRouter);
 app.use('/static', express.static('public'));
 
 // catch 404 and forward to error handler

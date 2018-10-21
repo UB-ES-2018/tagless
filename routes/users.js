@@ -51,6 +51,10 @@ router.get('/:username/settings', function (req, res, next) {
   );
 });
 
+router.put('/profileView/:userId', ctl_user.updateProfile)
+
+router.get('/profileView/:userId', ctl_user.getUserById);
+
 
 function moveFile(file, somePlace) {
   return new Promise((resolve, reject) => {
