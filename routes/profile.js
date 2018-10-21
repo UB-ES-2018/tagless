@@ -4,21 +4,26 @@ var ctl_user = require('../controllers/user_controller');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  //Get all posts
-	res.render('profile', { username: 'Aradan', imageURL: '', description: 'Ejemplo de descripcion', posts: [] })
+	//Get all posts
+	console.log("get profile");
+
+	res.render('profile', { username: 'Usuario', imageURL: '', description: 'Ejemplo de descripcion', posts: [] })
 });
 
 
 router.get('/settings', function(req, res, next) {
 
-	res.render('profile_settings', { username: 'Aradan', imageURL: '', description: 'Ejemplo de descripcion', posts: [] })
+	console.log("get settings");
+
+	res.render('profile_settings', { username: 'Usuario', imageURL: '', description: 'Ejemplo de descripcion', posts: [] })
 });
 
-router.post('/settings', function(req, res, next) {
+router.post('/', function(req, res, next) {
 
 	//hacer los cambios 
+	console.log("post settings");
 
-	res.render('profile', { username: 'Aradan', imageURL: '', description: 'Ejemplo de descripcion', posts: [] })
+	res.render('profile', { username: 'Usuario', imageURL: '', description: 'Ejemplo de descripcion', posts: [] })
 });
 
 module.exports = router;

@@ -19,7 +19,7 @@ block content
 				//hay que ver donde se pone el style
 				p(style="margin-top:0;margin-bottom:14px;font-size:12px;line-height:18px;color:#222;") #{description}
 
-				form(method='POST' action='/profile/settings')
+				form(method='POST' action='/profile')
 					div.form-group
 						input#changeDescription.form-control(type='text', placeholder=description name='changeDescription' onPaste="" onkeydown="if (event.keyCode == 13) return false;")
 
