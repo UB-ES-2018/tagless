@@ -44,7 +44,7 @@ router.get('/:username/', function (req, res, next) {
 });
 
 router.get('/:username/settings', function (req, res, next) {
-  res.render('user/user_activity', {
+  res.render('user/user_settings', {
     username: 'Aradan', imageURL: '',
     description: 'Ejemplo de descripcion', 
     posts: [] }
