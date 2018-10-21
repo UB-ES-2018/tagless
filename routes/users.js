@@ -11,11 +11,6 @@ router.post('/login', function(req, res, next) {
   console.log(req.body);
   console.log(req.body['username']);
   console.log(req.body['password']);
-  controlador.login(password, user, function(success) {
-    if (success) {
-      res.send("Loged");
-    }
-  });
   res.send("Loged");
 });
 
@@ -44,6 +39,10 @@ router.get('/signup', function(req, res, next) {
 //Get data from request and create user
 //res.render('signup');
 });
+
+router.put('/profileView/:userId', ctl_user.updateProfile)
+
+router.get('/profileView/:userId', ctl_user.getUserById);
 
 
 module.exports = router;

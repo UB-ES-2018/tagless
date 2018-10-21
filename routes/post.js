@@ -2,6 +2,7 @@
 var express = require('express');
 var router = express.Router();
 
+
 /* POST Create a post */
 router.post('/submit', function(req, res, next) {
   console.log(req.body);

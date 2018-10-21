@@ -7,10 +7,10 @@ module.exports = (sequelize, DataTypes) => {
           primaryKey: true,
           type: Sequelize.INTEGER
       },
-    title: DataTypes.STRING,
-    description: DataTypes.STRING,
-    createdAt: DataTypes.DATE,
-    updatedAt: DataTypes.DATE,
+      title: DataTypes.STRING,
+      description: DataTypes.STRING,
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
   }, {});
   Thread.associate = function(models) {
       Thread.belongsTo(User, {foreignKey: 'id_user'}); // Adds id_user to Thread
