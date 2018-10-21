@@ -1,0 +1,12 @@
+img.img_profile{
+    height: 80px;
+    width: 80px;
+}
+
+p.profile-text{
+    margin-top:0;
+    margin-bottom:14px;
+    font-size:12px;
+    line-height:18px;
+    color:#222;
+}

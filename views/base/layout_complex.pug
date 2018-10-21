@@ -4,13 +4,14 @@ block stylesheets
     link(href='/static/stylesheets/blog-home.css', rel='stylesheet')
 
 block content
-    include elements/navbar
+    include ../elements/navbar
     .container
         .row
             // Blog Entries Column
             .col-md-8
+                h1.my-4 Default community
                 block main
-            include elements/profile_widget   
+            include ../elements/sidebar   
     footer.py-5.bg-dark
         .container
             p.m-0.text-center.text-white Copyright &copy; Your Website 2018
