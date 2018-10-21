@@ -39,7 +39,7 @@ router.get('/:username/', function (req, res, next) {
   res.render('user/user_activity', {
     username: 'Aradan', imageURL: '',
     description: 'Ejemplo de descripcion', 
-    posts: [] }
+    threads: [] }
   );
 });
 
@@ -47,7 +47,7 @@ router.get('/:username/settings', function (req, res, next) {
   res.render('user/user_settings', {
     username: 'Aradan', imageURL: '',
     description: 'Ejemplo de descripcion', 
-    posts: [] }
+    threads: [] }
   );
 });
 
@@ -90,7 +90,7 @@ router.post('/:username/settings', function (req, res, next) {
 
         //TODO: 
         res.render('user/user_activity', {
-          username: 'Aradan', imageURL: '', description: 'Ejemplo de descripcion', posts: []
+          username: 'Aradan', imageURL: '', description: 'Ejemplo de descripcion', threads: []
         });
       })
       .catch(err => {
@@ -99,7 +99,7 @@ router.post('/:username/settings', function (req, res, next) {
       });
   }
   res.render('user/user_activity', {
-    username: 'Aradan', imageURL: '', description: 'Ejemplo de descripcion', posts: []
+    username: 'Aradan', imageURL: '', description: 'Ejemplo de descripcion', threads: []
   });
 });
 

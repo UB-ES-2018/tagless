@@ -1,17 +1,17 @@
 extends base/layout_complex
 block main
-  include elements/post_submit
-  include elements/post_preview
-  //include post_submit
-  each post in posts
-    //+post(post)
+  include elements/thread_submit
+  include elements/thread_preview
+  //include thread_submit
+  each thread in threads
+    //+thread(thread)
   else
-    +post({'title':'Post Title',
+    +thread({'title':'thread Title',
        'text':'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!',
        'id':1,
        'date': 'Posted on January 1, 2017 by',
        'autor': {'id':'1', 'username':'Anonimous'}})
-    +post({'title':'Post Title',
+    +thread({'title':'thread Title',
        'text':'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!',
        'id':1,
        'date': 'Posted on January 1, 2017 by',

@@ -1,0 +1,11 @@
+mixin thread(thread)
+    // Blog thread
+    .card.mb-4
+        //img.card-img-top(src='http://placehold.it/750x300' alt='Card image cap')
+        .card-body
+            h2.card-title #{thread.title}
+            p.card-text #{thread.text}
+            a.btn.btn-primary(href='/thread/' + thread.id + '/comments') Read More &rarr;
+        .card-footer.text-muted
+            | #{thread.date}
+            a(href='/user/'+thread.autor.id)  #{thread.autor.username}

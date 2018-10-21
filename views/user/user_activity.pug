@@ -1,16 +1,16 @@
 extends ../base/layout_user
 block main
 	h1.my-4 Recent Activity
-	include ../elements/post_preview
-	each post in posts
-		+post(post)
+	include ../elements/thread_preview
+	each thread in threads
+		+thread(thread)
 	else
-		+post({'title':'Placeholder thread 1',
+		+thread({'title':'Placeholder thread 1',
 			'text':'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!',
 			'id':1,
 			'date': 'Posted on January 1, 2017 by',
 			'autor': {'id':'1', 'username':'Anonimous'}})
-		+post({'title':'Placeholder thread 2',
+		+thread({'title':'Placeholder thread 2',
 			'text':'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!',
 			'id':1,
 			'date': 'Posted on January 1, 2017 by',
