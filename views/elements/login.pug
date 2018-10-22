@@ -1,0 +1,15 @@
+.card.my-4
+  h5.card-header Login
+  .card-body
+          form(method='POST' action='/users/login')
+            div.form-group
+              input#username.form-control(type='text', placeholder='Username' name='username')
+            div.form-group
+              input#password.form-control(type='password', placeholder='Shhh' name='password')
+            button.btn.btn-secondary(type='submit') Login
+  .card-footer
+    div
+      p New to Tagless? 
+        a(href='/users/signup') Sign up
+
+                  

@@ -1,0 +1,11 @@
+mixin post(post)
+    // Blog Post
+    .card.mb-4
+        //img.card-img-top(src='http://placehold.it/750x300' alt='Card image cap')
+        .card-body
+            h2.card-title #{post.title}
+            p.card-text #{post.text}
+            a.btn.btn-primary(href='/post/' + post.id + '/comments') Read More &rarr;
+        .card-footer.text-muted
+            | #{post.date}
+            a(href='/user/'+post.autor.id)  #{post.autor.username}

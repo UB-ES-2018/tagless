@@ -38,5 +38,9 @@ router.get('/signup', function (req, res, next) {
 //res.render('signup');
 });
 
+router.put('/profileView/:userId', ctl_user.updateProfile)
+
+router.get('/profileView/:userId', ctl_user.getUserById);
+
 
 module.exports = router;
