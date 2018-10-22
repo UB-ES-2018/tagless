@@ -5,15 +5,13 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var Sequelize = require('sequelize');
 var models = require('./config/models');
+var session = require ('express-session');
 var sequelizeConnection = require("./config/sequelizeConnection");
-
-var session = require('express-session');
-var uuid = require('uuid/v4');
-
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var postRouter = require('./routes/post');
+var profileRouter = require('./routes/profile');
 var commentsRouter = require('./routes/comments');
 
 var app = express();
@@ -27,17 +25,15 @@ const User = sequelize.define('User',{
   pass: Sequelize.STRING,
   createdAt: Sequelize.DATE,
   updatedAt: Sequelize.DATE,
-});
+})
 
 sequelize.query('SELECT * FROM Users')
     .then(user => console.log(user));
-
 
 var data = User.findAll({
     attributes: ['username', 'pass']});
 
 console.log(data.valueOf());
-
 //test ----
 
 // view engine setup
@@ -51,16 +47,32 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
-    secret: 'keyboard cat',
+    key: 'user_sid',
+    secret: '%_i_love_enginyeria_software',
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: false,
+    cookie: {
+        expires: 60000
+    }
 }));
+
+// This middleware will check if user's cookie is still saved in browser and user is not set, then automatically log the user out.
+// This usually happens when you stop your express server after login, your cookie still remains saved in the browser.
+app.use((req, res, next) => {
+    if (req.cookies.user_sid && !req.session.user) {
+        res.clearCookie('user_sid');
+    }
+    next();
+});
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/post', postRouter);
+app.use('/profile', profileRouter);
 app.use('/comments', commentsRouter);
 app.use('/static', express.static('public'));
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
