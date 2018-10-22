@@ -1,31 +1,19 @@
 var sequelizeConnection = require("../config/sequelizeConnection");
 var Sequelize = require('sequelize');
-var User = require('../models/user');
+var userModel = require('../models/user');
 var DataTypes = require('sequelize/lib/data-types');
 const bcrypt = require('bcrypt');
 
 
-exports.userController_Signup = function(u_email,u_name,u_pass) {
-
-    //create user into database.
+exports.userController_Signup = function(req,res) {
 
     var sequelize = sequelizeConnection.sequelize;
     
-    const User = sequelize.define('User',{
-        userId : Sequelize.INTEGER, 
-        email: Sequelize.STRING,
-        username: Sequelize.STRING,
-        pass: Sequelize.STRING,
-        createdAt: Sequelize.DATE,
-        updatedAt: Sequelize.DATE,
-    });
-    
+    const User = userModel(sequelize, DataTypes);
     const saltRounds = 10;
 
-    var saltRounds = 10;
-
     console.log("hasta aquí he llegado");
-    userController_OnBD(u_email, u_name,function(err, content) {
+    userController_OnBD(req.body['email'], req.body['username'],function(err, content) {
         if (err) {
             return next("Mysql error, check your query");
         } else {
@@ -35,19 +23,19 @@ exports.userController_Signup = function(u_email,u_name,u_pass) {
             }
             else{
                 bcrypt.genSalt(saltRounds, function(err, salt) {
-                    bcrypt.hash(u_pass, salt, function(err, hash) {
+                    bcrypt.hash(req.body['password'], salt, function(err, hash) {
                         User.create({
-                            email : u_email,
-                            username : u_name,
+                            email : req.body['email'],
+                            username : req.body['username'],
                             pass : hash,
                         });
                     });
                 });
+
+                res.send("Registered");
             }
         }
     });
-    
-
 };
 
 exports.userController_Login = function(u_name, u_pass) {

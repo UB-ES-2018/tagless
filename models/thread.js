@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       updatedAt: DataTypes.DATE,
   }, {});
   Thread.associate = function(models) {
-      Thread.belongsTo(User, {foreignKey: 'id_user'}); // Adds id_user to Thread
+      Thread.belongsTo(User, {foreignKey : 'id_user'});
   };
   return Thread;
 };

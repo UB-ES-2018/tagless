@@ -1,15 +1,11 @@
 
 var express = require('express');
 var router = express.Router();
+var thread_ctl = require('../controllers/thread_controller');
 
 
 /* POST Create a post */
-router.post('/submit', function(req, res, next) {
-  console.log(req.body);
-  //Get a request and create a post
-  //Requires to be login
-  res.send("Posted");
-});
+router.post('/submit', thread_ctl.thread_postThread);
 
 router.get('/:post_id/comments/', function(req, res, next) {
   var post_id = req.params.post_id;

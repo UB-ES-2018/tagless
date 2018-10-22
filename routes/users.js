@@ -22,13 +22,7 @@ router.post('/login', function(req, res, next) {
 });
 
 /* POST user register. */
-router.post('/signup', function(req, res, next) {
-  //TODO
-  //Get data from request and log user
-  ctl_user.userController_Signup(req.body['email'],req.body['username'], req.body['password']);
-
-  res.send("Registered");
-});
+router.post('/signup', ctl_user.userController_Signup);
 
 
 /* GET user singup. */
@@ -40,7 +34,7 @@ router.get('/signup', function(req, res, next) {
 //res.render('signup');
 });
 
-router.put('/profileView/:userId', ctl_user.updateProfile)
+router.put('/profileView/:userId', ctl_user.updateProfile);
 
 router.get('/profileView/:userId', ctl_user.getUserById);
 
