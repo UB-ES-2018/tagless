@@ -27,6 +27,6 @@ benchmarks/graphs
 
 #Profile images
 public/images/users/*
-
+!public/images/users/placeholder.txt
 #Idea
 .idea/*
