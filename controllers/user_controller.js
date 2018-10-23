@@ -8,6 +8,7 @@ const bcrypt = require('bcrypt');
 exports.userController_Signup = function(req,res) {
 
     //create user into database.
+
     var sequelize = sequelizeConnection.sequelize;
     
     const User = userModel(sequelize,DataTypes);
@@ -61,21 +62,23 @@ exports.getUser = function(u_name,u_pass,callback){
     var sequelize = sequelizeConnection.sequelize;
 
     sequelize.query('SELECT id FROM Users WHERE (Users.username = (?) OR Users.pass = (?))',
-    { replacements: [u_name,u_pass], type: sequelize.QueryTypes.SELECT })
+     { replacements: [u_name,u_pass], type: sequelize.QueryTypes.SELECT })
     .then(result => {
 
         if (result[0]['id']){
             callback(null,result[0]['id']);
+
         }
         else{
             callback(null,null);
         }
     });
-};
+}
 
 exports.updateProfile = function(req, res){
 
   var sequelize = sequelizeConnection.sequelize;
+
   var UserModel = User(sequelize, DataTypes);
 
   UserModel.find({ where : { id: req.params.userId } })
@@ -84,18 +87,19 @@ exports.updateProfile = function(req, res){
               user.updateAttributes({
                 pictureLink: req.body.pictureLink,
                 description: req.body.description
-              });
+              })
               res.status(200).send();
           }else{
               console.log("User not found");
               res.status(500).send("User not found");
           }
         })
-};
+}
 
 exports.getUserById = function(req, res){
 
     var sequelize = sequelizeConnection.sequelize;
+
     var UserModel = User(sequelize, DataTypes);
 
     UserModel.find({ where : { id: req.params.userId } })
@@ -109,4 +113,4 @@ exports.getUserById = function(req, res){
                 res.status(500).send("User not found");
             }
         })
-};
+}

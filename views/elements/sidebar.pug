@@ -1,7 +1,16 @@
 // Sidebar Widgets Column
 .col-md-4
-    // Search Widget
+    
+    // LogIn Widget
     include login
+
+    // ejemplo de perfil
+    .card.my-4
+        h5.card-header Ejemplo de perfil
+        .card-body
+            a(href='/profile') test profile page
+
+    // Search Widget
     .card.my-4
         h5.card-header Search
         .card-body
@@ -9,6 +18,7 @@
                 input.form-control(type='text' placeholder='Search for...')
                 span.input-group-btn
                     button.btn.btn-secondary(type='button') Go!
+
     // Categories Widget
     .card.my-4
         h5.card-header Categories
@@ -30,6 +40,7 @@
                             a(href='#') CSS
                         li
                             a(href='#') Tutorials
+
     // Side Widget
     .card.my-4
         h5.card-header Side Widget

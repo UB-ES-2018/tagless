@@ -1,0 +1,22 @@
+extends layout
+block stylesheets
+    link(href='/static/stylesheets/bootstrap.min.css', rel='stylesheet')
+    link(href='/static/stylesheets/blog-home.css', rel='stylesheet')
+
+block content
+    include elements/navbar
+    .container
+        .row
+            // Blog Entries Column
+            .col-md-8
+                block main
+            include elements/profile_widget   
+    footer.py-5.bg-dark
+        .container
+            p.m-0.text-center.text-white Copyright &copy; Your Website 2018
+        // /.container
+
+block script
+    // Bootstrap core JavaScript
+    script(src='/static/javascripts/jquery.min.js')
+    script(src='/static/javascripts/bootstrap.bundle.min.js')

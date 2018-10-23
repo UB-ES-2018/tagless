@@ -56,6 +56,13 @@ router.post('/login', function(req, res, next) {
   res.send("Loged");
 });
 
+/* POST user login. */
+router.post('/login', function(req, res, next) {
+  //TODO
+  //Get data from request and log user
+  res.send("Loged");
+});
+
 
 
 router.put('/profileView/:userId', ctl_user.updateProfile);
