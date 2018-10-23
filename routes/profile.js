@@ -6,6 +6,7 @@ var ctl_user = require('../controllers/user_controller');
 router.get('/', function(req, res, next) {
 	//Get all posts
 	console.log("get profile");
+    console.log('Cookies: ', req.cookies);
 
 	res.render('profile', { username: 'Usuario', imageURL: '', description: 'Ejemplo de descripcion', posts: [] })
 });

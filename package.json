@@ -18,7 +18,7 @@
     "mysql2": "^1.6.1",
     "pug": "2.0.0-beta11",
     "sequelize": "^4.39.0",
-    "sqlite3": "^4.0.2",
+    "sqlite3": "^4.0.2"
   },
   "devDependencies": {
     "sequelize-cli": "^4.1.1"
