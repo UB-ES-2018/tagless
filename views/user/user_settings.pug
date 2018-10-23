@@ -1,0 +1,17 @@
+extends ../base/layout_user
+block main
+	div.card.my-4
+		h5.card-header Settings
+		div.card-body
+			form(method='POST' action='', encType="multipart/form-data")
+				div.form-group
+					label Description
+					input.form-control(type='text', value=description, name='description')
+
+				div.form-group
+					label Change profile picture
+					.custom-file
+						input#input_file.custom-file-input(type='file', name="image" accept=".png, .jpg, .jpeg")
+						label.custom-file-label(for='input_file') Choose file
+				hr
+				button.btn.btn-secondary(type='submit') Save changes
