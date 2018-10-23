@@ -26,6 +26,7 @@ router.get('/signup', function(req, res, next) {
     res.render('signup');
 });
 
+/*
 // route for user's dashboard
 router.get('/dashboard', (req, res) => {
     if (req.session.user && req.cookies.user_sid) {
@@ -34,6 +35,7 @@ router.get('/dashboard', (req, res) => {
         res.redirect('/login');
     }
 });
+*/
 
 // route for user logout
 router.get('/logout', (req, res) => {
@@ -62,8 +64,6 @@ router.post('/login', function(req, res, next) {
   //Get data from request and log user
   res.send("Loged");
 });
-
-
 
 router.put('/profileView/:userId', ctl_user.updateProfile);
 
