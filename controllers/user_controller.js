@@ -86,44 +86,55 @@ exports.getUser = function(u_name,u_pass,callback){
         }
     }
     );
-}
+};
 
-exports.updateProfile = function(req, res){
+exports.updateProfile = function(userId, pictureLink, description){
 
-  var sequelize = sequelizeConnection.sequelize;
+    return new Promise(function(resolve,reject){
+       var sequelize = sequelizeConnection.sequelize;
+       var UserModel = User(sequelize, DataTypes);
 
-  var UserModel = User(sequelize, DataTypes);
+      UserModel.find({ where : { id: userId } })
+          .then(function(user){
+            user.updateAttributes({
+              pictureLink: pictureLink,
+              description: description
+            });
+            resolve("User with ID:"+userId+" successfully updated");
+          },function(err){
+             reject("Problem ocurred: "+err);
+          });
+    });
+};
 
-  UserModel.find({ where : { id: req.params.userId } })
-      .then(function(user){
-          if (user){
-              user.updateAttributes({
-                pictureLink: req.body.pictureLink,
-                description: req.body.description
-              })
-              res.status(200).send();
-          }else{
-              console.log("User not found");
-              res.status(500).send("User not found");
-          }
-        })
-}
+exports.getUserById = function(userId){
 
-exports.getUserById = function(req, res){
+    return new Promise(function(resolve, reject){
+        var sequelize = sequelizeConnection.sequelize;
+        var UserModel = User(sequelize, DataTypes);
 
+        UserModel.find({where : {id : userId} })
+            .then(function(user){
+                resolve(user);
+            }, function(err){
+                console.log("Error ocurred: "+err);
+                reject(err);
+            })
+  });
+};
+
+exports.getUserByUsername = function(username){
+
+  return new Promise(function(resolve, reject){
     var sequelize = sequelizeConnection.sequelize;
-
     var UserModel = User(sequelize, DataTypes);
 
-    UserModel.find({ where : { id: req.params.userId } })
+    UserModel.find({where : {username : username} })
         .then(function(user){
-            if (user){
-                console.log("User found");
-                console.log(user.dataValues);
-                res.json(user.dataValues);
-            }else{
-                console.log("User not founded");
-                res.status(500).send("User not found");
-            }
+          resolve(user);
+        }, function(err){
+          console.log("Error ocurred: "+err);
+          reject(err);
         })
-}
+  });
+};

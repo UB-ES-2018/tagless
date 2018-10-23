@@ -44,6 +44,24 @@ router.get('/:username/', function (req, res, next) {
 });
 
 router.get('/:username/settings', function (req, res, next) {
+  //process req
+  var username = req.params.username;
+
+  //Implementation
+  /*ctl_user.getUserByUsername(username)
+      .then(function(user){
+        console.log(user);
+        res.render('user/user_settings', {
+          username: user.username,
+          imageURL: user.pictureLink,
+          description: user.description,
+          threads: [] }
+        );
+      }, function(err){
+        console.log(err);
+        res.status(500).send(err);
+      })*/
+
   res.render('user/user_settings', {
     username: 'Aradan', imageURL: '',
     description: 'Ejemplo de descripcion', 
@@ -51,10 +69,33 @@ router.get('/:username/settings', function (req, res, next) {
   );
 });
 
-router.put('/profileView/:userId', ctl_user.updateProfile)
+router.put('/profileView/:userId', function(req,res,next){
+  //process req
+  var userId = req.params.userId;
+  var pictureLink = req.body.imageURL;
+  var description = req.body.description;
 
-router.get('/profileView/:userId', ctl_user.getUserById);
+  ctl_user.updateProfile(userId, pictureLink, description)
+      .then(function(success){
+        res.status(200).send(success);
+      }, function(err){
+        res.status(500).send(err);
+      });
+});
 
+router.get('/profileView/:userId', function(req,res,next){
+  //process req
+  var userId = req.params.userId;
+
+  ctl_user.getUserById(userId)
+      .then(function(user){
+        console.log(user);
+        res.json(user);
+      }, function(err){
+        console.log(err);
+        res.status(500).send(err);
+      });
+});
 
 function moveFile(file, somePlace) {
   return new Promise((resolve, reject) => {
