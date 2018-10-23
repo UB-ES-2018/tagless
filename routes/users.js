@@ -25,16 +25,16 @@ router.get('/signup', function(req, res, next) {
 
     res.render('signup');
 });
-/*
+
 // route for user's dashboard
-app.get('/dashboard', (req, res) => {
+router.get('/dashboard', (req, res) => {
     if (req.session.user && req.cookies.user_sid) {
         res.redirect('/dashboard');
     } else {
         res.redirect('/login');
     }
 });
-*/
+
 // route for user logout
 router.get('/logout', (req, res) => {
     if (req.session.user && req.cookies.user_sid) {
