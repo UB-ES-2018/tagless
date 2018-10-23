@@ -7,39 +7,38 @@ var Sequelize = require('sequelize');
 
 //Comment Controller
 
-exports.getAllByThreadId = function(req, res){
-  console.log(req.params.threadId);
+exports.getAllByThreadId = function(threadId){
 
-  if (res.threadId !== "") {
-    sequelize.query("SELECT * FROM Comments WHERE threadId = " + req.params.threadId + " ORDER BY createdAt")
-        .then(function (allComments) {
-          res.json(allComments[0]);
-        }, function (reason) {
-          res.writeHead(500, {'Content-Type' : 'application/json'});
-          res.send();
-          res.end();
-        });
-  }else{
-    res.writeHead(500, {'Content-Type' : 'application/json'});
-    res.send();
-    res.end();
-  }
+ return new Promise(function(resolve, reject){
+   if (threadId != ""){
+     sequelize.query("SELECT * FROM Comments WHERE threadId = " + threadId + " ORDER BY createdAt")
+         .then(function(allComments){
+           resolve(allComments[0]);
+         }, function(err){
+           reject("Query failed");
+         });
+   }else{
+     reject("Thread is null");
+   }
+ });
 };
 
-exports.createComment = function(req, res){
+exports.createComment = function(threadId, text, autor, reply){
 
-  var CommentModel = Comment(sequelize, DataTypes);
+  return new Promise(function(resolve, reject){
+    var CommentModel = Comment(sequelize, DataTypes);
 
-  CommentModel.create({
-    body: req.body.text,
-    threadId: req.params.threadId,
-    userId: req.body.autor,
-    replyId: req.body.reply,
-    edited: false})
-      .then(function(data){
-        res.status(200).send();
-      },function(reason){
-        res.status(500).send();
-      }
-  );
+    CommentModel.create({
+      body: text,
+      threadId: threadId,
+      userId: autor,
+      replyId: reply,
+      edited: false})
+        .then(function(data){
+              resolve("New Comment created successfully");
+            },function(err){
+              reject("Error ocurred: "+err);
+            }
+        );
+  });
 }

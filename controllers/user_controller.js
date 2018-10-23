@@ -101,52 +101,63 @@ exports.getUser = function (u_name, u_pass, callback) {
         {replacements: [u_name, u_pass], type: sequelize.QueryTypes.SELECT})
         .then(result => {
 
-                if (result[0]['id']) {
-                    callback(null, result[0]['id']);
-                }
-                else {
-                    callback(null, null);
-                }
-            }
-        );
-}
+        if (result[0]['id']){
+            callback(null,result[0]['id']);
+        }
+        else{
+            callback(null,null);
+        }
+    }
+    );
+};
 
-exports.updateProfile = function (req, res) {
+exports.updateProfile = function(userId, pictureLink, description){
 
+    return new Promise(function(resolve,reject){
+       var sequelize = sequelizeConnection.sequelize;
+       var UserModel = User(sequelize, DataTypes);
+
+      UserModel.find({ where : { id: userId } })
+          .then(function(user){
+            user.updateAttributes({
+              pictureLink: pictureLink,
+              description: description
+            });
+            resolve("User with ID:"+userId+" successfully updated");
+          },function(err){
+             reject("Problem ocurred: "+err);
+          });
+    });
+};
+
+exports.getUserById = function(userId){
+
+    return new Promise(function(resolve, reject){
+        var sequelize = sequelizeConnection.sequelize;
+        var UserModel = User(sequelize, DataTypes);
+
+        UserModel.find({where : {id : userId} })
+            .then(function(user){
+                resolve(user);
+            }, function(err){
+                console.log("Error ocurred: "+err);
+                reject(err);
+            })
+  });
+};
+
+exports.getUserByUsername = function(username){
+
+  return new Promise(function(resolve, reject){
     var sequelize = sequelizeConnection.sequelize;
-
     var UserModel = User(sequelize, DataTypes);
 
-    UserModel.find({where: {id: req.params.userId}})
-        .then(function (user) {
-            if (user) {
-                user.updateAttributes({
-                    pictureLink: req.body.pictureLink,
-                    description: req.body.description
-                })
-                res.status(200).send();
-            } else {
-                console.log("User not found");
-                res.status(500).send("User not found");
-            }
+    UserModel.find({where : {username : username} })
+        .then(function(user){
+          resolve(user);
+        }, function(err){
+          console.log("Error ocurred: "+err);
+          reject(err);
         })
-}
-
-exports.getUserById = function (req, res) {
-
-    var sequelize = sequelizeConnection.sequelize;
-
-    var UserModel = User(sequelize, DataTypes);
-
-    UserModel.find({where: {id: req.params.userId}})
-        .then(function (user) {
-            if (user) {
-                console.log("User found");
-                console.log(user.dataValues);
-                res.json(user.dataValues);
-            } else {
-                console.log("User not founded");
-                res.status(500).send("User not found");
-            }
-        })
-}
+  });
+};
