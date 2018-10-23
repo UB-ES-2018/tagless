@@ -6,8 +6,6 @@ var ctl_user = require('../controllers/user_controller');
 /* POST user login. */
 router.post('/login', function (req, res, next) {
     console.log(req.body);
-    console.log(req.body['username']);
-    console.log(req.body['password']);
 
     //Get data from request and log user
     ctl_user.userController_Login(req.body['username'], req.body['password'], function(success) {
