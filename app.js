@@ -59,8 +59,17 @@ app.use(session({
 // This middleware will check if user's cookie is still saved in browser and user is not set, then automatically log the user out.
 // This usually happens when you stop your express server after login, your cookie still remains saved in the browser.
 app.use((req, res, next) => {
-    if (req.cookies.user_sid && !req.session.user) {
-        res.clearCookie('user_sid');
+    console.log("Cookie user_sid "+ req.cookies.user_sid);
+    console.log("Req Session user "+ req.session.user);
+    res.locals.is_loged = false;
+    if (req.cookies.user_sid){
+        if (!req.session.user){
+            console.log("Clear cookie");
+            res.clearCookie('user_sid');
+        }else{
+            res.locals.is_logged = true;
+            res.locals.logged_username = req.session.user;
+        }
     }
     next();
 });

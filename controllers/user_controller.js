@@ -9,19 +9,8 @@ exports.userController_Signup = function (u_email, u_name, u_pass) {
 
     //create user into database.
 
-    var sequelize = sequelizeConnection.sequelize;
-
-    const User = sequelize.define('User', {
-        userId: Sequelize.INTEGER,
-        email: Sequelize.STRING,
-        username: Sequelize.STRING,
-        pass: Sequelize.STRING,
-        createdAt: Sequelize.DATE,
-        updatedAt: Sequelize.DATE,
-    });
-
-    
-    //const User = userModel(sequelize,DataTypes); //TO validate from merge
+    var sequelize = sequelizeConnection.sequelize;   
+    const User = userModel(sequelize,DataTypes);
     const saltRounds = 10;
 
 
@@ -41,9 +30,6 @@ exports.userController_Signup = function (u_email, u_name, u_pass) {
                             email: u_email,
                             username: u_name,
                             pass: hash,
-                        }).then(user => {
-                            req.session.user = user.dataValues;
-                            res.redirect('/profile');
                         });
                     });
                 });

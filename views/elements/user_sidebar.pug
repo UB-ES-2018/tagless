@@ -2,16 +2,17 @@
 	.card.my-4
 		.card-body
 			.image-block
-				img.rounded-circle.img_profile(src="/static/images/default_profile.png"
-					alt="profile_picture" onerror="this.onerror=null;this.src='https://www.redditstatic.com/avatars/avatar_default_11_FFD635.png';")
-			h5=username
+				img.rounded-circle.img_profile(src="/static/images/users/"+username+"/profile.jpg"
+					alt="profile_picture" onerror="this.onerror=null;this.src='/static/images/default_profile.png';")
+			h5
+				a(href="/users/"+username) #{username}
 			p.profile-text 0 Karma
 
 			//Check if user is logged
-			if true
+			if is_logged && username==logged_username
 				button.btn.btn-sm.btn-block.btn-primary(type="button") New Thread
 				br
-				a.btn.btn-secondary(role='button', href="/users/username/settings" id="urluploader") Edit Profile
+				a.btn.btn-secondary(role='button', href="/users/"+logged_username+"/settings" id="urluploader") Edit Profile
 
 	// Side Widget
 	.card.my-4

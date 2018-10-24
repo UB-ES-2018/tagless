@@ -7,52 +7,26 @@ var fs = require('fs');
 
 router.use(fileUpload());
 
+
 // middleware function to check for logged-in users
 var sessionChecker = (req, res, next) => {
     if (req.session.user && req.cookies.user_sid) {
-        res.redirect('/login'); // POR PONER ALGO, DEBERIA IR A TU DASHBOARD
+        res.redirect('/');
     } else {
         next();
     }
 };
 
-// route for Home-Page
-router.get('/', sessionChecker, (req, res) => {
-    res.redirect('/');
-});
-
-/* POST user register. */
-router.post('/signup', ctl_user.userController_Signup);
-
-/* GET user singup. */
-router.get('/signup', function(req, res, next) {
-
-    res.render('signup');
-});
-
-/*
-// route for user's dashboard
-router.get('/dashboard', (req, res) => {
-    if (req.session.user && req.cookies.user_sid) {
-        res.redirect('/dashboard');
-    } else {
-        res.redirect('/login');
-    }
-});
-*/
-
 // route for user logout
 router.get('/logout', (req, res) => {
     if (req.session.user && req.cookies.user_sid) {
         res.clearCookie('user_sid');
-        res.redirect('/');
-    } else {
-        res.redirect('/login');
     }
+    res.redirect('/');
 });
 
 /* POST user login. */
-router.post('/login', function (req, res, next) {
+router.post('/login', sessionChecker, function (req, res, next) {
     console.log(req.body);
 
     //Get data from request and log user
@@ -62,38 +36,72 @@ router.post('/login', function (req, res, next) {
           return res.send(success.message);
         }
         if(success){
+          req.session.user = req.body['username'];
           res.redirect("/");
         } else {
           res.send("Wrong password");
         }
     });
 });
+
 /* GET user singup. */
 router.get('/signup', function (req, res, next) {
 
   res.render('signup');
-  //TODO
-  //Get data from request and create user
-  //res.render('signup');
 });
 
 /* POST user register. */
 router.post('/signup', function (req, res, next) {
   //TODO
   //Get data from request and log user
-  ctl_user.userController_Signup(req.body['email'], req.body['username'], req.body['password']);
-//router.put('/profileView/:userId', ctl_user.updateProfile); //To validate from merge
-
-    res.send("Registered");
+  var user = ctl_user.userController_Signup(req.body['email'], req.body['username'], req.body['password']);
+  //router.put('/profileView/:userId', ctl_user.updateProfile); //To validate from merge
+    console.log(user);
+    res.send("Registered. Please log in");
 });
 
 router.get('/:username/', function (req, res, next) {
+  var username=req.params.username;
+  console.log('Cookies: ', req.cookies);
   res.render('user/user_activity', {
-    username: 'Aradan', imageURL: '',
+    username: username,
+    imageURL: '',
     description: 'Ejemplo de descripcion', 
     threads: [] }
   );
 });
+
+
+/*
+router.put('/profileView/:userId', function(req,res,next){
+  //process req
+  var userId = req.params.userId;
+  var pictureLink = req.body.imageURL;
+  var description = req.body.description;
+  
+  ctl_user.updateProfile(userId, pictureLink, description)
+      .then(function(success){
+        res.status(200).send(success);
+      }, function(err){
+        res.status(500).send(err);
+      });
+});
+//router.get('/profileView/:userId', ctl_user.getUserById); //To validate from merge
+
+router.get('/profileView/:userId', function(req,res,next){
+  //process req
+  var userId = req.params.userId;
+
+  ctl_user.getUserById(userId)
+      .then(function(user){
+        console.log(user);
+        res.json(user);
+      }, function(err){
+        console.log(err);
+        res.status(500).send(err);
+      });
+});
+*/
 
 router.get('/:username/settings', function (req, res, next) {
   //process req
@@ -119,35 +127,6 @@ router.get('/:username/settings', function (req, res, next) {
     description: 'Ejemplo de descripcion', 
     threads: [] }
   );
-});
-
-router.put('/profileView/:userId', function(req,res,next){
-  //process req
-  var userId = req.params.userId;
-  var pictureLink = req.body.imageURL;
-  var description = req.body.description;
-
-  ctl_user.updateProfile(userId, pictureLink, description)
-      .then(function(success){
-        res.status(200).send(success);
-      }, function(err){
-        res.status(500).send(err);
-      });
-});
-//router.get('/profileView/:userId', ctl_user.getUserById); //To validate from merge
-
-router.get('/profileView/:userId', function(req,res,next){
-  //process req
-  var userId = req.params.userId;
-
-  ctl_user.getUserById(userId)
-      .then(function(user){
-        console.log(user);
-        res.json(user);
-      }, function(err){
-        console.log(err);
-        res.status(500).send(err);
-      });
 });
 
 function moveFile(file, somePlace) {
@@ -183,18 +162,14 @@ router.post('/:username/settings', function (req, res, next) {
       .then(() => {
 
         //TODO: 
-        res.render('user/user_activity', {
-          username: 'Aradan', imageURL: '', description: 'Ejemplo de descripcion', threads: []
-        });
+        res.redirect("/users/"+username);
       })
       .catch(err => {
         console.log(err);
         res.status(500).json(err);
       });
   }
-  res.render('user/user_activity', {
-    username: 'Aradan', imageURL: '', description: 'Ejemplo de descripcion', threads: []
-  });
+  res.redirect("/users/"+username);
 });
 
 module.exports = router;
