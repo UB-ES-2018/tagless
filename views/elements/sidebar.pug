@@ -2,7 +2,10 @@
 .col-md-4
     
     // LogIn Widget
-    include login
+    if is_logged
+        include user_card
+    else
+        include login
 
     // ejemplo de perfil
     .card.my-4

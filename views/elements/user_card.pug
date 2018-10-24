@@ -1,0 +1,12 @@
+.card.my-4
+		.card-body
+			.image-block
+				img.rounded-circle.img_profile(src="/static/images/users/"+logged_username+"/profile.jpg"
+					alt="profile_picture" onerror="this.onerror=null;this.src='/static/images/default_profile.png';")
+			h5
+				a(href="/users/"+logged_username) #{logged_username}
+			p.profile-text 0 Karma
+			
+			button.btn.btn-sm.btn-block.btn-primary(type="button") New Thread
+			br
+			a.btn.btn-secondary(role='button', href="/users/logout" id="urluploader") Logout
