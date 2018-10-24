@@ -8,10 +8,10 @@ var models = require('./config/models');
 var session = require ('express-session');
 var sequelizeConnection = require("./config/sequelizeConnection");
 
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var postRouter = require('./routes/post');
-var profileRouter = require('./routes/profile');
+var threadRouter = require('./routes/thread');
 var commentsRouter = require('./routes/comments');
 
 var app = express();
@@ -67,12 +67,11 @@ app.use((req, res, next) => {
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/post', postRouter);
-app.use('/profile', profileRouter);
-app.use('/comments', commentsRouter);
+app.use('/thread', threadRouter);
 app.use('/static', express.static('public'));
 
-
+//test
+app.use('/comments', commentsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

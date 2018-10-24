@@ -12,7 +12,6 @@ Desktop.ini
 .directory
 *~
 
-
 # npm
 node_modules
 package-lock.json
@@ -25,3 +24,9 @@ coverage
 
 # Benchmarking
 benchmarks/graphs
+
+#Profile images
+public/images/users/*
+!public/images/users/placeholder.txt
+#Idea
+.idea/*

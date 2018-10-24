@@ -1,0 +1,20 @@
+.col-md-4
+	.card.my-4
+		.card-body
+			.image-block
+				img.rounded-circle.img_profile(src="/static/images/default_profile.png"
+					alt="profile_picture" onerror="this.onerror=null;this.src='https://www.redditstatic.com/avatars/avatar_default_11_FFD635.png';")
+			h5=username
+			p.profile-text 0 Karma
+
+			//Check if user is logged
+			if true
+				button.btn.btn-sm.btn-block.btn-primary(type="button") New Thread
+				br
+				a.btn.btn-secondary(role='button', href="/users/username/settings" id="urluploader") Edit Profile
+
+	// Side Widget
+	.card.my-4
+		h5.card-header Description
+		.card-body
+			| #{description}
