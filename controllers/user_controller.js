@@ -53,27 +53,25 @@ exports.userController_Login = function (u_name, u_pass, callback) {
     //retrieve user from database.
     var sequelize = sequelizeConnection.sequelize;
     var real_pass = '';
-    var success;
+    var success = true;
 
     var sql = 'SELECT pass FROM Users WHERE (Users.username = (?))';
-    sequelize.query(sql, {replacements: [u_name], type: sequelize.QueryTypes.SELECT}).then(results => {
+    sequelize.query(sql, {replacements: [u_name], type: sequelize.QueryTypes.SELECT})
+    .then(results => {
+        console.log(results);
+        if (results.length == 0) throw new Error("User not foud");
         real_pass = results[0].pass;
-
         bcrypt.compare(u_pass, real_pass, function (err, res) {
             if (err) {
                 console.log("error");
                 throw err;
             }
-            if (res) {
-                success = true;
-            }
-            else {
-                console.log("Wrong password");
-                success = false;
-            }
+            if (!res) success=false;
+            
             callback(success);
         });
-
+    }).catch(function(err){
+        callback(err);
     });
 
 };

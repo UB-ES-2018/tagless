@@ -12,11 +12,15 @@ router.post('/login', function (req, res, next) {
     console.log(req.body);
 
     //Get data from request and log user
-    ctl_user.userController_Login(req.body['username'], req.body['password'], function(success) {
+    ctl_user.userController_Login(req.body['username'], req.body['password'], 
+      function(success) {
+        if (success instanceof Error){
+          return res.send(success.message);
+        }
         if(success){
-            res.send("Logged");
+          res.redirect("/");
         } else {
-            res.send("Wrong password");
+          res.send("Wrong password");
         }
     });
 });
