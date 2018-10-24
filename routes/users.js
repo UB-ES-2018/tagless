@@ -9,13 +9,20 @@ router.use(fileUpload());
 
 /* POST user login. */
 router.post('/login', function (req, res, next) {
-  //TODO
-  //Get data from request and log user
+    console.log(req.body);
 
-  console.log(req.body);
-  console.log(req.body['username']);
-  console.log(req.body['password']);
-  res.send("Loged");
+    //Get data from request and log user
+    ctl_user.userController_Login(req.body['username'], req.body['password'], 
+      function(success) {
+        if (success instanceof Error){
+          return res.send(success.message);
+        }
+        if(success){
+          res.redirect("/");
+        } else {
+          res.send("Wrong password");
+        }
+    });
 });
 /* GET user singup. */
 router.get('/signup', function (req, res, next) {
@@ -32,7 +39,7 @@ router.post('/signup', function (req, res, next) {
   //Get data from request and log user
   ctl_user.userController_Signup(req.body['email'], req.body['username'], req.body['password']);
 
-  res.send("Registered");
+    res.send("Registered");
 });
 
 router.get('/:username/', function (req, res, next) {
