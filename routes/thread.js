@@ -5,9 +5,8 @@ var ctl_thread = require('../controllers/thread_controller');
 
 /* POST Create a thread */
 router.post('/submit', function(req, res, next) {
-  console.log(req.body);
 
-  ctl_thread.postThread(req.body['title'],req.body['text']);
+  ctl_thread.postThread(1,req.body['title'],req.body['text']);
 
   res.send("Thread created");
 });

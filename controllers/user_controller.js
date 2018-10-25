@@ -120,7 +120,7 @@ exports.getUserById = function(userId){
 
     return new Promise(function(resolve, reject){
         var sequelize = sequelizeConnection.sequelize;
-        var UserModel = User(sequelize, DataTypes);
+        var UserModel = userModel(sequelize, DataTypes);
 
         UserModel.find({where : {id : userId} })
             .then(function(user){
