@@ -1,16 +1,12 @@
 var sequelizeConnection = require("../config/sequelizeConnection");
 var userController = require('./user_controller');
+var threadModel = require('../models/thread');
+
+var DataTypes = require('sequelize/lib/data-types');
 
 
 
 exports.thread_getThread = function(t_title,t_text) {
-
-    //create thread into database.
-
-    var sequelize = sequelizeConnection.sequelize; //instance to query
-
-
-
 
     getAllThreads(function(err, content) {
         if (err) {
@@ -20,15 +16,27 @@ exports.thread_getThread = function(t_title,t_text) {
         }
     });
     
-    userController.getUser("zic", "aa", function(err, content) {
+    
+
+};
+
+exports.postThread = function(t_title,t_text) {
+
+    var sequelize = sequelizeConnection.sequelize;
+
+    const Thread = threadModel(sequelize, DataTypes);
+    //We look for the user id with the fetUser method just with the user name
+    //yeh... we have to change it.
+    userController.getUser("zic", function(err, content) {
         if (err) {
             return next("Mysql error, check your query");
         } else {
             if (content){
-                var sql = "INSERT INTO _thread (userid, title ,text) VALUES (?,?,?)";
-                var params = [content,t_title, t_text];
-                sequelize.query(sql, params ,function(err, result) {
-                    if (err) throw err;
+                //With this id, the title and the text we create the model to the database.
+                Thread.create({
+                    userId: content,
+                    title: t_title,
+                    description: t_text,
                 });
             }
             else{
@@ -36,30 +44,25 @@ exports.thread_getThread = function(t_title,t_text) {
             }
         }
     });
-    
 
 };
 
-exports.thread_postThread = function() {
-
-    //export thread from the database.
-
-
-};
-
- function getAllThreads(callback){
+exports.getAllByThread = function(threadId){
 
     var sequelize = sequelizeConnection.sequelize;
 
-    sequelize.query('SELECT title,text FROM _thread ;',function (err, row, fields){
-        if (err) throw err;
-        var list = [];
-        for (i in row){
-            list[i] = row[i]['text'];
+    return new Promise(function(resolve, reject){
+        if (threadId != ""){
+          sequelize.query("SELECT * FROM Threads")
+              .then(function(allThreads){
+                console.log(allThreads);
+                resolve();
+              }, function(err){
+                reject("Query failed");
+              });
+        }else{
+          reject("Thread is null");
         }
-        callback(null,list);
-        
-        
     });
     
 
