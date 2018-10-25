@@ -60,12 +60,12 @@ function userController_OnBD(u_email, u_name, callback){
 
 };
 
-exports.getUser = function(u_name,u_pass,callback){
+exports.getUser = function(u_name,callback){
     
     var sequelize = sequelizeConnection.sequelize;
 
-    sequelize.query('SELECT id FROM Users WHERE (Users.username = (?) OR Users.pass = (?))',
-     { replacements: [u_name,u_pass], type: sequelize.QueryTypes.SELECT })
+    sequelize.query('SELECT id FROM Users WHERE (Users.username = (?))',
+     { replacements: [u_name], type: sequelize.QueryTypes.SELECT })
     .then(result => {
 
         if (result[0]['id']){

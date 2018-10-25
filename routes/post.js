@@ -5,7 +5,7 @@ var thread_ctl = require('../controllers/thread_controller');
 
 
 /* POST Create a post */
-router.post('/submit', thread_ctl.thread_postThread);
+router.post('/submit', thread_ctl.postThread);
 
 router.get('/:post_id/comments/', function(req, res, next) {
   var post_id = req.params.post_id;

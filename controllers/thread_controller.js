@@ -3,6 +3,7 @@ var userController = require('./user_controller');
 var Comment = require('../models/thread');
 
 var DataTypes = require('sequelize/lib/data-types');
+var threadModel = require('../models/thread');
 
 
 exports.thread_getThread = function(t_title,t_text) {
@@ -26,23 +27,21 @@ exports.thread_getThread = function(t_title,t_text) {
 };
 
 
-exports.thread_postThread = function(req,res) {
+exports.postThread = function(req,res) {
 
-    //console.log("hola");
-    /*
     var sequelize = sequelizeConnection.sequelize;
 
     const Thread = threadModel(sequelize, DataTypes);
 
-    userController.getUser("zic", "aa", function(err, content) {
+    userController.getUser("zic",function(err, content) {
         if (err) {
             return next("Mysql error, check your query");
         } else {
             console.log("añadiendo post...");
             if (content){                
                 Thread.create({
-                    title: req.body.title,
-                    description: req.body.text,
+                    title: req.body['title'],
+                    description: req.body['description'],
                     id_user : content,
 
                 });
@@ -55,31 +54,19 @@ exports.thread_postThread = function(req,res) {
             }
         }
     });
-    */
-
-    //res.send("Posted");
     
 
 }
 
-exports.thread_postThread = function() {
-
-    //export thread from the database.
-
-
-};
-
- function getAllThreads(callback){
+ function getAllThreads(req,res){
 
     var sequelize = sequelizeConnection.sequelize;
 
-    sequelize.query('SELECT title,text FROM _thread ;',function (err, row, fields){
+    sequelize.query('SELECT title,description FROM Threads ;',function (err, row, fields){
         if (err) throw err;
-        var list = [];
-        for (i in row){
-            list[i] = row[i]['text'];
+        else{
+            console.log(row[0]['title']);
         }
-        callback(null,list);
         
         
     });
