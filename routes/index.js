@@ -5,7 +5,8 @@ var ctl_thread = require('../controllers/thread_controller');
 /* GET home page. */
 router.get('/', function(req, res, next) {
   //Get all threads
-  console.log(req.sessionID);
+
+  console.log(req.session.user);
 
   ctl_thread.getAllThreads()
     .then(function(allThreads){
@@ -19,7 +20,7 @@ router.get('/', function(req, res, next) {
         
         showList.push(threadList);
       }
-
+      console.log(showList);
       res.render('index', { title: 'Express', 'threads':showList});
 
     });

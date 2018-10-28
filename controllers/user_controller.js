@@ -132,13 +132,13 @@ exports.getUserById = function(userId){
   });
 };
 
-exports.getUserByUsername = function(username){
+exports.getUserByUsername = function(u_username){
 
   return new Promise(function(resolve, reject){
     var sequelize = sequelizeConnection.sequelize;
-    var UserModel = User(sequelize, DataTypes);
+    var UserModel = userModel(sequelize, DataTypes);
 
-    UserModel.find({where : {username : username} })
+    UserModel.find({where : {username : u_username} })
         .then(function(user){
           resolve(user);
         }, function(err){

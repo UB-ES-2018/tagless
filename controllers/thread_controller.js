@@ -21,25 +21,33 @@ exports.thread_getThread = function(t_title,t_text) {
 
 };
 
-exports.postThread = function(u_id,t_title,t_text) {
+exports.postThread = function(u_username,t_title,t_text) {
 
     const Thread = threadModel(sequelize, DataTypes);
     //We look for the user id with the fetUser method just with the user name
     //yeh... we have to change it.
 
-    userController.getUserById(u_id)
-        .then(function(user){
-            //With this id, the title and the text we create the model to the database.
-            Thread.create({
-                userId : user['id'],
-                userName : user['username'],
-                title: t_title,
-                description: t_text,
-            });
+    //Check if the content or the title of the thread are not empty
+    if(!((t_title.replace(/\s/g, "")) && (t_text.replace(/\s/g, "")))){
+        console.log("El texto o el contenido esta vacío.");
+    }
+    else{
+        //Get the user of the username loged and post in his name.
+        userController.getUserByUsername(u_username)
+            .then(function(user){
+                //With this id, the title and the text we create the model to the database.
+                Thread.create({
+                    userId : user['id'],
+                    userName : user['username'],
+                    title: t_title,
+                    description: t_text,
+                });
+    
+            }, function(err){
+                console.log(err);
+        });
 
-        }, function(err){
-            console.log(err);
-    });
+    }
     
 
 };
