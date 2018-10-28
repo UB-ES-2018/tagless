@@ -6,7 +6,6 @@ var ctl_thread = require('../controllers/thread_controller');
 router.get('/', function(req, res, next) {
   //Get all threads
 
-  console.log(req.session.user);
 
   ctl_thread.getAllThreads()
     .then(function(allThreads){
