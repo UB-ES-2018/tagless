@@ -32,7 +32,7 @@ exports.postThread = function(u_username,t_title,t_text) {
         console.log("El texto o el contenido esta vacío.");
     }
     else{
-        //Get the user of the username loged and post in his name.
+        //Get the user of the username loged and post in his name. (if it is loged)
         userController.getUserByUsername(u_username)
             .then(function(user){
                 //With this id, the title and the text we create the model to the database.

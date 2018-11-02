@@ -9,7 +9,7 @@ router.post('/submit', function(req, res, next) {
   userLogedName = req.session.user;
   if (userLogedName){
     ctl_thread.postThread(userLogedName,req.body['title'],req.body['text']);
-    res.send("Thread creado");
+    res.redirect('/');
   }
   else{
     res.send("No estas logueado, logueate");
