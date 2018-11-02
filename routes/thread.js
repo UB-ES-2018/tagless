@@ -3,13 +3,25 @@ var router = express.Router();
 var ctl_thread = require('../controllers/thread_controller');
 
 
+async function asyncCallPostThread(userLogedName, req,res) {
+  console.log('calling');
+  var result = await ctl_thread.postThread(userLogedName,req.body['title'],req.body['text']);
+  console.log("resultado del async",result);
+  if (result){
+    res.redirect('/');
+  }
+  else{
+    res.send("El mensaje no es valido");
+  }
+  // expected output: 'resolved'
+}
+
 /* POST Create a thread */
 router.post('/submit', function(req, res, next) {
 
   userLogedName = req.session.user;
   if (userLogedName){
-    ctl_thread.postThread(userLogedName,req.body['title'],req.body['text']);
-    res.redirect('/');
+    asyncCallPostThread(userLogedName,req,res);
   }
   else{
     res.send("No estas logueado, logueate");

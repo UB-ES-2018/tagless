@@ -29,11 +29,11 @@ exports.postThread = function(u_username,t_title,t_text) {
 
     //Check if the content or the title of the thread are not empty
     if(!((t_title.replace(/\s/g, "")) && (t_text.replace(/\s/g, "")))){
-        console.log("El texto o el contenido esta vacío.");
+        return false;
     }
     else{
         //Get the user of the username loged and post in his name. (if it is loged)
-        userController.getUserByUsername(u_username)
+        return userController.getUserByUsername(u_username)
             .then(function(user){
                 //With this id, the title and the text we create the model to the database.
                 Thread.create({
@@ -42,9 +42,10 @@ exports.postThread = function(u_username,t_title,t_text) {
                     title: t_title,
                     description: t_text,
                 });
-    
+                return true;
+    xº
             }, function(err){
-                console.log(err);
+                return false;
         });
 
     }
