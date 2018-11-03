@@ -13,7 +13,7 @@ router.post('/submit', function(req, res, next) {
 router.get('/:thread_id/comments/', function(req, res, next) {
   //process req
   var threadId = req.params.threadId;
-
+}
   //TODO
   //Find the thread with the id and return the thread and its comments
 
