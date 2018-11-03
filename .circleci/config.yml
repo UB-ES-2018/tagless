@@ -25,10 +25,10 @@ jobs: # a collection of steps
             - ./node_modules
       - run:
           name: create-database
-          command: '~/project/node_module/.bin/sequelize db:create'
+          command: './node_modules/.bin/sequelize db:create'
       - run:
           name: create-migrate
-          command: '~/project/node_module/.bin/sequelize db:migrate'
+          command: './node_modules/.bin/sequelize db:migrate'
       - run: # run tests
           name: test
           command: npm test
