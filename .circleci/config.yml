@@ -1,7 +1,7 @@
 version: 2 # use CircleCI 2.0
 jobs: # a collection of steps
   build: # runs not using Workflows must have a `build` job as entry point
-    #working_directory: ~/mern-starter # directory where steps will run
+    working_directory: ~/project # directory where steps will run
     docker: # run the steps with Docker
       - image: circleci/node:10.10.0 # ...with this image as the primary container; this is where all `steps` will run
       - image: circleci/mysql # and this image as the secondary service container
@@ -25,10 +25,10 @@ jobs: # a collection of steps
             - ./node_modules
       - run:
           name: create-database
-          command: './node_module/.bin/sequelize db:create'
+          command: '~/project/node_module/.bin/sequelize db:create'
       - run:
           name: create-migrate
-          command: './node_module/.bin/sequelize db:migrate'
+          command: '~/project/node_module/.bin/sequelize db:migrate'
       - run: # run tests
           name: test
           command: npm test
