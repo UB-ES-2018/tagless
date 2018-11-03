@@ -1,19 +1,28 @@
 var express = require('express');
 var router = express.Router();
+var ctl_thread = require('../controllers/thread_controller');
 
 
 /* POST Create a thread */
 router.post('/submit', function(req, res, next) {
-  console.log(req.body);
-  //Get a request and create a thread
-  //Requires to be login
-  res.send("Thread created");
+
+  userLogedName = req.session.user;
+  if (userLogedName){
+    ctl_thread.postThread(userLogedName,req.body['title'],req.body['text']);
+    res.redirect('/');
+  }
+  else{
+    res.send("No estas logueado, logueate");
+
+  }
+
 });
 
 router.get('/:thread_id/comments/', function(req, res, next) {
   //process req
   var threadId = req.params.threadId;
-}
+  
+
   //TODO
   //Find the thread with the id and return the thread and its comments
 
