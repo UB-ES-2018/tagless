@@ -26,7 +26,8 @@ jobs: # a collection of steps
             - ./node_modules
       - run:
           name: check-syntax
-          command: 'find . -path ./node_modules -prune -o -name "*.js" -exec node -c {} \;'
+          #command: 'find . -path ./node_modules -prune -o -name "*.js" -exec node -c {} \;'
+          command: 'find . -path ./node_modules -prune -o-name "*.js" -print | xargs -I {} -r  node -c {}'
       - run:
           name: create-database
           command: './node_modules/.bin/sequelize db:create'
