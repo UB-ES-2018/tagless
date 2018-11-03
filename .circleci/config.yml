@@ -5,9 +5,9 @@ jobs: # a collection of steps
     docker: # run the steps with Docker
       - image: circleci/node:10.10.0 # ...with this image as the primary container; this is where all `steps` will run
       - image: circleci/mysql # and this image as the secondary service container
-          enviroment:
-              - MYSQL_USER=root
-              - MYSQL_PASSWORD=1234
+        environment:
+          MYSQL_USER=root
+          MYSQL_PASSWORD=1234
             
     steps: # a collection of executable commands 
       - checkout # special step to check out source code to working directory
