@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
           allowNull: false,
           primaryKey: true,
           type: Sequelize.INTEGER
-      }
+      },
       createdAt: {
           allowNull: false,
           type: Sequelize.DATE
@@ -28,21 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       vote: {
           type: Sequelize.INTEGER
       }
-  });
-},
-
-
-    id: {
-          allowNull: false,
-          autoIncrement: true,
-          primaryKey: true,
-          type: Sequelize.INTEGER
-      },
-      title: DataTypes.STRING,
-      description: DataTypes.STRING,
-      createdAt: DataTypes.DATE,
-      updatedAt: DataTypes.DATE,
-  }, {});
+    }, {});
   Like.associate = function(models) {
     // associations can be defined here
   };
