@@ -34,9 +34,6 @@ block main
   
   include elements/comment
   each comment in comments
-    //+comment(comment)
-  else
-    - var comment = {"text":"this is a comment", "autor":{"username":"Anonimous"}, "reply":[{"text":"this is a nexted coment", "autor":{"username":"Anonimous"},"reply":[]}]}
     +comment(comment)
-    // Comment with nested comments
+
 

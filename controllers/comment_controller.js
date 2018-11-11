@@ -1,6 +1,7 @@
 var sequelizeConnection = require('../config/sequelizeConnection');
 var sequelize = sequelizeConnection.sequelize;
 var Comment = require('../models/comment');
+var User = require('../models/user');
 
 var DataTypes = require('sequelize/lib/data-types');
 var Sequelize = require('sequelize');
@@ -10,13 +11,25 @@ var Sequelize = require('sequelize');
 exports.getAllByThreadId = function(threadId){
 
  return new Promise(function(resolve, reject){
+   var UserModel = User(sequelize, DataTypes);
+   var CommentModel = Comment(sequelize, DataTypes);
+
    if (threadId != ""){
-     sequelize.query("SELECT * FROM Comments WHERE threadId = " + threadId + " ORDER BY createdAt")
-         .then(function(allComments){
-           resolve(allComments[0]);
+
+     UserModel.hasMany(CommentModel, {foreignKey: "userId"});
+     CommentModel.belongsTo(UserModel, {foreignKey: "userId"});
+
+     CommentModel.findAll({ where: {}, include: [UserModel] })
+         .then(function(data){
+           console.log("Legth of data retrieved = " + data.length);
+           for (var i=0; i<data.length; i++){
+             console.log("data ["+i+"] = " + data[i].dataValues.User.username);
+           }
+           resolve(data);
          }, function(err){
-           reject("Query failed");
+           reject(err);
          });
+
    }else{
      reject("Thread is null");
    }
