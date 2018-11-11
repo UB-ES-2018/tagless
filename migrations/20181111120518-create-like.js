@@ -8,7 +8,12 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      like_id: {
+      userId: {
+        allowNull: false,
+        primaryKey: true,
+        type: Sequelize.INTEGER
+      },
+      thread_id: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.INTEGER

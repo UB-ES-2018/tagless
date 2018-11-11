@@ -6,7 +6,8 @@ var ctl_thread = require('../controllers/thread_controller');
 async function asyncCallPostThread(userLogedName, req,res) {
   console.log('calling');
   var result = await ctl_thread.postThread(userLogedName,req.body['title'],req.body['text']);
-  console.log("resultado del async",result);
+
+  console.log("resultado del async",result.id);
   if (result){
     res.redirect('/');
   }

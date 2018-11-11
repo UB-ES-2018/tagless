@@ -6,22 +6,6 @@ var likeModel = require('../models/like');
 
 var DataTypes = require('sequelize/lib/data-types');
 
-
-
-exports.thread_getThread = function(t_title,t_text) {
-
-    getAllThreads(function(err, content) {
-        if (err) {
-            return next("Mysql error, check your query");
-        } else {
-            console.log(content);
-        }
-    });
-    
-    
-
-};
-
 exports.postThread = function(u_username,t_title,t_text) {
 
     const Thread = threadModel(sequelize, DataTypes);
@@ -37,20 +21,22 @@ exports.postThread = function(u_username,t_title,t_text) {
         //Get the user of the username loged and post in his name. (if it is loged)
         return userController.getUserByUsername(u_username)
             .then(function(user){
+                var threadId;
                 //With this id, the title and the text we create the model to the database.
                 Thread.create({
                     userId : user['id'],
                     userName : user['username'],
                     title: t_title,
                     description: t_text,
+                }).then( threadCreated => {
+                    console.log("YYYYYYYYYYYYYYYYYYYYYYY : ", threadCreated.userId);
+                    Like.create({
+                        userId: threadCreated.userId,
+                        thread_id: threadCreated.id,
+                        vote: 1,
+                    });
                 });
-                console.log("SOY EL THREAD ID: LOOK AT ME", Thread.id);
 
-                Like.create({
-                    userId: user['id'],
-                    thread_id: Thread.id,
-                    vote: 1,
-                });
 
                 return true;
             }, function(err){
