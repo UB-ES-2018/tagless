@@ -5,8 +5,10 @@ module.exports = (sequelize, DataTypes) => {
           allowNull: false,
           autoIncrement: true,
           primaryKey: true,
-          type: Sequelize.INTEGER
+          type: DataTypes.INTEGER
       },
+      userId: DataTypes.INTEGER,
+      userName: DataTypes.STRING,
       title: DataTypes.STRING,
       description: DataTypes.STRING,
       createdAt: DataTypes.DATE,

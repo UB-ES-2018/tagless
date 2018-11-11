@@ -79,12 +79,12 @@ function userController_OnBD(u_email, u_name, callback) {
 
 };
 
-exports.getUser = function (u_name, u_pass, callback) {
+exports.getUser = function (u_name, callback) {
 
     var sequelize = sequelizeConnection.sequelize;
 
-    sequelize.query('SELECT id FROM Users WHERE (Users.username = (?) OR Users.pass = (?))',
-        {replacements: [u_name, u_pass], type: sequelize.QueryTypes.SELECT})
+    sequelize.query('SELECT id FROM Users WHERE (Users.username = (?))',
+        {replacements: [u_name], type: sequelize.QueryTypes.SELECT})
         .then(result => {
 
         if (result[0]['id']){
@@ -120,7 +120,7 @@ exports.getUserById = function(userId){
 
     return new Promise(function(resolve, reject){
         var sequelize = sequelizeConnection.sequelize;
-        var UserModel = User(sequelize, DataTypes);
+        var UserModel = userModel(sequelize, DataTypes);
 
         UserModel.find({where : {id : userId} })
             .then(function(user){
@@ -132,13 +132,13 @@ exports.getUserById = function(userId){
   });
 };
 
-exports.getUserByUsername = function(username){
+exports.getUserByUsername = function(u_username){
 
   return new Promise(function(resolve, reject){
     var sequelize = sequelizeConnection.sequelize;
-    var UserModel = User(sequelize, DataTypes);
+    var UserModel = userModel(sequelize, DataTypes);
 
-    UserModel.find({where : {username : username} })
+    UserModel.find({where : {username : u_username} })
         .then(function(user){
           resolve(user);
         }, function(err){

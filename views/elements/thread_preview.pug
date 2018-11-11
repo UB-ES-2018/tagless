@@ -8,4 +8,4 @@ mixin thread(thread)
             a.btn.btn-primary(href='/thread/' + thread.id + '/comments') Read More &rarr;
         .card-footer.text-muted
             | #{thread.date}
-            a(href='/user/'+thread.autor.id)  #{thread.autor.username}
+            a(href='/user/'+thread.username)  #{thread.username}
