@@ -55,7 +55,6 @@ exports.postThread = function(u_username,t_title,t_text) {
 
 exports.getAllThreads = function(){
 
-
     return new Promise(function(resolve, reject){
         sequelize.query("SELECT * FROM Threads")
             .then(function(allThreads){
@@ -66,5 +65,4 @@ exports.getAllThreads = function(){
             });
     });
     
-
 };
