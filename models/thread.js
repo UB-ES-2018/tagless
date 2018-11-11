@@ -16,6 +16,11 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Thread.associate = function(models) {
     // associations can be defined here
+      Thread.hasMany(models.like,{
+          foreignKey: 'like_id',
+          as: 'likes',
+      })
+
   };
   return Thread;
 };
