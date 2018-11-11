@@ -2,6 +2,7 @@ var sequelizeConnection = require("../config/sequelizeConnection");
 var sequelize = sequelizeConnection.sequelize;
 var userController = require('./user_controller');
 var threadModel = require('../models/thread');
+var likeModel = require('../models/like');
 
 var DataTypes = require('sequelize/lib/data-types');
 
@@ -24,6 +25,7 @@ exports.thread_getThread = function(t_title,t_text) {
 exports.postThread = function(u_username,t_title,t_text) {
 
     const Thread = threadModel(sequelize, DataTypes);
+    const Like = likeModel(sequelize, DataTypes);
     //We look for the user id with the fetUser method just with the user name
     //yeh... we have to change it.
 
@@ -42,8 +44,15 @@ exports.postThread = function(u_username,t_title,t_text) {
                     title: t_title,
                     description: t_text,
                 });
+                console.log("SOY EL THREAD ID: LOOK AT ME", Thread.id);
+
+                Like.create({
+                    userId: user['id'],
+                    thread_id: Thread.id,
+                    vote: 1,
+                });
+
                 return true;
-    xº
             }, function(err){
                 return false;
         });

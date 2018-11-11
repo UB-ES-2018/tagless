@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
           allowNull: false,
           autoIncrement: true,
           primaryKey: true,
-          type: Sequelize.INTEGER
+          type: DataTypes.INTEGER
       },
       userId: {
           allowNull: false,
@@ -15,18 +15,18 @@ module.exports = (sequelize, DataTypes) => {
       thread_id: {
           allowNull: false,
           primaryKey: true,
-          type: Sequelize.INTEGER
+          type: DataTypes.INTEGER
       },
       createdAt: {
           allowNull: false,
-          type: Sequelize.DATE
+          type: DataTypes.DATE
       },
       updatedAt: {
           allowNull: false,
-          type: Sequelize.DATE
+          type: DataTypes.DATE
       },
       vote: {
-          type: Sequelize.INTEGER
+          type: DataTypes.INTEGER
       }
     }, {});
   Like.associate = function(models) {
