@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     edited: {
       type: DataTypes.BOOLEAN,
       value: false
-      }
+    }
   }, {});
   Comment.associate = function(models) {
     // associations can be defined here
