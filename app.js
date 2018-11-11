@@ -14,6 +14,7 @@ var usersRouter = require('./routes/users');
 var threadRouter = require('./routes/thread');
 var commentsRouter = require('./routes/comments');
 
+
 var app = express();
 var sequelize = sequelizeConnection.sequelize; //instance to query
 
@@ -78,6 +79,8 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/thread', threadRouter);
 app.use('/static', express.static('public'));
+app.use('/static/open-iconic', express.static('node_modules/open-iconic'));
+
 
 //test
 app.use('/comments', commentsRouter);

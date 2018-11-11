@@ -3,9 +3,20 @@ mixin thread(thread)
     .card.mb-4
         //img.card-img-top(src='http://placehold.it/750x300' alt='Card image cap')
         .card-body
-            h2.card-title #{thread.title}
-            p.card-text #{thread.text}
-            a.btn.btn-primary(href='/thread/' + thread.id + '/comments') Read More &rarr;
+            .container-fluid
+                .row
+                    .col-sm-1.text-center
+                        span.upvote.oi.oi-arrow-top(title="upvote" thread-id=thread.id role="button" aria-hidden="true")
+                        br
+                        if thread.karma
+                            | #{thread.karma}
+                        else
+                            | 0
+                        br
+                        span.downvote.oi.oi-arrow-bottom(title="upvote" thread-id=thread.id aria-hidden="true")
+                    //img.thread-preview-image(src="" onerror="this.onerror=null;this.src='https://www.redditstatic.com/avatars/avatar_default_11_FFD635.png';")
+                    a(href='/thread/' + thread.id + '/comments' )
+                        h3.card-text #{thread.title}
         .card-footer.text-muted
             | #{thread.date}
             a(href='/user/'+thread.username)  #{thread.username}

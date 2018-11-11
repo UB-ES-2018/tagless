@@ -3,7 +3,8 @@ block stylesheets
     link(href='/static/stylesheets/bootstrap.min.css', rel='stylesheet')
     link(href='/static/stylesheets/blog-home.css', rel='stylesheet')
     link(href='/static/stylesheets/user.css', rel='stylesheet')
-
+    link(href="/static/open-iconic/font/css/open-iconic-bootstrap.css" rel="stylesheet")
+    //link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css" integrity="sha256-BJ/G+e+y7bQdrYkS2RBTyNfBHpA9IuGaPmf9htub5MQ=" crossorigin="anonymous")
 
 block content
     include ../elements/navbar
@@ -23,3 +24,29 @@ block script
     // Bootstrap core JavaScript
     script(src='/static/javascripts/jquery.min.js')
     script(src='/static/javascripts/bootstrap.bundle.min.js')
+    script(type="text/javascript").
+        $(document).ready(function () {
+            $('.upvote').click(function () {
+                var thread_id = $(this).attr("thread-id");
+                $.post("/api/vote", {
+                    val: 1,
+                    id: thread_id
+                }).done(function(data){
+                    alert("Thread upvoted");
+                }).fail(function(data){
+                    alert("Error");
+                });
+            });
+            $('.downvote').click(function () {
+                var thread_id = $(this).attr("thread-id");
+                $.post("/api/vote", {
+                    val: -1,
+                    id: thread_id
+                }).done(function (data) {
+                    alert("Thread upvoted");
+                }).fail(function (data) {
+                    alert("Error");
+                });
+            });
+
+        });
