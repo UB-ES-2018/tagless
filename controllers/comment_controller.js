@@ -19,12 +19,8 @@ exports.getAllByThreadId = function(threadId){
      UserModel.hasMany(CommentModel, {foreignKey: "userId"});
      CommentModel.belongsTo(UserModel, {foreignKey: "userId"});
 
-     CommentModel.findAll({ where: {}, include: [UserModel] })
+     CommentModel.findAll({ where: { threadId : threadId }, include: [UserModel] })
          .then(function(data){
-           console.log("Legth of data retrieved = " + data.length);
-           for (var i=0; i<data.length; i++){
-             console.log("data ["+i+"] = " + data[i].dataValues.User.username);
-           }
            resolve(data);
          }, function(err){
            reject(err);
