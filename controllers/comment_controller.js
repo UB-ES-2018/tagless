@@ -1,6 +1,7 @@
 var sequelizeConnection = require('../config/sequelizeConnection');
 var sequelize = sequelizeConnection.sequelize;
 var Comment = require('../models/comment');
+var User = require('../models/user');
 
 var DataTypes = require('sequelize/lib/data-types');
 var Sequelize = require('sequelize');
@@ -27,18 +28,26 @@ exports.createComment = function(threadId, text, autor, reply){
 
   return new Promise(function(resolve, reject){
     var CommentModel = Comment(sequelize, DataTypes);
+    var UserModel = User(sequelize, DataTypes);
 
-    CommentModel.create({
-      body: text,
-      threadId: threadId,
-      userId: autor,
-      replyId: reply,
-      edited: false})
-        .then(function(data){
-              resolve("New Comment created successfully");
-            },function(err){
-              reject("Error ocurred: "+err);
-            }
-        );
+    UserModel.findOne({ where : { username : autor } })
+        .then(function(user){
+
+          CommentModel.create({
+            body: text,
+            threadId: threadId,
+            userId: user.id,
+            replyId: reply,
+            edited: false})
+              .then(function(data){
+                    resolve("New Comment created successfully");
+                  },function(err){
+                    reject("Error ocurred: "+err);
+                  }
+              );
+
+        }, function(err){
+          reject("Error ocurred: "+err);
+        });
   });
 }

@@ -58,26 +58,20 @@ router.post('/:thread_id/comment/submit', function(req, res, next) {
   //process req
   var threadId = req.params.thread_id;
   var text = req.body.text;
-  var autor = req.body.autor;
+  var autor = req.session.user;
   var reply = req.body.reply;
 
-  console.log(req.body);
-  console.log(req.params.thread_id);
-  console.log(req.cookies);
-  console.log(res.locals.username_logged);
-
-  //TODO
-  //Find the thread with the id and return the thread and its comments
-
   //Implementation
-  comment_ctl.createComment(threadId, text, autor, reply)
-      .then(function(success){
-        res.status(200).send(success);
-      }, function(err){
-        res.status(500).send(err);
-      });
-
-  //res.send("Commented");
+  if (autor != undefined) {
+    comment_ctl.createComment(threadId, text, autor, reply)
+        .then(function (success) {
+          res.status(200).send(success);
+        }, function (err) {
+          res.status(500).send(err);
+        });
+  }else{
+    res.status(500).send("¡WARNING! Sig in to continue");
+  }
 });
 
 module.exports = router;
