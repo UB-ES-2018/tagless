@@ -11,13 +11,21 @@ var Sequelize = require('sequelize');
 exports.getAllByThreadId = function(threadId){
 
  return new Promise(function(resolve, reject){
+   var UserModel = User(sequelize, DataTypes);
+   var CommentModel = Comment(sequelize, DataTypes);
+
    if (threadId != ""){
-     sequelize.query("SELECT * FROM Comments WHERE threadId = " + threadId + " ORDER BY createdAt")
-         .then(function(allComments){
-           resolve(allComments[0]);
+
+     UserModel.hasMany(CommentModel, {foreignKey: "userId"});
+     CommentModel.belongsTo(UserModel, {foreignKey: "userId"});
+
+     CommentModel.findAll({ where: { threadId : threadId }, include: [UserModel] })
+         .then(function(data){
+           resolve(data);
          }, function(err){
-           reject("Query failed");
+           reject(err);
          });
+
    }else{
      reject("Thread is null");
    }
