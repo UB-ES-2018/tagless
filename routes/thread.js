@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var comment_ctl = require('../controllers/comment_controller');
 var ctl_thread = require('../controllers/thread_controller');
 
 
@@ -51,26 +52,26 @@ router.get('/:thread_id/comments/', function(req, res, next) {
   res.render('thread', { title: 'Express', 'comments':[]});
 
 });
+
 /* POST Create a comment */
 router.post('/:thread_id/comment/submit', function(req, res, next) {
   //process req
-  var threadId = req.params.threadId;
+  var threadId = req.params.thread_id;
   var text = req.body.text;
-  var autor = req.body.autor;
+  var autor = req.session.user;
   var reply = req.body.reply;
 
-  //TODO
-  //Find the thread with the id and return the thread and its comments
-
   //Implementation
-  /*comment_ctl.createComment(threadId, text, autor, reply)
-      .then(function(success){
-        res.status(200).send(success);
-      }, function(err){
-        res.status(500).send(err);
-      })*/
-
-  res.send("Commented");
+  if (autor != undefined) {
+    comment_ctl.createComment(threadId, text, autor, reply)
+        .then(function (success) {
+          res.status(200).send(success);
+        }, function (err) {
+          res.status(500).send(err);
+        });
+  }else{
+    res.status(500).send("¡WARNING! Sig in to continue");
+  }
 });
 
 module.exports = router;
