@@ -12,7 +12,6 @@ block content
         .row
             // Blog Entries Column
             .col-md-8
-                h1.my-4 Default community
                 block main
             include ../elements/sidebar   
     footer.py-5.bg-dark
@@ -28,24 +27,16 @@ block script
         $(document).ready(function () {
             $('.upvote').click(function () {
                 var thread_id = $(this).attr("thread-id");
-                $.post("/api/vote", {
+                $.post("/vote", {
                     val: 1,
                     id: thread_id
-                }).done(function(data){
-                    alert("Thread upvoted");
-                }).fail(function(data){
-                    alert("Error");
                 });
             });
             $('.downvote').click(function () {
                 var thread_id = $(this).attr("thread-id");
-                $.post("/api/vote", {
+                $.post("/vote", {
                     val: -1,
                     id: thread_id
-                }).done(function (data) {
-                    alert("Thread upvoted");
-                }).fail(function (data) {
-                    alert("Error");
                 });
             });
 

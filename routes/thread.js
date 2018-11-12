@@ -67,23 +67,17 @@ router.post('/submit', function(req, res, next) {
 
 router.get('/:thread_id/comments/', function(req, res, next) {
   //process req
-  var threadId = req.params.threadId;
-  
+  var threadId = req.params.thread_id;
 
-  //TODO
-  //Find the thread with the id and return the thread and its comments
+  ctl_thread.getThreadById(threadId)
+    .then(function(thread){
 
-  //Implementation
-  /*comment_ctl.getAllByThreadId(threadId)
-      .then(function(comments){
-        console.log(comments);
-        res.render('thread', { title: 'Express', 'comments':[comments]});
-      }, function(err){
-        console.log(err);
-        res.status(500).send(err);
-      })*/
+      console.log(thread);
 
-  res.render('thread', { title: 'Express', 'comments':[]});
+      res.render('thread', { title: thread['title'], text: thread['description'], username: thread['userName'], date: thread['updatedAt'], 
+        comments:[]});
+
+    });
 
 });
 /* POST Create a comment */

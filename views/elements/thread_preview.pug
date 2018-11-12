@@ -13,10 +13,10 @@ mixin thread(thread)
                         else
                             | 0
                         br
-                        span.downvote.oi.oi-arrow-bottom(title="upvote" thread-id=thread.id aria-hidden="true")
+                        span.downvote.oi.oi-arrow-bottom(title="downvote" thread-id=thread.id role="button" aria-hidden="true")
                     //img.thread-preview-image(src="" onerror="this.onerror=null;this.src='https://www.redditstatic.com/avatars/avatar_default_11_FFD635.png';")
                     a(href='/thread/' + thread.id + '/comments' )
                         h3.card-text #{thread.title}
         .card-footer.text-muted
             | #{thread.date}
-            a(href='/user/'+thread.username)  #{thread.username}
+            a(href='/users/'+thread.username)  #{thread.username}

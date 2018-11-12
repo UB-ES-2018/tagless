@@ -51,6 +51,7 @@ exports.postThread = function(u_username,t_title,t_text) {
 exports.getAllThreads = function(){
 
     return new Promise(function(resolve, reject){
+
         sequelize.query("SELECT * FROM Threads")
             .then(function(allThreads){
 
@@ -60,4 +61,21 @@ exports.getAllThreads = function(){
             });
     });
     
+};
+
+
+exports.getThreadById = function(threadId){
+
+    return new Promise(function(resolve, reject){
+        var sequelize = sequelizeConnection.sequelize;
+        var ThreadModel = threadModel(sequelize, DataTypes);
+
+        ThreadModel.find({where : {id : threadId} })
+            .then(function(thread){
+                resolve(thread);
+            }, function(err){
+                console.log("Error ocurred: "+err);
+                reject(err);
+            })
+  });
 };

@@ -27,7 +27,7 @@ exports.findallLikesfromThread = function(thread_id) {
 };
 
 
-exports.addPositiveorNegativeLikes = function(thread_id, user_id, vote) {
+exports.addPositiveorNegativeLikes = function(thread_id, username, vote) {
 
     //Aqui siempre creamos
     console.log("THREEEEEEEEEEEEAD ID",thread_id);
@@ -37,13 +37,16 @@ exports.addPositiveorNegativeLikes = function(thread_id, user_id, vote) {
        //Si no llega la id del thread hacer un query para buscarlo
         //Si no llega la id de user, hacer query para buscarlo
         //Si llegan id de user i id del thread, es muy sencillo ya que simplemente se crea el like en BD.
+
+        // user_id = query(id = username);
+
         sequelize.query('SELECT * FROM Likes WHERE (Likes.thread_id = (?) AND Likes.userId = (?))', {
             replacements: [thread_id,user_id],
             type: sequelize.QueryTypes.SELECT
         })
             .then( result => {
-                console.log(result, result[0]);
-                if (result[0] == ''){
+                console.log(result);
+                if (result[0]){
                     console.log("ADDING NEW LIKEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
                     Like.create({
                         userId: user_id,
