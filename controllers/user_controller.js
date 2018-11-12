@@ -62,7 +62,6 @@ exports.userController_Login = function (u_name, u_pass, callback) {
     }).catch(function(err){
         callback(err);
     });
-
 };
 
 function userController_OnBD(u_email, u_name, callback) {
@@ -75,9 +74,7 @@ function userController_OnBD(u_email, u_name, callback) {
                 callback(null, result[0]['count'] > 0);
             }
         );
-
-
-};
+}
 
 exports.getUser = function (u_name, callback) {
 
@@ -95,13 +92,13 @@ exports.getUser = function (u_name, callback) {
             callback(null,null);
         }
     });
-}
+};
 
-exports.updateProfile = function(userId, pictureLink, description){
+exports.updateProfile = function(userId, description, pictureLink){
 
     return new Promise(function(resolve,reject){
        var sequelize = sequelizeConnection.sequelize;
-       var UserModel = User(sequelize, DataTypes);
+       var UserModel = userModel(sequelize, DataTypes);
 
       UserModel.find({ where : { id: userId } })
           .then(function(user){
