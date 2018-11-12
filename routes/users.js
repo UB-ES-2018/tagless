@@ -63,13 +63,35 @@ router.post('/signup', function (req, res, next) {
 async function asyncCallGetUser(user_name, req,res) {
   const result = await ctl_user.getUserByUsername(user_name);
 
+  //We show the user if it exist
   if (result){
-    res.render('user/user_activity', {
-      username: result.username,
-      imageURL: '',
-      description: 'Descripcion', 
-      threads: [] }
-    );
+    //But it have a privacity level:
+
+    //If it is public:
+    if (result.privacity == 0){
+      res.render('user/user_activity', {
+        username: result.username,
+        imageURL: '',
+        description: 'Descripcion', 
+        threads: [] }
+      );
+    }
+    else if(result.privacity == 1){
+      if(req.session.user){
+        res.render('user/user_activity', {
+          username: result.username,
+          imageURL: '',
+          description: 'Descripcion', 
+          threads: [] }
+        );
+      }
+      else{
+        res.send("No puedes ver el usuario si no estas logueado");
+      }
+    }
+    else{
+      res.send("Shhhh, this is a secret user");
+    }
   }
   else{
     res.send("El usuario no es valido");
@@ -79,7 +101,7 @@ async function asyncCallGetUser(user_name, req,res) {
 router.get('/:username/', function (req, res, next) {
   var username=req.params.username;
   console.log('Cookies: ', req.cookies);
-  asyncCallGetUser(username, req,res);
+  asyncCallGetUser(username,req,res);
 });
 
 

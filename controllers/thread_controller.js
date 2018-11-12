@@ -29,7 +29,6 @@ exports.postThread = function(u_username,t_title,t_text) {
                     title: t_title,
                     description: t_text,
                 }).then( threadCreated => {
-                    console.log("YYYYYYYYYYYYYYYYYYYYYYY : ", threadCreated.userId);
                     Like.create({
                         userId: threadCreated.userId,
                         thread_id: threadCreated.id,

@@ -27,7 +27,11 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
-      }
+      },
+      privacity: {
+        defaultValue: 0,
+        type: Sequelize.INTEGER
+      },
     });
   },
   down: (queryInterface, Sequelize) => {
