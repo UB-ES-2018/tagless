@@ -140,7 +140,12 @@ exports.getUserByUsername = function(u_username){
 
     UserModel.find({where : {username : u_username} })
         .then(function(user){
-          resolve(user);
+            if (user){
+                resolve(user);
+            }
+            else{
+                resolve(null);
+            }
         }, function(err){
           console.log("Error ocurred: "+err);
           reject(err);

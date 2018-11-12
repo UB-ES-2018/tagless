@@ -60,15 +60,26 @@ router.post('/signup', function (req, res, next) {
     res.send("Registered. Please log in");
 });
 
+async function asyncCallGetUser(user_name, req,res) {
+  const result = await ctl_user.getUserByUsername(user_name);
+
+  if (result){
+    res.render('user/user_activity', {
+      username: result.username,
+      imageURL: '',
+      description: 'Descripcion', 
+      threads: [] }
+    );
+  }
+  else{
+    res.send("El usuario no es valido");
+  }
+}
+
 router.get('/:username/', function (req, res, next) {
   var username=req.params.username;
   console.log('Cookies: ', req.cookies);
-  res.render('user/user_activity', {
-    username: username,
-    imageURL: '',
-    description: 'Ejemplo de descripcion', 
-    threads: [] }
-  );
+  asyncCallGetUser(username, req,res);
 });
 
 
