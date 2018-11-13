@@ -25,19 +25,53 @@ block script
     script(src='/static/javascripts/bootstrap.bundle.min.js')
     script(type="text/javascript").
         $(document).ready(function () {
-            $('.upvote').click(function () {
-                var thread_id = $(this).attr("thread-id");
-                $.post("/vote", {
+
+            //No me borreis el post done y fail!
+            $('.upvote.thread').click(function () {
+                var thread_id = $(this).attr("data-thread-id");
+                $.post("/vote/thread", {
                     val: 1,
                     id: thread_id
-                });
-            });
-            $('.downvote').click(function () {
-                var thread_id = $(this).attr("thread-id");
-                $.post("/vote", {
-                    val: -1,
-                    id: thread_id
+                }).done(function (data) {
+                    alert("Thread upvoted");
+                }).fail(function (data) {
+                    alert("Error");
                 });
             });
 
+            $('.downvote.thread').click(function () {
+                var thread_id = $(this).attr("data-thread-id");
+                $.post("/vote/thread", {
+                    val: -1,
+                    id: thread_id
+                }).done(function (data) {
+                    alert("Thread downvoted");
+                }).fail(function (data) {
+                    alert("Error");
+                });
+            });
+
+            $('.upvote.comment').click(function () {
+                var comment_id = $(this).attr("data-comment-id");
+                $.post("/vote/comment", {
+                    val: -1,
+                    id: comment_id
+                }).done(function (data) {
+                    alert("Comment upvoted");
+                }).fail(function (data) {
+                    alert("Error");
+                });
+            });
+
+            $('.downvote.comment').click(function () {
+                var comment_id = $(this).attr("data-comment-id");
+                $.post("/vote/comment", {
+                    val: -1,
+                    id: comment_id
+                }).done(function (data) {
+                    alert("Comment downvoted");
+                }).fail(function (data) {
+                    alert("Error");
+                });
+            });
         });

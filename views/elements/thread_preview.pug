@@ -6,14 +6,14 @@ mixin thread(thread)
             .container-fluid
                 .row
                     .col-sm-1.text-center
-                        span.upvote.oi.oi-arrow-top(title="upvote" thread-id=thread.id role="button" aria-hidden="true")
+                        span.upvote.thread.oi.oi-arrow-top(title="upvote" data-thread-id=thread.id role="button" aria-hidden="true")
                         br
                         if thread.karma
                             | #{thread.karma}
                         else
                             | 0
                         br
-                        span.downvote.oi.oi-arrow-bottom(title="downvote" thread-id=thread.id role="button" aria-hidden="true")
+                        span.thread.downvote.oi.oi-arrow-bottom(title="downvote" data-thread-id=thread.id role="button" aria-hidden="true")
                     //img.thread-preview-image(src="" onerror="this.onerror=null;this.src='https://www.redditstatic.com/avatars/avatar_default_11_FFD635.png';")
                     a(href='/thread/' + thread.id + '/comments' )
                         h3.card-text #{thread.title}

@@ -11,10 +11,22 @@ mixin subcomment(subcomment)
             
 mixin comment(comment)
     .media.mb-4
+        div
+            span.comment.upvote.oi.oi-arrow-top(title="upvote" data-comment-id=comment.id role="button" aria-hidden="true")
+            br
+            span.comment.downvote.oi.oi-arrow-bottom(title="downvote" data-comment-id=comment.id role="button" aria-hidden="true")
+
         img.d-flex.mr-3.rounded-circle(src='http://placehold.it/50x50' alt='')
         .media-body
             h5.mt-0 #{comment.autor.username}
+                small
+                    if comment.karma
+                        small #{comment.karma} points
+                    else
+                        small 0 points
+                    br
             | #{comment.text}
-            if comment.reply
+
+            //if comment.reply
                 each subcomment in comment["reply"]
                     +subcomment(subcomment)

@@ -74,8 +74,7 @@ router.get('/:thread_id/comments/', function(req, res, next) {
 
       console.log(thread);
 
-      res.render('thread', { title: thread['title'], text: thread['description'], username: thread['userName'], date: thread['updatedAt'], 
-        comments:[]});
+      res.render('thread', { thread, comments:[]});
 
     });
 

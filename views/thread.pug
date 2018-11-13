@@ -1,7 +1,17 @@
 extends base/layout_complex
 block main
-  
-  h1.my-4 #{title}
+  .container-fluid
+    .row
+      .col-sm-1.text-center
+        span.thread.upvote.oi.oi-arrow-top(title="upvote" data-thread-id=thread.id role="button" aria-hidden="true")
+        br
+        if thread.karma
+          | #{thread.karma}
+        else
+          | 0
+        br
+        span.thread.downvote.oi.oi-arrow-bottom(title="downvote" data-thread-id=thread.id role="button" aria-hidden="true")
+      h1.my-4 #{thread.title}
   
   // Author
   p.lead
@@ -9,13 +19,13 @@ block main
     a(href='/users/'+username)  #{username}
   hr
   // Date/Time
-  p Posted on #{date}
+  p Posted on #{thread.date}
   hr
   // Preview Image
-  img.img-fluid.rounded(src='http://placehold.it/900x300' alt='')
+  //img.img-fluid.rounded(src='http://placehold.it/900x300' alt='')
   hr
   // Post Content
-  | #{text}
+  | #{thread.description}
   hr
   include elements/comment_submit
   
@@ -24,6 +34,8 @@ block main
     //+comment(comment)
   else
     - var comment = {"text":"this is a comment", "autor":{"username":"Anonimous"}, "reply":[{"text":"this is a nexted coment", "autor":{"username":"Anonimous"},"reply":[]}]}
+    +comment(comment)
+    +comment(comment)
     +comment(comment)
     // Comment with nested comments
 
