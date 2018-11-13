@@ -63,12 +63,20 @@ router.post('/signup', function (req, res, next) {
 router.get('/:username/', function (req, res, next) {
   var username=req.params.username;
   console.log('Cookies: ', req.cookies);
-  res.render('user/user_activity', {
-    username: username,
-    imageURL: '',
-    description: 'Ejemplo de descripcion', 
-    threads: [] }
-  );
+    //Implementation
+    ctl_user.getUserByUsername(username)
+        .then(function(user){
+            if (!user) return res.status(404).send("User Not found");
+            res.render('user/user_settings', {
+                username: user.username,
+                imageURL: user.pictureLink,
+                description: user.description,
+                threads: [] }
+            );
+        }, function(err){
+            console.log(err);
+            res.status(500).send("Internal server error");
+        });
 });
 
 
@@ -110,7 +118,7 @@ router.get('/:username/settings', function (req, res, next) {
   //Implementation
   ctl_user.getUserByUsername(username)
       .then(function(user){
-        console.log(user);
+        if (!user) return res.status(404).send("User Not found");
         res.render('user/user_settings', {
           username: user.username,
           imageURL: user.pictureLink,
@@ -119,7 +127,7 @@ router.get('/:username/settings', function (req, res, next) {
         );
       }, function(err){
         console.log(err);
-        res.status(500).send(err);
+        res.status(500).send("Internal server error");
       });
 });
 
