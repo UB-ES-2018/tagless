@@ -156,12 +156,10 @@ exports.getUserByUsername = function(u_username){
 };
 
 exports.updatePrivacity() = function(u_username, u_privacity){
-
     this.getUserByUsername(u_username).then( result =>{
             result.update({
                 privacity : u_privacity
             });
         }
     );
-
-}
+};
