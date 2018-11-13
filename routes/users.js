@@ -86,11 +86,11 @@ async function asyncCallGetUser(user_name, req,res) {
         );
       }
       else{
-        res.send("No puedes ver el usuario si no estas logueado");
+        res.render('user/user_private');
       }
     }
     else{
-      res.send("Shhhh, this is a secret user");
+      res.render('user/user_private');
     }
   }
   else{
