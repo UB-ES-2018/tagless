@@ -38,6 +38,8 @@ exports.userController_Signup = function (u_email, u_name, u_pass) {
     });
 };
 
+
+
 exports.userController_Login = function (u_name, u_pass, callback) {
     //retrieve user from database.
     var sequelize = sequelizeConnection.sequelize;
@@ -152,3 +154,14 @@ exports.getUserByUsername = function(u_username){
         })
   });
 };
+
+exports.updatePrivacity() = function(u_username, u_privacity){
+
+    this.getUserByUsername(u_username).then( result =>{
+            result.update({
+                privacity : u_privacity
+            });
+        }
+    );
+
+}
