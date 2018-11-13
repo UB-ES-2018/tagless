@@ -67,7 +67,7 @@ router.get('/:username/', function (req, res, next) {
     ctl_user.getUserByUsername(username)
         .then(function(user){
             if (!user) return res.status(404).send("User Not found");
-            res.render('user/user_settings', {
+            res.render('user/user_activity', {
                 username: user.username,
                 imageURL: user.pictureLink,
                 description: user.description,
