@@ -5,9 +5,9 @@ var ctl_like = require('../controllers/like_controller');
 var ctl_like_comments = require('../controllers/Like_comment_controller');
 
 
-async function asyncCallPostLikeDislike(thread_id, user_id, vote, req,res) {
+async function asyncCallPostLikeDislike(thread_id, username, vote, req,res) {
   console.log('calling');
-  var result = await ctl_like.addPositiveorNegativeLikes(thread_id, user_id, vote);
+  var result = await ctl_like.addPositiveorNegativeLikes(thread_id, username, vote);
   if (result){
     res.redirect('/');
   }
@@ -18,8 +18,7 @@ async function asyncCallPostLikeDislike(thread_id, user_id, vote, req,res) {
 }
 
 async function asyncCallCommentLikeDislike(comment_id, username, vote, req, res) {
-    console.log('calling');
-    var result = await ctl_like_comments.addPositiveorNegativeLikesComments(comment_id, user_id, vote);
+    var result = await ctl_like_comments.addPositiveorNegativeLikesComments(comment_id, username, vote);
     if (result){
         res.redirect('/');
     }
@@ -33,7 +32,6 @@ async function asyncCallCommentLikeDislike(comment_id, username, vote, req, res)
 /* GET home page. */
 router.get('/', function(req, res, next) {
   //Get all threads
-
 
   ctl_thread.getAllThreads()
     .then(function(allThreads){
@@ -49,11 +47,30 @@ router.get('/', function(req, res, next) {
       }
       console.log(showList);
       res.render('index', { title: 'Express', 'threads':showList});
-
     });
-
-
 });
+
+async function asyncCallALLlike(thread_id,req,res) {
+    var result = await ctl_like.findallLikesfromThread(thread_id,req,res);
+    if (result){
+        res.redirect('/');
+    }
+    else{
+        res.send("Error en el like/dislike a un commentario");
+    }
+    // expected output: 'resolved'
+}
+
+async function asyncCallALLlikeComment(thread_id,req,res) {
+    var result = await ctl_like.findallLikesfromComment(thread_id,req,res);
+    if (result){
+        res.redirect('/');
+    }
+    else{
+        res.send("Error en el like/dislike a un commentario");
+    }
+    // expected output: 'resolved'
+}
 
 router.post('/api/vote/thread', function(req, res, next) {
 
@@ -61,16 +78,8 @@ router.post('/api/vote/thread', function(req, res, next) {
   var vote = req.body.val;
   var username = req.session.user;
 
-  console.log(req.body);
-  console.log("THREAD_ID: ",thread_id);
-  console.log("VALOR: ", vote);
-  console.log("USER: ", username);
-
   if (username){
-
-    console.log("VOLEM VOTAR!!");
     asyncCallPostLikeDislike(thread_id, username, vote, req, res);
-    console.log("HEM VOTAT!!");
   }else{
     res.send("No estas logueado, logueate");
 
@@ -83,17 +92,10 @@ router.post('/vote/comment', function(req,res,next){
     var vote = req.body.val;
     var username = req.session.user;
 
-    console.log(req.body);
-    console.log("COMMENT_ID: ", comment_id);
-    console.log("VALOR: ", vote);
-    console.log("USER: ", username);
-
     if (username) {
-        console.log("VOTAR COMENTARI");
         asyncCallCommentLikeDislike(comment_id, username, vote, req,res);
-        console.log("VOTE SUBMITED");
     }else {
-        res.send("no estas logueado pinche pendejo");
+        res.send("No estas logueado, hazlo porfavor.");
     }
 });
 

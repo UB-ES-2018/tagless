@@ -11,7 +11,7 @@ exports.findallLikesfromThread = function(thread_id) {
         })
             .then(result => {
                 if (result) {
-                    resolve(result);
+                    resolve(result[0]['SUM(vote)']);
                 }
             });
     });

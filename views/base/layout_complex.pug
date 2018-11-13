@@ -54,7 +54,7 @@ block script
             $('.upvote.comment').click(function () {
                 var comment_id = $(this).attr("data-comment-id");
                 $.post("/vote/comment", {
-                    val: -1,
+                    val: 1,
                     id: comment_id
                 }).done(function (data) {
                     alert("Comment upvoted");

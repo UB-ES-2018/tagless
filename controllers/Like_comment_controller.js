@@ -11,13 +11,14 @@ exports.findallLikesfromComment = function(comment_id) {
         })
             .then(result => {
                 if (result) {
-                    resolve(result);
+                    resolve(result[0]['SUM(vote)']);
                 }
             });
     });
 };
 
-exports.addPositiveorNegativeLikesComments = function(comment_id, user_id, vote) {
+exports.addPositiveorNegativeLikesComments = function(comment_id, username, vote) {
+
     return new Promise( function (resolve, reject) {
         sequelize.query('INSERT INTO Like_comments (comment_id, userId, vote, createdAt, updatedAt) VALUES((?), (SELECT id FROM Users WHERE username=(?)), (?), (?), (?)) ON DUPLICATE KEY UPDATE vote=(?), updatedAt=(?)',{
             replacements: [comment_id, username, vote, new Date(), new Date(), vote, new Date()]
