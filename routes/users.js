@@ -156,7 +156,7 @@ router.get('/:username/settings', function (req, res, next) {
       })*/
 
   res.render('user/user_settings', {
-    username: 'Aradan', imageURL: '',
+    username: username, imageURL: '',
     description: 'Ejemplo de descripcion', 
     threads: [] }
   );
