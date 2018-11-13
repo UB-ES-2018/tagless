@@ -29,6 +29,10 @@ module.exports = {
       vote: {
         type: Sequelize.INTEGER
       }
+    }).then(function() {
+      return queryInterface.sequelize.query(
+          'ALTER TABLE Likes ADD UNIQUE unique_index (userId, thread_id)'
+      );
     });
   },
   down: (queryInterface, Sequelize) => {

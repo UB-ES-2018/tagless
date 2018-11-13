@@ -18,5 +18,5 @@ mixin thread(thread)
                     a(href='/thread/' + thread.id + '/comments' )
                         h3.card-text #{thread.title}
         .card-footer.text-muted
-            | #{thread.date}
-            a(href='/users/'+thread.username)  #{thread.username}
+            | #{thread.createdAt}
+            a(href='/users/'+thread.userName)  #{thread.userName}

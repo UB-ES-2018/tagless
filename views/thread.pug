@@ -16,10 +16,10 @@ block main
   // Author
   p.lead
     | by
-    a(href='/users/'+username)  #{username}
+    a(href='/users/'+username)  #{thread.userName}
   hr
   // Date/Time
-  p Posted on #{thread.date}
+  p Posted on #{thread.createdAt}
   hr
   // Preview Image
   //img.img-fluid.rounded(src='http://placehold.it/900x300' alt='')
