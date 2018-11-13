@@ -20,7 +20,6 @@ module.exports = (sequelize, DataTypes) => {
           foreignKey: 'like_id',
           as: 'likes',
       })
-
   };
   return Thread;
 };

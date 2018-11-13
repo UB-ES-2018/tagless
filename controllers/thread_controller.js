@@ -60,3 +60,21 @@ exports.getAllThreads = function(){
     });
     
 };
+
+
+exports.getUserThreads = function(u_username){
+    return new Promise(function(resolve, reject){
+        var Threads = threadModel(sequelize, DataTypes);
+        Threads.findAll({where : {username : u_username},
+            order: [ [ 'updatedAt', 'DESC' ]] })
+        .then(result => {
+            var list = []
+            while(i < 5 && i< result){
+                list.push(result[i]);
+            }
+            resolve(list);
+
+        });
+
+    });
+}
