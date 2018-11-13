@@ -13,5 +13,11 @@ block main
 					.custom-file
 						input#input_file.custom-file-input(type='file', name="image" accept=".png, .jpg, .jpeg")
 						label.custom-file-label(for='input_file') Choose file
+				.form-group
+					label Privacy
+					select.form-control(name='privacy')
+						option(value=0) Public
+						option(value=1) Only Logged
+						option(value=2) Private
 				hr
 				button.btn.btn-secondary(type='submit') Save changes
