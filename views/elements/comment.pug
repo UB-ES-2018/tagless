@@ -1,5 +1,7 @@
 // Single Comment
-mixin subcomment(subcomment)
+
+
+//-mixin subcomment(subcomment)
     .media.mt-4
         img.d-flex.mr-3.rounded-circle(src='http://placehold.it/50x50' alt='')
         .media-body
@@ -7,7 +9,7 @@ mixin subcomment(subcomment)
             | #{subcomment.text}
             if subcomment.reply
                 each subreply in subcomment.reply
-                    +subcomment(subreply)
+                    +subcomment(subreply) //
             
 mixin comment(comment)
     .media.mb-4
@@ -18,14 +20,14 @@ mixin comment(comment)
 
         img.d-flex.mr-3.rounded-circle(src='http://placehold.it/50x50' alt='')
         .media-body
-            h5.mt-0 #{comment.autor.username}
+            h5.mt-0 #{comment.User.username}
                 small
                     if comment.karma
                         small #{comment.karma} points
                     else
                         small 0 points
                     br
-            | #{comment.text}
+            | #{comment.body}
 
             //if comment.reply
                 each subcomment in comment["reply"]

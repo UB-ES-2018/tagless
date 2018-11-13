@@ -8,7 +8,6 @@ var models = require('./config/models');
 var session = require ('express-session');
 var sequelizeConnection = require("./config/sequelizeConnection");
 
-
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var threadRouter = require('./routes/thread');
