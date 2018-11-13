@@ -29,7 +29,7 @@ block script
             //No me borreis el post done y fail!
             $('.upvote.thread').click(function () {
                 var thread_id = $(this).attr("data-thread-id");
-                $.post("/vote/thread", {
+                $.post("/api/vote/thread", {
                     val: 1,
                     id: thread_id
                 }).done(function (data) {
@@ -41,7 +41,7 @@ block script
 
             $('.downvote.thread').click(function () {
                 var thread_id = $(this).attr("data-thread-id");
-                $.post("/vote/thread", {
+                $.post("/api/vote/thread", {
                     val: -1,
                     id: thread_id
                 }).done(function (data) {

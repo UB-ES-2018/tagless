@@ -43,13 +43,13 @@ router.get('/', function(req, res, next) {
 
 });
 
-router.post('/vote', function(req, res, next) {
+router.post('/api/vote/thread', function(req, res, next) {
 
   var thread_id = req.body.id;
   var vote = req.body.val;
   var username = req.session.user;
 
-  console.log(req.session);
+  console.log(req.body);
   console.log("THREAD_ID: ",thread_id);
   console.log("VALOR: ", vote);
   console.log("USER: ", username);
