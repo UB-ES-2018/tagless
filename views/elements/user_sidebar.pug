@@ -2,14 +2,14 @@
 	.card.my-4
 		.card-body
 			.image-block
-				img.rounded-circle.img_profile(src="/static/images/users/"+username+"/profile.jpg"
+				img.rounded-circle.img_profile(src="/static/images/users/"+user.username+"/profile.jpg"
 					alt="profile_picture" onerror="this.onerror=null;this.src='/static/images/default_profile.png';")
 			h5
-				a(href="/users/"+username) #{username}
+				a(href="/users/"+user.username) #{user.username}
 			p.profile-text 0 Karma
 
 			//Check if user is logged
-			if is_logged && username==logged_username
+			if is_logged && user.username===logged_username
 				button.btn.btn-sm.btn-block.btn-primary(type="button") New Thread
 				br
 				a.btn.btn-secondary(role='button', href="/users/"+logged_username+"/settings" id="urluploader") Edit Profile
@@ -18,4 +18,4 @@
 	.card.my-4
 		h5.card-header Description
 		.card-body
-			| #{description}
+			| #{user.description}
