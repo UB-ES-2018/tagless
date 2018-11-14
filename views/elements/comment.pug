@@ -17,9 +17,9 @@ mixin comment(comment)
             span.comment.upvote.oi.oi-arrow-top(title="upvote" data-comment-id=comment.id role="button" aria-hidden="true")
             br
             if comment.karma
-                span(id="karma"+comment.id ) #{comment.karma}
+                span(id="comment-karma"+comment.id ) #{comment.karma}
             else
-                span(id="karma"+comment.id ) 0
+                span(id="comment-karma"+comment.id ) 0
             br
             span.comment.downvote.oi.oi-arrow-bottom(title="downvote" data-comment-id=comment.id role="button" aria-hidden="true")
 
