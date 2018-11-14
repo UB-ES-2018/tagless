@@ -1,5 +1,7 @@
 // Single Comment
-mixin subcomment(subcomment)
+
+
+//-mixin subcomment(subcomment)
     .media.mt-4
         img.d-flex.mr-3.rounded-circle(src='http://placehold.it/50x50' alt='')
         .media-body
@@ -7,14 +9,12 @@ mixin subcomment(subcomment)
             | #{subcomment.text}
             if subcomment.reply
                 each subreply in subcomment.reply
-                    +subcomment(subreply)
+                    +subcomment(subreply) //
             
 mixin comment(comment)
-    .media.mb-4
-        img.d-flex.mr-3.rounded-circle(src='http://placehold.it/50x50' alt='')
-        .media-body
-            h5.mt-0 #{comment.autor.username}
-            | #{comment.text}
-            if comment.reply
-                each subcomment in comment["reply"]
-                    +subcomment(subcomment)
+    if comment.User
+        .media.mb-4
+            img.d-flex.mr-3.rounded-circle(src='http://placehold.it/50x50' alt='')
+            .media-body
+                h5.mt-0 #{comment.User.username}
+                | #{comment.body}

@@ -101,6 +101,20 @@ async function asyncCallGetUser(user_name, req,res) {
 router.get('/:username/', function (req, res, next) {
   var username=req.params.username;
   console.log('Cookies: ', req.cookies);
+    //Implementation
+    ctl_user.getUserByUsername(username)
+        .then(function(user){
+            if (!user) return res.status(404).send("User Not found");
+            res.render('user/user_activity', {
+                username: user.username,
+                imageURL: user.pictureLink,
+                description: user.description,
+                threads: [] }
+            );
+        }, function(err){
+            console.log(err);
+            res.status(500).send("Internal server error");
+        });
   asyncCallGetUser(username,req,res);
 });
 
@@ -141,9 +155,9 @@ router.get('/:username/settings', function (req, res, next) {
   var username = req.params.username;
 
   //Implementation
-  /*ctl_user.getUserByUsername(username)
+  ctl_user.getUserByUsername(username)
       .then(function(user){
-        console.log(user);
+        if (!user) return res.status(404).send("User Not found");
         res.render('user/user_settings', {
           username: user.username,
           imageURL: user.pictureLink,
@@ -152,6 +166,8 @@ router.get('/:username/settings', function (req, res, next) {
         );
       }, function(err){
         console.log(err);
+        res.status(500).send("Internal server error");
+      });
         res.status(500).send(err);
       })*/
 
@@ -173,35 +189,51 @@ function moveFile(file, somePlace) {
 }
 
 router.post('/:username/settings', function (req, res, next) {
+  //process req
   var username = req.params.username;
+  var description = req.body.description;
   var appDir = path.dirname(require.main.filename);
-  
-  //TODO
-  // Save description on user entity
 
-
-  if (Object.keys(req.files).length > 0) {
-    let filepath = appDir + "/../public/images/users/" + username;
-    console.log(filepath);
-    if (!fs.existsSync(filepath)) {
-      fs.mkdirSync(filepath, { recursive: true }, (err) => {
-        if (err) throw err;
+  //Implementation
+  ctl_user.getUserByUsername(username)
+      .then(function(user){
+        ctl_user.updateProfile(user.id, description, null)
+            .then(function(success){
+            }, function(err){
+              throw err;
+            });
+      }, function(err){
+        throw err;
       });
+
+  try {
+
+    if (Object.keys(req.files).length > 0) {
+      let filepath = appDir + "/../public/images/users/" + username;
+      console.log(filepath);
+      if (!fs.existsSync(filepath)) {
+        fs.mkdirSync(filepath, {recursive: true}, (err) => {
+          if (err) throw err;
+        });
+      }
+      const fileMovePromise =
+          req.files ? moveFile(req.files.image, filepath + '/profile.jpg') : Promise.resolve('No file present');
+
+      fileMovePromise
+          .then(() => {
+
+            //TODO:
+            res.redirect("/users/" + username);
+          })
+          .catch(err => {
+            console.log(err);
+            res.status(500).json(err);
+          });
     }
-    const fileMovePromise =
-      req.files ? moveFile(req.files.image, filepath + '/profile.jpg') : Promise.resolve('No file present');
-
-    fileMovePromise
-      .then(() => {
-
-        //TODO: 
-        res.redirect("/users/"+username);
-      })
-      .catch(err => {
-        console.log(err);
-        res.status(500).json(err);
-      });
+  } catch (err){
+    res.status(500).send(err);
   }
+
   res.redirect("/users/"+username);
 });
 
