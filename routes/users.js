@@ -71,7 +71,9 @@ router.get('/:username/', function (req, res) {
             else if (user.privacity === 1) show_user = res.locals.is_logged;
             else show_user = res.locals.is_logged && res.locals.logged_username === username;
             if (show_user){
-                next();
+                return res.render('user/user_activity', {
+                    user:user.dataValues, threads:[],
+                });
             }else{
                 return res.render('user/user_private', {
                     user:user.dataValues
