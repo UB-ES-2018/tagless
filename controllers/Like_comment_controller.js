@@ -13,7 +13,9 @@ exports.findallLikesfromComment = function(comment_id) {
                 if (result) {
                     resolve(result[0]['SUM(vote)']);
                 }
-            });
+            }, function(err){
+            reject("Query failed");
+        });
     });
 };
 
