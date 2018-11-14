@@ -72,17 +72,25 @@ router.get('/:username/', function (req, res) {
             else show_user = res.locals.is_logged && res.locals.logged_username === username;
             if (show_user){
                 return res.render('user/user_activity', {
-                    user:user.dataValues, threads:[],
+                    user:user.dataValues,
+                    threads: ctl_user.getCommentedThreadsByUser(user.id)
+                        .then(function (threads) {
+                            console.log(threads);
+                        }, function (err) {
+                            console.log(err);
+                            res.status(500).send("Internal server error");
+                        })
                 });
             }else{
                 return res.render('user/user_private', {
                     user:user.dataValues
                 });
             }
-        }, function(err){
+        }, function (err) {
             console.log(err);
             res.status(500).send("Internal server error");
         });
+
 });
 
 router.get('/:username/settings', function (req, res) {
