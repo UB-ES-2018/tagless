@@ -2,28 +2,14 @@ var sequelizeConnection = require("../config/sequelizeConnection");
 var sequelize = sequelizeConnection.sequelize;
 var userController = require('./user_controller');
 var threadModel = require('../models/thread');
+var likeModel = require('../models/like');
 
 var DataTypes = require('sequelize/lib/data-types');
-
-
-
-exports.thread_getThread = function(t_title,t_text) {
-
-    getAllThreads(function(err, content) {
-        if (err) {
-            return next("Mysql error, check your query");
-        } else {
-            console.log(content);
-        }
-    });
-    
-    
-
-};
 
 exports.postThread = function(u_username,t_title,t_text) {
 
     const Thread = threadModel(sequelize, DataTypes);
+    const Like = likeModel(sequelize, DataTypes);
     //We look for the user id with the fetUser method just with the user name
     //yeh... we have to change it.
 
@@ -35,15 +21,21 @@ exports.postThread = function(u_username,t_title,t_text) {
         //Get the user of the username loged and post in his name. (if it is loged)
         return userController.getUserByUsername(u_username)
             .then(function(user){
+                var threadId;
                 //With this id, the title and the text we create the model to the database.
                 Thread.create({
                     userId : user['id'],
                     userName : user['username'],
                     title: t_title,
                     description: t_text,
+                }).then( threadCreated => {
+                    Like.create({
+                        userId: threadCreated.userId,
+                        thread_id: threadCreated.id,
+                        vote: 1,
+                    });
                 });
                 return true;
-    xº
             }, function(err){
                 return false;
         });
@@ -55,8 +47,8 @@ exports.postThread = function(u_username,t_title,t_text) {
 
 exports.getAllThreads = function(){
 
-
     return new Promise(function(resolve, reject){
+
         sequelize.query("SELECT * FROM Threads")
             .then(function(allThreads){
 
@@ -66,5 +58,21 @@ exports.getAllThreads = function(){
             });
     });
     
+};
 
+
+exports.getThreadById = function(threadId){
+
+    return new Promise(function(resolve, reject){
+        var sequelize = sequelizeConnection.sequelize;
+        var ThreadModel = threadModel(sequelize, DataTypes);
+
+        ThreadModel.find({where : {id : threadId} })
+            .then(function(thread){
+                resolve(thread);
+            }, function(err){
+                console.log("Error ocurred: "+err);
+                reject(err);
+            })
+  });
 };

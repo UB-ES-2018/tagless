@@ -13,6 +13,7 @@ var usersRouter = require('./routes/users');
 var threadRouter = require('./routes/thread');
 var commentsRouter = require('./routes/comments');
 
+
 var app = express();
 var sequelize = sequelizeConnection.sequelize; //instance to query
 
@@ -51,7 +52,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     cookie: {
-        expires: 60000
+        expires: 60000000000000
     }
 }));
 
@@ -60,7 +61,7 @@ app.use(session({
 app.use((req, res, next) => {
     console.log("Cookie user_sid "+ req.cookies.user_sid);
     console.log("Req Session user "+ req.session.user);
-    res.locals.is_loged = false;
+    res.locals.is_logged = false;
     if (req.cookies.user_sid){
         if (!req.session.user){
             console.log("Clear cookie");
@@ -70,6 +71,7 @@ app.use((req, res, next) => {
             res.locals.logged_username = req.session.user;
         }
     }
+    console.log(res.locals.is_logged);
     next();
 });
 
@@ -77,6 +79,8 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/thread', threadRouter);
 app.use('/static', express.static('public'));
+app.use('/static/open-iconic', express.static('node_modules/open-iconic'));
+
 
 //test
 app.use('/comments', commentsRouter);
