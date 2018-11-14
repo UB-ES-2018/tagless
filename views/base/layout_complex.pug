@@ -33,7 +33,9 @@ block script
                     val: 1,
                     id: thread_id
                 }).done(function (data) {
-                    alert("Thread upvoted");
+                    var karma = $("#karma"+thread_id);
+                    var value = parseInt(karma.text())+1;
+                    karma.text(value);
                 }).fail(function (data) {
                     alert("Error");
                 });
@@ -45,7 +47,11 @@ block script
                     val: -1,
                     id: thread_id
                 }).done(function (data) {
-                    alert("Thread downvoted");
+
+                    var karma = $("#karma"+thread_id);
+                    var value = parseInt(karma.text())-1;
+                    karma.text(value);
+
                 }).fail(function (data) {
                     alert("Error");
                 });
@@ -57,7 +63,9 @@ block script
                     val: 1,
                     id: comment_id
                 }).done(function (data) {
-                    alert("Comment upvoted");
+                    var karma = $("#karma"+comment_id);
+                    var value = parseInt(karma.text())+1;
+                    karma.text(value);
                 }).fail(function (data) {
                     alert("Error");
                 });
@@ -69,7 +77,9 @@ block script
                     val: -1,
                     id: comment_id
                 }).done(function (data) {
-                    alert("Comment downvoted");
+                    var karma = $("#karma"+comment_id);
+                    var value = parseInt(karma.text())-1;
+                    karma.text(value);
                 }).fail(function (data) {
                     alert("Error");
                 });

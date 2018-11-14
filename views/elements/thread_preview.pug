@@ -9,7 +9,7 @@ mixin thread(thread)
                         span.upvote.thread.oi.oi-arrow-top(title="upvote" data-thread-id=thread.id role="button" aria-hidden="true")
                         br
                         if thread.karma
-                            | #{thread.karma}
+                            span(id="karma"+thread.id ) #{thread.karma}
                         else
                             | 0
                         br

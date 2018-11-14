@@ -57,7 +57,7 @@ router.post('/signup', function (req, res, next) {
   var user = ctl_user.userController_Signup(req.body['email'], req.body['username'], req.body['password']);
   //router.put('/profileView/:userId', ctl_user.updateProfile); //To validate from merge
     console.log(user);
-    res.send("Registered. Please log in");
+    res.redirect("/");
 });
 
 router.get('/:username/', function (req, res, next) {

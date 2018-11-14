@@ -28,47 +28,48 @@ async function asyncCallCommentLikeDislike(comment_id, username, vote, req, res)
     // expected output: 'resolved'
 }
 
+async function asyncCallToShowAllThreads(req,res,next) {
+
+  var allThreads = await ctl_thread.getAllThreads()
+  console.log("ALLTHREADS: ",allThreads);
+  showList= [];
+  
+  for(i in allThreads){
+        
+    var karma = await asyncCallALLlike(allThreads[i]['id'],req,res);
+    if(!karma){
+      karma=0;
+    }
+    threadList ={"id": allThreads[i]['id'],
+      "text":allThreads[i]['description'],
+      "date":allThreads[i]['updatedAt'],
+      "title":allThreads[i]['title'],
+      "username":allThreads[i]['userName'],
+      "karma": karma
+    };
+    console.log("PROMISE: ",karma);
+    showList.push(threadList);
+
+  }
+  console.log(showList);
+  res.render('index', { title: 'Express', 'threads':showList});
+}
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
   //Get all threads
-
-  ctl_thread.getAllThreads()
-    .then(function(allThreads){
-      showList= [];
-      for(i in allThreads){
-        threadList ={"id": allThreads[i]['id'],
-        "text":allThreads[i]['description'],
-        "date":allThreads[i]['updatedAt'],
-        "title":allThreads[i]['title'],
-        "username":allThreads[i]['userName']};
-        
-        showList.push(threadList);
-      }
-      console.log(showList);
-      res.render('index', { title: 'Express', 'threads':showList});
-    });
+  asyncCallToShowAllThreads(req, res, next);
 });
 
 async function asyncCallALLlike(thread_id,req,res) {
     var result = await ctl_like.findallLikesfromThread(thread_id,req,res);
-    if (result){
-        res.redirect('/');
-    }
-    else{
-        res.send("Error en el like/dislike a un commentario");
-    }
+    return result;
     // expected output: 'resolved'
 }
 
 async function asyncCallALLlikeComment(thread_id,req,res) {
     var result = await ctl_like.findallLikesfromComment(thread_id,req,res);
-    if (result){
-        res.redirect('/');
-    }
-    else{
-        res.send("Error en el like/dislike a un commentario");
-    }
+    return result;
     // expected output: 'resolved'
 }
 
@@ -80,9 +81,9 @@ router.post('/api/vote/thread', function(req, res, next) {
 
   if (username){
     asyncCallPostLikeDislike(thread_id, username, vote, req, res);
+    
   }else{
     res.send("No estas logueado, logueate");
-
   }
 });
 
