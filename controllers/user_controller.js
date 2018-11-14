@@ -1,6 +1,8 @@
 var sequelizeConnection = require("../config/sequelizeConnection");
 var Sequelize = require('sequelize');
 var userModel = require('../models/user');
+var Comment = require('../models/comment');
+var Thread = require('../models/thread');
 var DataTypes = require('sequelize/lib/data-types');
 const bcrypt = require('bcrypt');
 
@@ -84,63 +86,115 @@ exports.getUser = function (u_name, callback) {
         {replacements: [u_name], type: sequelize.QueryTypes.SELECT})
         .then(result => {
 
-        if (result[0]['id']){
-            callback(null,result[0]['id']);
+            if (result[0]['id']) {
+                callback(null, result[0]['id']);
 
-        }
-        else{
-            callback(null,null);
-        }
-    });
+            }
+            else {
+                callback(null, null);
+            }
+        });
 };
 
-exports.updateProfile = function(userId, description, pictureLink){
+exports.updateProfile = function (userId, description, pictureLink) {
 
-    return new Promise(function(resolve,reject){
-       var sequelize = sequelizeConnection.sequelize;
-       var UserModel = userModel(sequelize, DataTypes);
-
-      UserModel.find({ where : { id: userId } })
-          .then(function(user){
-            user.updateAttributes({
-              pictureLink: pictureLink,
-              description: description
-            });
-            resolve("User with ID:"+userId+" successfully updated");
-          },function(err){
-             reject("Problem ocurred: "+err);
-          });
-    });
-};
-
-exports.getUserById = function(userId){
-
-    return new Promise(function(resolve, reject){
+    return new Promise(function (resolve, reject) {
         var sequelize = sequelizeConnection.sequelize;
         var UserModel = userModel(sequelize, DataTypes);
 
-        UserModel.find({where : {id : userId} })
-            .then(function(user){
+        UserModel.find({where: {id: userId}})
+            .then(function (user) {
+                user.updateAttributes({
+                    pictureLink: pictureLink,
+                    description: description
+                });
+                resolve("User with ID:" + userId + " successfully updated");
+            }, function (err) {
+                reject("Problem ocurred: " + err);
+            });
+    });
+};
+
+exports.getUserById = function (userId) {
+
+    return new Promise(function (resolve, reject) {
+        var sequelize = sequelizeConnection.sequelize;
+        var UserModel = userModel(sequelize, DataTypes);
+
+        UserModel.find({where: {id: userId}})
+            .then(function (user) {
                 resolve(user);
-            }, function(err){
-                console.log("Error ocurred: "+err);
+            }, function (err) {
+                console.log("Error ocurred: " + err);
                 reject(err);
             })
-  });
+    });
 };
 
-exports.getUserByUsername = function(u_username){
+exports.getUserByUsername = function (u_username) {
 
-  return new Promise(function(resolve, reject){
-    var sequelize = sequelizeConnection.sequelize;
-    var UserModel = userModel(sequelize, DataTypes);
+    return new Promise(function (resolve, reject) {
+        var sequelize = sequelizeConnection.sequelize;
+        var UserModel = userModel(sequelize, DataTypes);
 
-    UserModel.find({where : {username : u_username} })
-        .then(function(user){
-          resolve(user);
-        }, function(err){
-          console.log("Error ocurred: "+err);
-          reject(err);
-        })
-  });
+        UserModel.find({where: {username: u_username}})
+            .then(function (user) {
+                resolve(user);
+            }, function (err) {
+                console.log("Error ocurred: " + err);
+                reject(err);
+            })
+    });
 };
+
+
+function selectUniqueThreads(threads) {
+    results = [];
+    for (var i = 0; i < threads.length; i++) {
+        if (!results.includes(threads[i])) {
+            results.push(threads[i]);
+        }
+        if (results.length === 5) {
+            break;
+        }
+    }
+    return results;
+}
+
+exports.getCommentedThreadsByUser = function (userId) {
+
+    return new Promise(function (resolve, reject) {
+        var sequelize = sequelizeConnection.sequelize;
+        var CommentModel = Comment(sequelize, DataTypes);
+        var ThreadModel = Thread(sequelize, DataTypes);
+
+        if (typeof userId !== 'undefined') {
+            CommentModel.findAll(
+                {
+                    where: {
+                        userId: userId
+                    },
+                    order: [
+                        ['createdAt', 'DESC']
+                    ]
+                }
+            ).then(function (data) {
+                data = data.map(com => com.get('threadId'));
+                data = selectUniqueThreads(data);
+                ThreadModel.findAll({
+                    where: {
+                        id: data
+                    }
+                }).then((results) =>
+                    resolve(results)
+                );
+            }, function (err) {
+                reject(err);
+            });
+
+        } else {
+            reject("userId is null");
+        }
+    });
+};
+

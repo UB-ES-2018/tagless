@@ -30,53 +30,61 @@ router.post('/login', sessionChecker, function (req, res, next) {
     console.log(req.body);
 
     //Get data from request and log user
-    ctl_user.userController_Login(req.body['username'], req.body['password'], 
-      function(success) {
-        if (success instanceof Error){
-          return res.send(success.message);
-        }
-        if(success){
-          req.session.user = req.body['username'];
-          res.redirect("/");
-        } else {
-          res.send("Wrong password");
-        }
-    });
+    ctl_user.userController_Login(req.body['username'], req.body['password'],
+        function (success) {
+            if (success instanceof Error) {
+                return res.send(success.message);
+            }
+            if (success) {
+                req.session.user = req.body['username'];
+                res.redirect("/");
+            } else {
+                res.send("Wrong password");
+            }
+        });
 });
 
 /* GET user singup. */
 router.get('/signup', function (req, res, next) {
 
-  res.render('signup');
+    res.render('signup');
 });
 
 /* POST user register. */
 router.post('/signup', function (req, res, next) {
-  //TODO
-  //Get data from request and log user
-  var user = ctl_user.userController_Signup(req.body['email'], req.body['username'], req.body['password']);
-  //router.put('/profileView/:userId', ctl_user.updateProfile); //To validate from merge
+    //TODO
+    //Get data from request and log user
+    var user = ctl_user.userController_Signup(req.body['email'], req.body['username'], req.body['password']);
+    //router.put('/profileView/:userId', ctl_user.updateProfile); //To validate from merge
     console.log(user);
     res.send("Registered. Please log in");
 });
 
 router.get('/:username/', function (req, res, next) {
-  var username=req.params.username;
-  console.log('Cookies: ', req.cookies);
+    var username = req.params.username;
+    console.log('Cookies: ', req.cookies);
     //Implementation
     ctl_user.getUserByUsername(username)
-        .then(function(user){
+        .then(function (user) {
             if (!user) return res.status(404).send("User Not found");
             res.render('user/user_activity', {
-                username: user.username,
-                imageURL: user.pictureLink,
-                description: user.description,
-                threads: [] }
+                    username: user.username,
+                    imageURL: user.pictureLink,
+                    description: user.description,
+                    threads: ctl_user.getCommentedThreadsByUser(user.id)
+                        .then(function (threads) {
+                            console.log(threads);
+                        }, function (err) {
+                            console.log(err);
+                            res.status(500).send("Internal server error");
+                        })
+                }
             );
-        }, function(err){
+        }, function (err) {
             console.log(err);
             res.status(500).send("Internal server error");
         });
+
 });
 
 
