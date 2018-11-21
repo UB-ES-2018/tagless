@@ -25,13 +25,13 @@ mixin comment(comment)
 
         img.d-flex.mr-3.rounded-circle(src='http://placehold.it/50x50' alt='')
         .media-body
-            h5.mt-0 #{comment.User.username}
-                small
-                    if comment.karma
-                        small #{comment.karma} points
-                    else
-                        small 0 points
-                    br
+            a(href='/users/'+comment.User.username) #{comment.User.username} 
+            small
+                if comment.karma
+                    small #{comment.karma} points
+                else
+                    small 0 points
+                br
             | #{comment.body}
 
             //if comment.reply

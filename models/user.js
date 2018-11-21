@@ -28,6 +28,10 @@ module.exports = (sequelize, DataTypes) => {
       description: {
         type: DataTypes.STRING
       },
+      privacity: {
+        defaultValue: 0,
+        type: DataTypes.INTEGER
+      },
   }, {});
   User.associate = function(models) {
     // associations can be defined here
