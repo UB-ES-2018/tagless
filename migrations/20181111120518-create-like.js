@@ -1,24 +1,22 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Users', {
+    return queryInterface.createTable('Likes', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      userid: {
+      userId: {
+        allowNull: false,
+        primaryKey: true,
         type: Sequelize.INTEGER
       },
-      email: {
-        type: Sequelize.STRING
-      },
-      username: {
-        type: Sequelize.STRING
-      },
-      pass: {
-        type: Sequelize.STRING
+      thread_id: {
+        allowNull: false,
+        primaryKey: true,
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,
@@ -28,13 +26,16 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       },
-      privacity: {
-        defaultValue: 0,
+      vote: {
         type: Sequelize.INTEGER
-      },
+      }
+    }).then(function() {
+      return queryInterface.sequelize.query(
+          'ALTER TABLE Likes ADD UNIQUE unique_index (userId, thread_id)'
+      );
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Users');
+    return queryInterface.dropTable('Likes');
   }
 };

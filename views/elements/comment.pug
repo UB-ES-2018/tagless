@@ -1,5 +1,7 @@
 // Single Comment
-mixin subcomment(subcomment)
+
+
+//-mixin subcomment(subcomment)
     .media.mt-4
         img.d-flex.mr-3.rounded-circle(src='http://placehold.it/50x50' alt='')
         .media-body
@@ -7,14 +9,31 @@ mixin subcomment(subcomment)
             | #{subcomment.text}
             if subcomment.reply
                 each subreply in subcomment.reply
-                    +subcomment(subreply)
+                    +subcomment(subreply) //
             
 mixin comment(comment)
     .media.mb-4
+        div
+            span.comment.upvote.oi.oi-arrow-top(title="upvote" data-comment-id=comment.id role="button" aria-hidden="true")
+            br
+            if comment.karma
+                span(id="karma"+comment.id ) #{comment.karma}
+            else
+                span(id="karma"+comment.id ) 0
+            br
+            span.comment.downvote.oi.oi-arrow-bottom(title="downvote" data-comment-id=comment.id role="button" aria-hidden="true")
+
         img.d-flex.mr-3.rounded-circle(src='http://placehold.it/50x50' alt='')
         .media-body
-            h5.mt-0 #{comment.autor.username}
-            | #{comment.text}
-            if comment.reply
+            a(href='/users/'+comment.User.username) #{comment.User.username} 
+            small
+                if comment.karma
+                    small #{comment.karma} points
+                else
+                    small 0 points
+                br
+            | #{comment.body}
+
+            //if comment.reply
                 each subcomment in comment["reply"]
                     +subcomment(subcomment)
