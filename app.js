@@ -18,7 +18,7 @@ var app = express();
 var sequelize = sequelizeConnection.sequelize; //instance to query
 
 //test ----
-const User = sequelize.define('User',{
+/*const User = sequelize.define('User',{
   userId : Sequelize.INTEGER, 
   email: Sequelize.STRING,
   username: Sequelize.STRING,
@@ -33,7 +33,7 @@ sequelize.query('SELECT * FROM Users')
 var data = User.findAll({
     attributes: ['username', 'pass']});
 
-console.log(data.valueOf());
+console.log(data.valueOf());*/
 //test ----
 
 // view engine setup
