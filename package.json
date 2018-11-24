@@ -23,7 +23,8 @@
     "pug": "2.0.0-beta11",
     "sequelize": "^4.39.0",
     "session-file-store": "^1.2.0",
-    "sqlite3": "^4.0.2"
+    "sqlite3": "^4.0.2",
+    "hat": "0.0.3"
   },
   "devDependencies": {
     "sequelize-cli": "^4.1.1"

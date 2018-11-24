@@ -5,6 +5,7 @@ var Comment = require('../models/comment');
 var Thread = require('../models/thread');
 var DataTypes = require('sequelize/lib/data-types');
 const bcrypt = require('bcrypt');
+var hat = require('hat');
 
 
 exports.userController_Signup = function (u_email, u_name, u_pass) {
@@ -28,10 +29,17 @@ exports.userController_Signup = function (u_email, u_name, u_pass) {
             else {
                 bcrypt.genSalt(saltRounds, function (err, salt) {
                     bcrypt.hash(u_pass, salt, function (err, hash) {
+                        //Generamos API key:
+                        var apikey = hat();
+
+                        console.log("--------------------------");
+                        console.log(apikey);
+                        console.log("--------------------------");
                         User.create({
                             email: u_email,
                             username: u_name,
                             pass: hash,
+                            apiKey: apikey,
                         });
                     });
                 });
