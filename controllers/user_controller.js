@@ -208,4 +208,16 @@ exports.getCommentedThreadsByUser = function (userId) {
         }
     });
 };
+async function asyncCountAPIKey(u_APIKey){
+    var UserModel = userModel(sequelize, DataTypes);
+
+    var countAPIKey = await UserModel.findAndCountAll({where: { APIKey : u_APIKey}}).then(
+        result => {
+            resolve(result.count);
+    });
+    return countAPIKey;
+}
+exports.countAPIKey = function (u_APIKey) {
+    return asyncCountAPIKey(u_APIKey);
+};
 
