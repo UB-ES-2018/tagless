@@ -32,6 +32,10 @@ exports.userController_Signup = function (u_email, u_name, u_pass) {
                             email: u_email,
                             username: u_name,
                             pass: hash,
+                        }).then(user => {
+                            console.log("User created and added to sitexml");
+                            sitemap.add({url: 'users/' + user.username});
+                            sitemap.clearCache();
                         });
                     });
                 });
