@@ -206,11 +206,12 @@ exports.getCommentedThreadsByUser = function (userId) {
     });
 };
 exports.getUserByAPIKey = function(u_APIKey){
-    return new promise (function (resolve,reject){
-
+    
+    return new Promise(function (resolve, reject) {
+        var sequelize = sequelizeConnection.sequelize;
         var UserModel = userModel(sequelize, DataTypes);
 
-        UserModel.find({where: {apiKey: u_APIKey}})
+        UserModel.findOne({where: {apiKey: u_APIKey}})
             .then(function (user) {
                 resolve(user);
             }, function (err) {
