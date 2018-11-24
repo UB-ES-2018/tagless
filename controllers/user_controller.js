@@ -31,15 +31,12 @@ exports.userController_Signup = function (u_email, u_name, u_pass) {
                     bcrypt.hash(u_pass, salt, function (err, hash) {
                         //Generamos API key:
                         var apikey = hat();
-
-                        console.log("--------------------------");
-                        console.log(apikey);
-                        console.log("--------------------------");
                         User.create({
                             email: u_email,
                             username: u_name,
                             pass: hash,
                             apiKey: apikey,
+                            privacity : 0,
                         });
                     });
                 });
@@ -208,16 +205,19 @@ exports.getCommentedThreadsByUser = function (userId) {
         }
     });
 };
-async function asyncCountAPIKey(u_APIKey){
-    var UserModel = userModel(sequelize, DataTypes);
+exports.getUserByAPIKey = function(u_APIKey){
+    return new promise (function (resolve,reject){
 
-    var countAPIKey = await UserModel.findAndCountAll({where: { APIKey : u_APIKey}}).then(
-        result => {
-            resolve(result.count);
+        var UserModel = userModel(sequelize, DataTypes);
+
+        UserModel.find({where: {apiKey: u_APIKey}})
+            .then(function (user) {
+                resolve(user);
+            }, function (err) {
+                console.log("Error ocurred: " + err);
+                reject(err);
+            })
     });
-    return countAPIKey;
+
 }
-exports.countAPIKey = function (u_APIKey) {
-    return asyncCountAPIKey(u_APIKey);
-};
 
