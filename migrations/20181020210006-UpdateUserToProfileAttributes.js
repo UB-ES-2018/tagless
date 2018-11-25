@@ -3,9 +3,9 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
 
-      queryInterface.addColumn('Users', 'pictureLink', {type: Sequelize.STRING}).then(function(success) {
-        return queryInterface.addColumn('Users', 'description', {type: Sequelize.STRING});
-      });
+      queryInterface.addColumn('Users', 'pictureLink', {type: Sequelize.STRING});
+      return queryInterface.addColumn('Users', 'description', {type: Sequelize.STRING});
+
   },
 
   down: (queryInterface, Sequelize) => {
