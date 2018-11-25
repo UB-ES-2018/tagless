@@ -30,3 +30,4 @@ public/images/users/*
 !public/images/users/placeholder.txt
 #Idea
 .idea/*
+sessions/*
