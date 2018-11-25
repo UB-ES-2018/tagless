@@ -86,9 +86,9 @@ setUp = function(indexNames, tableNames) {
   for (let i=0; i<indexNames.length; i++) {
     try {
       elasticClient.indices.delete({index: indexNames[i]}, function (err, resp, status) {
-        console.log("AFTER DELETE " + indexNames[i] + " OF TABLE " + tableNames[i]);
+        console.log("AFTER DELETE INDEX " + indexNames[i] + " OF TABLE " + tableNames[i]);
         elasticClient.indices.create({index: indexNames[i]}, function(err, resp, status){
-          console.log("AFTER CREATE " + indexNames[i] + " OF TABLE " + tableNames[i]);
+          console.log("AFTER CREATE INDEX" + indexNames[i] + " OF TABLE " + tableNames[i]);
           make(indexNames[i], tableNames[i]);
         });
       });
@@ -98,7 +98,7 @@ setUp = function(indexNames, tableNames) {
   }
 };
 
-module.exports.mapElasticsearch =  async function() {
+module.exports.mapElasticsearch =  function() {
   fs.readdir('../models/', function(err, files) {
     if (err) {
       console.log(err);
@@ -123,5 +123,25 @@ module.exports.mapElasticsearch =  async function() {
   });
 };
 
+module.exports.addDocument = function(indexName, document) {
+    elasticClient.index({
+    index: indexName,
+    id: document.id,
+    type: indexName,
+    body: document,
+  }, function (err, resp, status) {
+    console.log(resp);
+  });
+};
+
+module.exports.delDocument = function(indexName, id) {
+  elasticClient.delete({
+    index: indexName,
+    id: id,
+    type: indexName
+  }, function (err, resp, status) {
+    console.log(resp);
+  });
+};
 
 this.mapElasticsearch();
