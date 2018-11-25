@@ -3,6 +3,7 @@ const elasticClient = require('./elasticsearchConnection');
 const sequelize = require('./sequelizeConnection');
 const sequelizeClient = sequelize.sequelize;
 const path = require('path');
+const fetch = require("node-fetch");
 
 elasticClient.cluster.health({}, function(err,resp,status) {
   console.log("-- Client Health --", resp);
@@ -15,6 +16,7 @@ var bulk = [];
 
 
 var makebulk = async function(indexName, tableName, entityList, callback){
+  console.log("MAKEBULK OF " + tableName);
 
   var description = await sequelizeClient.queryInterface.describeTable(tableName);
   var attributes = Object.keys(description);
@@ -50,27 +52,26 @@ var indexall = function(indexName, madebulk, callback) {
   });
 };
 
-async function make(indexNames, tableNames) {
-   var data = [];
-   for (let i=0; i<tableNames.length; i++){
-     try{
-       // Getting all data from our Database
-       let dataModel = await sequelizeClient.query("SELECT * FROM " + tableNames[i]);
-       console.log("------------" + tableNames[i] + "---------------");
-       console.log(dataModel[0]);
-       console.log("index Names ", indexNames[i]);
+async function make(indexName, tableName) {
 
-       // Make bulk
-       makebulk(indexNames[i], tableNames[i], dataModel[0], function(response) {
-         console.log("Bulk content prepared");
-         indexall(indexNames[i], response, function(response) {
-           console.log(response);
-         });
+   try{
+     // Getting all data from our Database
+     let dataModel = await sequelizeClient.query("SELECT * FROM " + tableName);
+     console.log("------------" + tableName + "---------------");
+     console.log(dataModel[0]);
+     console.log("index Names ", indexName);
+
+     // Make bulk
+     makebulk(indexName, tableName, dataModel[0], function(response) {
+       console.log("Bulk content prepared");
+       indexall(indexName, response, function(resp) {
+         console.log("AFTER INDEXALL", resp);
        });
-     }catch (error) {
-       console.log(error)
-     }
+     });
+   }catch (error) {
+     console.log(error)
    }
+
 }
 
 
@@ -80,31 +81,47 @@ String.prototype.capitalize = function() {
   return this.charAt(0).toUpperCase() + this.slice(1);
 };
 
-module.exports.mapElasticsearch = function() {
+setUp = function(indexNames, tableNames) {
+
+  for (let i=0; i<indexNames.length; i++) {
+    try {
+      elasticClient.indices.delete({index: indexNames[i]}, function (err, resp, status) {
+        console.log("AFTER DELETE " + indexNames[i] + " OF TABLE " + tableNames[i]);
+        elasticClient.indices.create({index: indexNames[i]}, function(err, resp, status){
+          console.log("AFTER CREATE " + indexNames[i] + " OF TABLE " + tableNames[i]);
+          make(indexNames[i], tableNames[i]);
+        });
+      });
+    } catch (err) {
+      console.log("Error: " + err);
+    }
+  }
+};
+
+module.exports.mapElasticsearch =  async function() {
   fs.readdir('../models/', function(err, files) {
     if (err) {
       console.log(err);
     }
-    else{
+    else {
       // Manage mapping of each entity in models
       var indexNames = [];
-      for (var i=0; i<files.length; i++){
+      for (var i = 0; i < files.length; i++) {
         files[i] = path.parse(files[i]).name;
         indexNames.push(files[i]);
         files[i] = files[i].capitalize();
         // Pluralize name to get Table Name
-        if (files[i].charAt((files[i].length-1)) !== 's'){
+        if (files[i].charAt((files[i].length - 1)) !== 's') {
           files[i] = files[i] + 's';
         }
       }
       console.log(files);
       console.log(indexNames);
 
-      make(indexNames, files);
+      setUp(indexNames, files);
     }
   });
 };
-
 
 
 this.mapElasticsearch();
