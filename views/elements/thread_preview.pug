@@ -6,14 +6,22 @@ mixin thread(thread)
             .container-fluid
                 .row
                     .col-sm-1.text-center
-                        span.upvote.thread.oi.oi-arrow-top(title="upvote" data-thread-id=thread.id role="button" aria-hidden="true")
-                        br
-                        if thread.karma
-                            span(id="thread-karma"+thread.id ) #{thread.karma}
-                        else
-                            span(id="thread-karma"+thread.id ) 0
-                        br
-                        span.thread.downvote.oi.oi-arrow-bottom(title="downvote" data-thread-id=thread.id role="button" aria-hidden="true")
+                        if (thread.karma)
+                            if (thread.karma.user_vote == 1)
+                                span.vote.upvote.thread.upvoted.oi.oi-arrow-top(title="upvote" data-thread-id=thread.id role="button" aria-hidden="true")
+                            else
+                                span.vote.upvote.thread.oi.oi-arrow-top(title="upvote" data-thread-id=thread.id role="button" aria-hidden="true")
+                            br
+                            if thread.karma
+                                span(id="thread-karma"+thread.id ) #{thread.karma.total}
+                            else
+                                span(id="thread-karma"+thread.id ) 0
+                            br
+                            if (thread.karma.user_vote == -1)
+                                span.vote.thread.downvote.downvoted.oi.oi-arrow-bottom(title="downvote" data-thread-id=thread.id role="button" aria-hidden="true")
+                            else
+                                span.vote.thread.downvote.oi.oi-arrow-bottom(title="downvote" data-thread-id=thread.id role="button" aria-hidden="true")
+
                     //img.thread-preview-image(src="" onerror="this.onerror=null;this.src='https://www.redditstatic.com/avatars/avatar_default_11_FFD635.png';")
                     a(href='/thread/' + thread.id + '/comments' )
                         h3.card-text #{thread.title}

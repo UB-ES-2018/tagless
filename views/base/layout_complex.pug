@@ -13,7 +13,7 @@ block content
             // Blog Entries Column
             .col-md-8
                 block main
-            include ../elements/sidebar   
+            include ../elements/sidebar
     footer.py-5.bg-dark
         .container
             p.m-0.text-center.text-white Copyright &copy; Your Website 2018
@@ -25,89 +25,53 @@ block script
     script(src='/static/javascripts/bootstrap.bundle.min.js')
     script(type="text/javascript").
         $(document).ready(function () {
+            $('.vote').click(function (){
+                var button, inverse_element_id, value;
+                var this_element = $($(this)[0]);
+                console.log($(this)[0]);
+                if (this_element.hasClass("thread")){
+                    var url = "/api/vote/thread";
+                    var element_id = this_element.attr("data-thread-id");
+                    var karma = $("#thread-karma" + element_id);
 
-            //No me borreis el post done y fail!
-            $('.upvote.thread').click(function () {
-                var thread_id = $(this).attr("data-thread-id");
-                $.post("/api/vote/thread", {
-                    val: $('.upvote.thread').hasClass('upvoted')? 1 : 0,
-                    id: thread_id
-                }).done(function (data) {
-                    var karma = $("#thread-karma"+thread_id);
-                    if ($('.upvote.thread').hasClass('upvoted')){
-                        var value = parseInt(karma.text())-1;
-                        $('.upvote.thread').removeClass('upvoted');
+                    if (this_element.hasClass("upvote")){
+                        inverse_element_id = $($(".downvote.thread[data-thread-id='" + element_id + "']")[0]);
+                        value = this_element.hasClass('upvoted') ? 0 : 1;
                     }else{
-                        var value = parseInt(karma.text()) + 1;
-                        $('.upvote.thread').addClass('upvoted');
+                        inverse_element_id = $($(".upvote.thread[data-thread-id='" + element_id + "']")[0]);
+                        value = this_element.hasClass('downvoted') ? 0 : -1;
                     }
-                    karma.text(value);
 
-                }).fail(function (data) {
-                    alert("Error");
-                });
-            });
+                }else if (this_element.hasClass("comment")){
+                    var url = "/api/vote/comment";
+                    var element_id = this_element.attr("data-comment-id");
+                    var karma = $("#comment-karma" + element_id);
 
-            $('.downvote.thread').click(function () {
-                var thread_id = $(this).attr("data-thread-id");
-                $.post("/api/vote/thread", {
-                    val: $('.downvote.thread').hasClass('downvoted') ? -1 : 0,
-                    id: thread_id
-                }).done(function (data) {
-                    var karma = $("#thread-karma" + thread_id);
-                    if ($('.downvote.thread').hasClass('downvoted')) {
-                        var value = parseInt(karma.text()) + 1;
-                        $('.downvote.thread').removeClass('downvoted');
+                    if (this_element.hasClass("upvote")) {
+                        inverse_element_id = $($(".downvote.comment[data-comment-id='" + element_id + "']")[0]);
+                        value = this_element.hasClass('upvoted') ? 0 : 1;
                     } else {
-                        var value = parseInt(karma.text()) - 1;
-                        $('.downvote.thread').addClass('downvoted');
+                        inverse_element_id = $($(".upvote.comment[data-comment-id='" + element_id + "']")[0]);
+                        value = this_element.hasClass('downvoted') ? 0 : -1;
                     }
-                    karma.text(value);
+                }
 
-                }).fail(function (data) {
-                    alert("Error");
-                });
-            });
-
-            $('.upvote.comment').click(function () {
-                var comment_id = $(this).attr("data-comment-id");
-                $.post("/api/vote/comment", {
-                    val: $('.upvote.comment').hasClass('upvote') ? 1 : 0,
-                    id: comment_id
+                $.post(url, {
+                    val: value,
+                    id: element_id
                 }).done(function (data) {
-                    var karma = $("#comment-karma" + comment_id);
-                    if ($('.upvote.comment').hasClass('upvote')) {
-                        var value = parseInt(karma.text()) - 1;
-                        $('.upvote.comment').removeClass('upvote');
-                    } else {
-                        var value = parseInt(karma.text()) + 1;
-                        $('.upvote.comment').addClass('upvote');
+                    if (data.user_vote == 1) this_element.addClass('upvoted');
+                    else if (data.user_vote == -1) this_element.addClass('downvoted');
+                    else {
+                        this_element.removeClass('upvoted');
+                        this_element.removeClass('downvoted');
                     }
-                    karma.text(value);
-
+                    inverse_element_id.removeClass("downvoted");
+                    inverse_element_id.removeClass("upvoted");
+                    karma.text(data.total);
                 }).fail(function (data) {
                     alert("Error");
                 });
             });
 
-            $('.downvote.comment').click(function () {
-                var comment_id = $(this).attr("data-comment-id");
-                $.post("/api/vote/comment", {
-                    val: $('.downvote.comment').hasClass('downvoted') ? -1 : 0,
-                    id: comment_id
-                }).done(function (data) {
-                    var karma = $("#comment-karma" + comment_id);
-                    if ($('.downvote.comment').hasClass('downvoted')) {
-                        var value = parseInt(karma.text()) + 1;
-                        $('.downvote.comment').removeClass('downvoted');
-                    } else {
-                        var value = parseInt(karma.text()) - 1;
-                        $('.downvote.comment').addClass('downvoted');
-                    }
-                    karma.text(value);
-
-                }).fail(function (data) {
-                    alert("Error");
-                });
-            });
         });
