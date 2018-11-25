@@ -123,6 +123,15 @@ module.exports.mapElasticsearch =  function() {
   });
 };
 
+/*
+  Document expects to be a dictionary that include every
+  property of a specific object, example:
+  document = {
+    id : 1,
+    name : Jhon,
+    username : Mack,
+    }
+ */
 module.exports.addDocument = function(indexName, document) {
     elasticClient.index({
     index: indexName,

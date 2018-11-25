@@ -3,13 +3,14 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
 
-    queryInterface.addColumn('Users', 'pictureLink', { type: Sequelize.STRING});
-    queryInterface.addColumn('Users', 'description', { type: Sequelize.STRING});
+    return queryInterface.addColumn('Users', 'pictureLink', { type: Sequelize.STRING})
+        .then(function() {queryInterface.addColumn('Users', 'description', { type: Sequelize.STRING}) });
+
   },
 
   down: (queryInterface, Sequelize) => {
 
-    queryInterface.removeColumn('Users', 'pictureLink');
-    queryInterface.removeColumn('Users', 'description');
+    return queryInterface.removeColumn('Users', 'pictureLink')
+        .then(function() {queryInterface.removeColumn('Users', 'description')} );
   }
 };
