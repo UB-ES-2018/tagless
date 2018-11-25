@@ -3,8 +3,11 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
 
-    return queryInterface.addColumn('Users', 'pictureLink', { type: Sequelize.STRING})
-        .then(function() {queryInterface.addColumn('Users', 'description', { type: Sequelize.STRING}) });
+    return new Promise(function(resolve,reject)
+    {
+      queryInterface.addColumn('Users', 'pictureLink', {type: Sequelize.STRING});
+      queryInterface.addColumn('Users', 'description', {type: Sequelize.STRING});
+    });
 
   },
 
