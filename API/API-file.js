@@ -77,7 +77,6 @@ router.post('/signup', ayncCheckAPIKey, function (req, res, next) {
         });
 });
 
-
 /* As headers we have:
  * api-key : "Api key provided in the profile"
  * Content-Type : application/x-www-form-urlencoded
