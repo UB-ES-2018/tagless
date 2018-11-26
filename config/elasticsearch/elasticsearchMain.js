@@ -1,13 +1,9 @@
 const fs = require('fs');
 const elasticClient = require('./elasticsearchConnection');
-const sequelize = require('./sequelizeConnection');
+const sequelize = require('../sequelizeConnection');
 const sequelizeClient = sequelize.sequelize;
 const path = require('path');
 const fetch = require("node-fetch");
-
-elasticClient.cluster.health({}, function(err,resp,status) {
-  console.log("-- Client Health --", resp);
-});
 
 //****************BULK*********************************
 
@@ -88,7 +84,7 @@ setUp = function(indexNames, tableNames) {
       elasticClient.indices.delete({index: indexNames[i]}, function (err, resp, status) {
         console.log("AFTER DELETE INDEX " + indexNames[i] + " OF TABLE " + tableNames[i]);
         elasticClient.indices.create({index: indexNames[i]}, function(err, resp, status){
-          console.log("AFTER CREATE INDEX" + indexNames[i] + " OF TABLE " + tableNames[i]);
+          console.log("AFTER CREATE INDEX " + indexNames[i] + " OF TABLE " + tableNames[i]);
           make(indexNames[i], tableNames[i]);
         });
       });
@@ -99,7 +95,7 @@ setUp = function(indexNames, tableNames) {
 };
 
 module.exports.mapElasticsearch =  function() {
-  fs.readdir('../models/', function(err, files) {
+  fs.readdir('../../models/', function(err, files) {
     if (err) {
       console.log(err);
     }
