@@ -49,7 +49,8 @@ router.get('/users', asyncCheckAPIKey ,function (req, res, next) {
 
 
 router.get('/user/username/:user',asyncCheckAPIKey, function(req,res,next){
-    var username = req.url.substr(req.url.indexOf("/",6)+1,req.url.length);
+    var substruser = req.url.substr((req.url.indexOf("/",6)+1),req.url.length);
+    var username = substruser.substr(0,substruser.indexOf("/"));
 
     var username = req.url.substr(6,req.url.length);
     ctl_user.getUserByUsername(username).then( user =>{
