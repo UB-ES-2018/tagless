@@ -1,17 +1,28 @@
 var sequelizeConnection = require("../config/sequelizeConnection");
 var sequelize = sequelizeConnection.sequelize;
 
-exports.findallLikesfromThread = function(thread_id) {
+exports.findallLikesfromThread = function(thread_id, req, res) {
 
     return new Promise(function (resolve, reject) {
         var sequelize = sequelizeConnection.sequelize;
-        sequelize.query('SELECT SUM(vote) FROM Likes WHERE (Likes.thread_id = (?))', {
-            replacements: [thread_id],
-            type: sequelize.QueryTypes.SELECT
-        })
+        sequelize.query(
+            'SELECT SUM(vote) as "total", SUM(vote=1) as "upvotes", SUM(vote=-1) as "downvotes", sum(User_vote.user_vote) as "user_vote"' +
+            ' FROM Likes ' +
+            'left join (' +
+            '   SELECT Users.id, vote as "user_vote"' +
+            '   FROM Likes ' +
+            '   left join Users on Users.id = Likes.userId ' +
+            '   WHERE Likes.thread_id = (?) and Users.username = (?)' +
+            ') as User_vote on User_vote.id = Likes.userId ' +
+            ' WHERE Likes.thread_id = (?)',
+            {
+                replacements: [thread_id, res.locals.logged_username, thread_id],
+                type: sequelize.QueryTypes.SELECT
+            })
             .then(result => {
                 if (result) {
-                    resolve(result[0]['SUM(vote)']);
+                    console.log(result);
+                    resolve(result[0]);
                 }
             },function(err){
                 reject("Query failed");
@@ -25,9 +36,9 @@ exports.addPositiveorNegativeLikes = function(thread_id, username, vote) {
         sequelize.query('INSERT INTO Likes (thread_id, userId, vote, createdAt, updatedAt) VALUES((?), (SELECT id FROM Users WHERE username=(?)), (?), (?), (?)) ON DUPLICATE KEY UPDATE vote=(?), updatedAt=(?)',{
             replacements: [thread_id, username, vote, new Date(), new Date(), vote, new Date()]
         }).spread((results, metadata) => {
-                console.log(metadata);
-                resolve(results);
-            });
+            console.log(metadata);
+            resolve(results);
+        });
     });
 };
 
