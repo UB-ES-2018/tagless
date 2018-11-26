@@ -127,6 +127,63 @@ router.get('/threads', asyncCheckAPIKey ,function (req, res, next) {
 });
 
 
+router.get('/thread/:id', asyncCheckAPIKey ,function (req, res, next) {
+    var threadId = parseInt(req.url.substr(8,req.url.length));
+
+    ctl_thread.getThreadById(threadId).then(thread => {
+            if(thread){
+                res.json({
+                    id: thread.id,
+                    userId: thread.userId,
+                    userName: thread.userName,
+                    title: thread.title,
+                    description: thread.description,
+                    createdAt: thread.createdAt,
+                    updatedAt: thread.updatedAt,
+                });
+            }
+            else{
+                res.json({
+                    success: false,
+                })
+            }
+        }, function (err) {
+            console.log(err);
+            res.status(500).send("Internal server error");
+        });
+});
+
+
+
+router.get('/thread/:id/comments', asyncCheckAPIKey ,function (req, res, next) {
+    var threadId = parseInt(req.url.substr(req.url.indexOf("/",1)+1,req.url.indexOf("/",req.url.indexOf("/",1)+1)));
+    ctl_comment.getAllByThreadId(threadId).then( comments => {
+            if (comments){
+                var list= [];
+                for (i in comments){
+                    var elem = {
+                        id: comments[i].id,
+                        userId: comments[i].userId,
+                        replyId: comments[i].replyId,
+                        threadId: comments[i].threadId,
+                        body: comments[i].body,
+                        edited: comments[i].edited,
+                        createdAt: comments[i].createdAt,
+                        updatedAt: comments[i].updatedAt,
+                    };
+                    list.push(elem);
+                };
+                res.json(list);
+            }else{
+                res.json({
+                    success: false,
+                })
+            }
+        }, function (err) {
+            console.log(err);
+            res.status(500).send("Internal server error");
+        });
+});
 /*
     var request = require("request");
 
