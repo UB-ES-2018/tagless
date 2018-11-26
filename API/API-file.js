@@ -48,7 +48,8 @@ router.get('/users', asyncCheckAPIKey ,function (req, res, next) {
 });
 
 
-router.get('/user/:user',asyncCheckAPIKey, function(req,res,next){
+router.get('/user/username/:user',asyncCheckAPIKey, function(req,res,next){
+    var username = req.url.substr(req.url.indexOf("/",6)+1,req.url.length);
 
     var username = req.url.substr(6,req.url.length);
     ctl_user.getUserByUsername(username).then( user =>{
@@ -67,32 +68,76 @@ router.get('/user/:user',asyncCheckAPIKey, function(req,res,next){
             })
         }
         else{
-            var userid = parseInt(username);
-            ctl_user.getUserById(userid).then( user =>{
-                if(user){
-                    res.json({
-                        apiKey : user.apiKey,
-                        id: user.id,
-                        username: user.username,
-                        password: user.pass,
-                        email: user.email,
-                        createdAt: user.createdAt,
-                        updatedAt: user.updatedAt,
-                        privacity: user.privacity,
-                        description: user.description,
-                        pictureLink: user.pictureLink,
-                    })
-                }
-                else{
-                    res.json({
-                        success: false,
-                    })
-                }
-            });
+            res.json({
+                success: false,
+            })
         }
     });
 
 });
+
+router.get('/user/id/:user',asyncCheckAPIKey, function(req,res,next){
+    var userid = parseInt(req.url.substr(req.url.indexOf("/",6)+1,req.url.length));
+
+    ctl_user.getUserById(userid).then( user =>{
+        if(user){
+            res.json({
+                apiKey : user.apiKey,
+                id: user.id,
+                username: user.username,
+                password: user.pass,
+                email: user.email,
+                createdAt: user.createdAt,
+                updatedAt: user.updatedAt,
+                privacity: user.privacity,
+                description: user.description,
+                pictureLink: user.pictureLink,
+            })
+        }
+        else{
+            res.json({
+                success: false,
+            })
+        }
+    });
+});
+
+
+router.get('/user/username/:user/threads',asyncCheckAPIKey, function(req,res,next){
+
+    var substruser = req.url.substr((req.url.indexOf("/",6)+1),req.url.length);
+    var username = substruser.substr(0,substruser.indexOf("/"));
+    
+    ctl_thread.getUserThreads(username).then(threads => {
+        if(threads){
+            var list= [];
+            for (i in threads){
+                var elem = {
+                    id: threads[i].id,
+                    userId: threads[i].userId,
+                    userName: threads[i].userName,
+                    title: threads[i].title,
+                    description: threads[i].description,
+                    createdAt: threads[i].createdAt,
+                    updatedAt: threads[i].updatedAt,
+                };
+                list.push(elem);
+            };
+            res.json(list);
+        }
+        else{
+            res.json({
+                success: false,
+            })
+        }
+    }, function (err) {
+        console.log(err);
+        res.status(500).send("Internal server error");
+    });
+    
+
+});
+  
 
 router.get('/threads', asyncCheckAPIKey ,function (req, res, next) {
     ctl_thread.getAllThreads().then(threads => {

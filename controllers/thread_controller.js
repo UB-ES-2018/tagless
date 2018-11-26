@@ -126,13 +126,13 @@ exports.getUserThreads = function(u_username){
         Threads.findAll({where : {username : u_username},
             order: [ [ 'updatedAt', 'DESC' ]] })
         .then(result => {
-            var list = []
-            while(i < 5 && i< result){
+            var i = 0;
+            var list = [];
+            while(i < 5 && i< result.length){
                 list.push(result[i]);
+                i++;
             }
             resolve(list);
-
         });
-
     });
 }
