@@ -72,18 +72,6 @@ exports.userController_Login = function (u_name, u_pass, callback) {
     });
 };
 
-function userController_OnBD(u_email, u_name, callback) {
-
-    var sequelize = sequelizeConnection.sequelize;
-
-    sequelize.query('SELECT count(*) AS count FROM Users WHERE (Users.username = (?) OR Users.email = (?))',
-        {replacements: [u_name, u_email], type: sequelize.QueryTypes.SELECT})
-        .then(result => {
-                callback(null, result[0]['count'] > 0);
-            }
-        );
-}
-
 exports.getUser = function (u_name, callback) {
 
     var sequelize = sequelizeConnection.sequelize;

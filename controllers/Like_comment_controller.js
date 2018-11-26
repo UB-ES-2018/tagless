@@ -10,6 +10,8 @@ exports.findallLikesfromComment = function(comment_id) {
             type: sequelize.QueryTypes.SELECT
         })
             .then(result => {
+                console.log(comment_id);
+                console.log(result);
                 if (result) {
                     resolve(result[0]['SUM(vote)']);
                 }

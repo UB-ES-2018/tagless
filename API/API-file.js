@@ -4,7 +4,7 @@ var ctl_comment = require('../controllers/comment_controller');
 var ctl_user = require('../controllers/user_controller');
 var ctl_thread = require('../controllers/thread_controller');
 var ctl_likethread = require('../controllers/like_controller');
-var ctl_likecomment = require('../controllers/like_commment_controller');
+var ctl_likecomment = require('../controllers/Like_comment_controller');
 
 
 //Middleware to check API key
@@ -22,33 +22,6 @@ async function asyncCheckAPIKey(req,res,next){
         res.send("La API key no es valida");
     }
 }
-
-router.get('/users', asyncCheckAPIKey ,function (req, res, next) {
-    ctl_user.getUserByAPIKey(req.headers['api-key'])
-        .then(function(user){
-            if(user){
-                res.json({
-                    apiKey : user.apiKey,
-                    id: user.id,
-                    username: user.username,
-                    password: user.pass,
-                    email: user.email,
-                    createdAt: user.createdAt,
-                    updatedAt: user.updatedAt,
-                    privacity: user.privacity,
-                    description: user.description,
-                    pictureLink: user.pictureLink,
-                })
-            }else {
-                res.json({
-                    success: false,
-                })
-            }
-        }, function (err) {
-            console.log(err);
-            res.status(500).send("Internal server error");
-        });
-});
 
 
 router.get('/user/username/:user',asyncCheckAPIKey, function(req,res,next){
@@ -132,7 +105,6 @@ router.get('/user/username/:user/threads',asyncCheckAPIKey, function(req,res,nex
             })
         }
     }, function (err) {
-        console.log(err);
         res.status(500).send("Internal server error");
     });
     
@@ -164,7 +136,6 @@ router.get('/threads', asyncCheckAPIKey ,function (req, res, next) {
                 })
             }
         }, function (err) {
-            console.log(err);
             res.status(500).send("Internal server error");
         });
 });
@@ -229,7 +200,6 @@ router.get('/thread/:id/comments', asyncCheckAPIKey ,function (req, res, next) {
 
 router.get('/thread/:id/likes', asyncCheckAPIKey ,function (req, res, next) {
     var threadId = parseInt(req.url.substr(req.url.indexOf("/",1)+1,req.url.indexOf("/",req.url.indexOf("/",1)+1)));
-    console.log(threadId);
     ctl_likethread.findallLikesfromThread(threadId)
         .then(function(success) {
             if (success){
@@ -237,19 +207,27 @@ router.get('/thread/:id/likes', asyncCheckAPIKey ,function (req, res, next) {
                     success:true,
                     num_likes: success,
                 })
+            }else{
+                res.json({
+                    success: false,
+                })
             }
         });
 });
 
 router.get('/thread/:id/comments/:comment', asyncCheckAPIKey ,function (req, res, next) {
-    console.log("MELON");
-    var commentId = parseInt(req.url.substr(req.url.indexOf("/",1)+1,req.url.indexOf("/",req.url.indexOf("/",1)+1))); //CAMBIAR EL PARSE!!!!!!!
+    var commentId = req.url.substr(req.url.indexOf("/",1)+12,req.url.length);
+    console.log(commentId);
     ctl_likecomment.findallLikesfromComment(commentId)
         .then(function(success) {
             if (success){
                 res.json({
                     success:true,
                     num_likes: success,
+                })
+            }else{
+                res.json({
+                    success: false,
                 })
             }
          });
@@ -341,5 +319,46 @@ router.post('/createCommentInThread', asyncCheckAPIKey, function (req, res, next
                 });
         });
 });
+
+
+router.post('/login', asyncCheckAPIKey, function (req, res, next) {
+
+    ctl_user.userController_Login(req.body['username'], req.body['password'],
+        function(success) {
+            if (success instanceof Error){
+                return res.send(success.message);
+            }
+            if(success){
+                req.session.user = req.body['username'];
+                res.json({
+                    success: true,
+                });
+            } else {
+                res.json({
+                    success: false,
+                });
+            }
+        });
+});
+
+router.post('/updateProfile', asyncCheckAPIKey, function (req, res, next) {
+
+    ctl_user.getUserByAPIKey(req.headers['api-key'])
+        .then(function(user) {
+            ctl_user.updateProfile(user['id'], req.body['description'], req.body['pictureLink'], req.body['privacity'])
+                .then(function(success){
+                    res.status(200).send(success).json({
+                        success: true,
+                    });
+                }, function(err){
+                    res.status(500).send(err).json({
+                        success: false,
+                    });
+                });
+        });
+});
+
+
+
 
 module.exports = router;
