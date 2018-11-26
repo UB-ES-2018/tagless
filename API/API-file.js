@@ -2,9 +2,9 @@ const express = require('express');
 const app = express();
 var router = express.Router();
 var ctl_comment = require('../controllers/comment_controller');
-var ctl_thread = require('../controllers/thread_controller');
 var ctl_user = require('../controllers/user_controller');
 var ctl_thread = require('../controllers/thread_controller');
+
 //Middleware to check API key
 async function asyncCheckAPIKey(req,res,next){
     try{
@@ -20,7 +20,6 @@ async function asyncCheckAPIKey(req,res,next){
         res.send("La API key no es valida");
     }
 }
-
 
 router.get('/users', asyncCheckAPIKey ,function (req, res, next) {
     ctl_user.getUserByAPIKey(req.headers['api-key'])
@@ -48,7 +47,6 @@ router.get('/users', asyncCheckAPIKey ,function (req, res, next) {
             res.status(500).send("Internal server error");
         });
 });
-
 
 
 router.get('/user/:user',asyncCheckAPIKey, function(req,res,next){
@@ -126,28 +124,6 @@ router.get('/threads', asyncCheckAPIKey ,function (req, res, next) {
         });
 });
 
-
-/*
-    var request = require("request");
-
-    var options = { method: 'POST',
-      url: 'http://localhost:3000/API/signup',
-      headers:
-       { 'cache-control': 'no-cache',
-         'Content-Type': 'application/x-www-form-urlencoded',
-         'api-key': 'fb8268a9e97502ce0c10024cf6e3136f' },
-      form:
-       { username: 'xxx',
-         password: 'xxx',
-         email: 'xxxx' } };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
-
-      console.log(body);
-    });
- */
-
 /* As headers we have:
  * api-key : "Api key provided in the profile"
  * Content-Type : application/x-www-form-urlencoded
@@ -187,8 +163,7 @@ router.post('/signup', asyncCheckAPIKey, function (req, res, next) {
  *
  * Return: True (if thread created) False (can not create thread)
  */
-router.post('/createThread', ayncCheckAPIKey, function (req, res, next) {
-
+router.post('/createThread', asyncCheckAPIKey, function (req, res, next) {
     ctl_user.getUserByAPIKey(req.headers['api-key'])
         .then(function(user) {
             ctl_thread.postThread(user,req.body['title'],req.body['text'])
