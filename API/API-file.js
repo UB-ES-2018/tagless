@@ -3,6 +3,9 @@ var router = express.Router();
 var ctl_comment = require('../controllers/comment_controller');
 var ctl_user = require('../controllers/user_controller');
 var ctl_thread = require('../controllers/thread_controller');
+var ctl_likethread = require('../controllers/like_controller');
+var ctl_likecomment = require('../controllers/like_commment_controller');
+
 
 //Middleware to check API key
 async function asyncCheckAPIKey(req,res,next){
@@ -194,7 +197,6 @@ router.get('/thread/:id', asyncCheckAPIKey ,function (req, res, next) {
 });
 
 
-
 router.get('/thread/:id/comments', asyncCheckAPIKey ,function (req, res, next) {
     var threadId = parseInt(req.url.substr(req.url.indexOf("/",1)+1,req.url.indexOf("/",req.url.indexOf("/",1)+1)));
     ctl_comment.getAllByThreadId(threadId).then( comments => {
@@ -223,6 +225,34 @@ router.get('/thread/:id/comments', asyncCheckAPIKey ,function (req, res, next) {
             console.log(err);
             res.status(500).send("Internal server error");
         });
+});
+
+router.get('/thread/:id/likes', asyncCheckAPIKey ,function (req, res, next) {
+    var threadId = parseInt(req.url.substr(req.url.indexOf("/",1)+1,req.url.indexOf("/",req.url.indexOf("/",1)+1)));
+    console.log(threadId);
+    ctl_likethread.findallLikesfromThread(threadId)
+        .then(function(success) {
+            if (success){
+                res.json({
+                    success:true,
+                    num_likes: success,
+                })
+            }
+        });
+});
+
+router.get('/thread/:id/comments/:comment', asyncCheckAPIKey ,function (req, res, next) {
+    console.log("MELON");
+    var commentId = parseInt(req.url.substr(req.url.indexOf("/",1)+1,req.url.indexOf("/",req.url.indexOf("/",1)+1))); //CAMBIAR EL PARSE!!!!!!!
+    ctl_likecomment.findallLikesfromComment(commentId)
+        .then(function(success) {
+            if (success){
+                res.json({
+                    success:true,
+                    num_likes: success,
+                })
+            }
+         });
 });
 
 /* As headers we have:
