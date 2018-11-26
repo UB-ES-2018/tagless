@@ -14,7 +14,6 @@ router.get('/:threadId/all', function(req,res,next){
 
   comment_ctl.getAllByThreadId(threadId)
       .then(function(comments){
-        console.log(comments);
         res.json(comments);
       }, function(err){
         console.log(err);

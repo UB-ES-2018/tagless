@@ -1,5 +1,4 @@
 const express = require('express');
-const app = express();
 var router = express.Router();
 var ctl_comment = require('../controllers/comment_controller');
 var ctl_user = require('../controllers/user_controller');
@@ -182,26 +181,6 @@ router.get('/thread/:id/comments', asyncCheckAPIKey ,function (req, res, next) {
             res.status(500).send("Internal server error");
         });
 });
-/*
-    var request = require("request");
-
-    var options = { method: 'POST',
-      url: 'http://localhost:3000/API/signup',
-      headers:
-       { 'cache-control': 'no-cache',
-         'Content-Type': 'application/x-www-form-urlencoded',
-         'api-key': 'fb8268a9e97502ce0c10024cf6e3136f' },
-      form:
-       { username: 'xxx',
-         password: 'xxx',
-         email: 'xxxx' } };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
-
-      console.log(body);
-    });
- */
 
 /* As headers we have:
  * api-key : "Api key provided in the profile"
@@ -263,5 +242,31 @@ router.post('/createThread', asyncCheckAPIKey, function (req, res, next) {
         });
 });
 
+/* As headers we have:
+ * api-key : "Api key provided in the profile"
+ * Content-Type : application/x-www-form-urlencoded
+ *
+ * As x-www-form-urlencoded data we have 2 keys:
+ * threadId
+ * text
+ *
+ * Return: True (if comment created) False (can not create comment)
+ */
+router.post('/createCommentInThread', asyncCheckAPIKey, function (req, res, next) {
+
+    ctl_user.getUserByAPIKey(req.headers['api-key'])
+        .then(function(user) {
+            ctl_comment.createComment(req.body['threadId'], req.body['text'], user['username'] ,0)
+                .then(function(success){
+                    res.status(200).send(success).json({
+                        success: true,
+                    });
+                }, function(err){
+                    res.status(500).send(err).json({
+                        success: false,
+                    });
+                });
+        });
+});
 
 module.exports = router;
