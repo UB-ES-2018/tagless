@@ -1,7 +1,8 @@
 const express = require('express');
 const app = express();
 var router = express.Router();
-var ctl_comments = require('../controllers/comment_controller');
+var ctl_comment = require('../controllers/comment_controller');
+var ctl_thread = require('../controllers/thread_controller');
 var ctl_user = require('../controllers/user_controller');
 
 //Middleware to check API key
@@ -96,6 +97,34 @@ router.get('/user/:user',asyncCheckAPIKey, function(req,res,next){
 
 });
 
+router.get('/threads', asyncCheckAPIKey ,function (req, res, next) {
+    ctl_thread.getAllThreads().then(threads => {
+            if(threads){
+                var list= [];
+                for (i in threads){
+                    var elem = {
+                        id: threads[i].id,
+                        userId: threads[i].userId,
+                        userName: threads[i].userName,
+                        title: threads[i].title,
+                        description: threads[i].description,
+                        createdAt: threads[i].createdAt,
+                        updatedAt: threads[i].updatedAt,
+                    };
+                    list.push(elem);
+                };
+                res.json(list);
+            }
+            else{
+                res.json({
+                    success: false,
+                })
+            }
+        }, function (err) {
+            console.log(err);
+            res.status(500).send("Internal server error");
+        });
+});
 
 
 /*
