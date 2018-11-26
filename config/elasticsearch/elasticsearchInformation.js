@@ -2,7 +2,7 @@ var client = require('./elasticsearchConnection');
 
 /***
   This file has the purpose of show information related with elasticsearch database.
-  Just run your elasticsearch and come to here to execute: $>node infoElasticsearch
+  Just run your elasticsearch and come to here to execute: $>node elasticsearchInformation
  ***/
 
 

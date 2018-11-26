@@ -5,12 +5,17 @@ const sequelizeClient = sequelize.sequelize;
 const path = require('path');
 const fetch = require("node-fetch");
 
-//****************BULK*********************************
+/***
+  This file contains the most useful functions to work with elasticsearch.
+ ***/
 
 
 var bulk = [];
 
-
+/*
+ makebulk: prepare bulk array pushing every document inside to later on be included in
+ a specific index.
+ */
 var makebulk = async function(indexName, tableName, entityList, callback){
   console.log("MAKEBULK OF " + tableName);
 
@@ -32,6 +37,10 @@ var makebulk = async function(indexName, tableName, entityList, callback){
   callback(bulk);
 };
 
+/*
+ indexall: after prepare bulk array is needed to follow the next step, use bulk method
+ to index every document inserted into bulk array.
+ */
 var indexall = function(indexName, madebulk, callback) {
   elasticClient.bulk({
     maxRetries: 5,
@@ -48,6 +57,9 @@ var indexall = function(indexName, madebulk, callback) {
   });
 };
 
+/*
+ make: querying database get every document, calls makebulk and then indexall
+ */
 async function make(indexName, tableName) {
 
    try{
@@ -71,7 +83,6 @@ async function make(indexName, tableName) {
 }
 
 
-//***********************BULK***********************************
 
 String.prototype.capitalize = function() {
   return this.charAt(0).toUpperCase() + this.slice(1);
@@ -94,6 +105,12 @@ setUp = function(indexNames, tableNames) {
   }
 };
 
+/*
+ mapElasticsearch: is the most important function in this file,
+ recover every data of our database related with each of our models
+ added in /models folder and then calls the other methods to sync
+ elasticsearch database with our MySQL database.
+ */
 module.exports.mapElasticsearch =  function() {
   fs.readdir('../../models/', function(err, files) {
     if (err) {
@@ -149,4 +166,3 @@ module.exports.delDocument = function(indexName, id) {
   });
 };
 
-this.mapElasticsearch();
