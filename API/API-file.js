@@ -22,11 +22,53 @@ async function ayncCheckAPIKey(req,res,next){
 
 
 router.get('/users', ayncCheckAPIKey ,function (req, res, next) {
-    var result = ctl_user.getUserByAPIKey(req.headers['api-key'] );
-    console.log(result);
-    res.send("JAJA");
+    ctl_user.getUserByAPIKey(req.headers['api-key'] )
+        .then(function(user){
+            if(user){
+                res.json({
+                    apiKey : user.apiKey,
+                    id: user.id,
+                    username: user.username,
+                    password: user.pass,
+                    email: user.email,
+                    createdAt: user.createdAt,
+                    updatedAt: user.updatedAt,
+                    privacity: user.privacity,
+                    description: user.description,
+                    pictureLink: user.pictureLink,
+                })
+            }else {
+                res.json({
+                    success: false,
+                })
+            }
+        }, function (err) {
+            console.log(err);
+            res.status(500).send("Internal server error");
+        });
 });
 
+
+/*
+    var request = require("request");
+
+    var options = { method: 'POST',
+      url: 'http://localhost:3000/API/signup',
+      headers:
+       { 'cache-control': 'no-cache',
+         'Content-Type': 'application/x-www-form-urlencoded',
+         'api-key': 'fb8268a9e97502ce0c10024cf6e3136f' },
+      form:
+       { username: 'xxx',
+         password: 'xxx',
+         email: 'xxxx' } };
+
+    request(options, function (error, response, body) {
+      if (error) throw new Error(error);
+
+      console.log(body);
+    });
+ */
 
 /* As headers we have:
  * api-key : "Api key provided in the profile"
