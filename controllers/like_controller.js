@@ -24,16 +24,40 @@ exports.findallLikesfromThread = function(thread_id, req, res) {
                     console.log(result);
                     resolve(result[0]);
                 }
-            },function(err){
+            }, function (err) {
                 reject("Query failed");
             });
     });
 };
 
-exports.addPositiveorNegativeLikes = function(thread_id, username, vote) {
+exports.getMostLikedThreads = function () {
 
-    return new Promise( function (resolve, reject) {
-        sequelize.query('INSERT INTO Likes (thread_id, userId, vote, createdAt, updatedAt) VALUES((?), (SELECT id FROM Users WHERE username=(?)), (?), (?), (?)) ON DUPLICATE KEY UPDATE vote=(?), updatedAt=(?)',{
+    return new Promise(function (resolve, reject) {
+        var sequelize = sequelizeConnection.sequelize;
+        sequelize.query(
+            'SELECT SUM(vote) as total, thread_id ' +
+            'FROM tagless.likes ' +
+            'GROUP BY thread_id ' +
+            'ORDER BY total DESC ' +
+            'LIMIT 10;',
+            {
+                type: sequelize.QueryTypes.SELECT
+            })
+            .then(result => {
+                if (result) {
+                    console.log(result);
+                    resolve(result);
+                }
+            }, function (err) {
+                reject("Query failed");
+            });
+    });
+};
+
+exports.addPositiveorNegativeLikes = function (thread_id, username, vote) {
+
+    return new Promise(function (resolve, reject) {
+        sequelize.query('INSERT INTO Likes (thread_id, userId, vote, createdAt, updatedAt) VALUES((?), (SELECT id FROM Users WHERE username=(?)), (?), (?), (?)) ON DUPLICATE KEY UPDATE vote=(?), updatedAt=(?)', {
             replacements: [thread_id, username, vote, new Date(), new Date(), vote, new Date()]
         }).spread((results, metadata) => {
             console.log(metadata);
