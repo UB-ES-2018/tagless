@@ -68,18 +68,18 @@ async function asyncGetThreadById(req, res, next){
 
     var threadId = req.params.thread_id;
     var thread = await ctl_thread.getThreadById(threadId);
-    thread.karma = await ctl_like.findallLikesfromThread(threadId);
+    thread.karma = await ctl_like.findallLikesfromThread(threadId, req, res);
 
             
     var comments = await comment_ctl.getAllByThreadId(threadId);
     for(i in comments){
         
-        var votos = await ctl_like_c.findallLikesfromComment(comments[i]['id']);
+        var votos = await ctl_like_c.findallLikesfromComment(comments[i]['id'], req, res);
         if(!votos){
             votos=0;
         }
         console.log("PROMISE: ",votos);
-        comments[i].karma=votos
+        comments[i].karma=votos;
         console.log(comments[i]);
 
   }
