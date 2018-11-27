@@ -9,10 +9,11 @@ async function asyncCallPostLikeDislike(thread_id, username, vote, req,res) {
   console.log('calling');
   var result = await ctl_like.addPositiveorNegativeLikes(thread_id, username, vote);
   if (result){
-    res.redirect('/');
+      var karma = await asyncCallALLlike(thread_id,req,res);
+      res.status(200).send(karma);
   }
   else{
-    res.send("Error en el like/dislike a un thread");
+    res.status(400).send("Error en el like/dislike a un thread");
   }
   // expected output: 'resolved'
 }
@@ -20,10 +21,11 @@ async function asyncCallPostLikeDislike(thread_id, username, vote, req,res) {
 async function asyncCallCommentLikeDislike(comment_id, username, vote, req, res) {
     var result = await ctl_like_comments.addPositiveorNegativeLikesComments(comment_id, username, vote);
     if (result){
-        res.redirect('/');
+        var karma = await asyncCallALLlikeComment(comment_id,req,res);
+        res.status(200).send(karma);
     }
     else{
-        res.send("Error en el like/dislike a un commentario");
+        res.status(400).send("Error en el like/dislike a un commentario");
     }
     // expected output: 'resolved'
 }
@@ -67,8 +69,8 @@ async function asyncCallALLlike(thread_id,req,res) {
     // expected output: 'resolved'
 }
 
-async function asyncCallALLlikeComment(thread_id,req,res) {
-    var result = await ctl_like.findallLikesfromComment(thread_id,req,res);
+async function asyncCallALLlikeComment(comment_id,req,res) {
+    var result = await ctl_like_comments.findallLikesfromComment(comment_id,req,res);
     return result;
     // expected output: 'resolved'
 }
@@ -79,15 +81,14 @@ router.post('/api/vote/thread', function(req, res, next) {
   var vote = req.body.val;
   var username = req.session.user;
 
-  if (username){
-    asyncCallPostLikeDislike(thread_id, username, vote, req, res);
-    
-  }else{
-    res.send("No estas logueado, logueate");
-  }
+    if (username) {
+        asyncCallPostLikeDislike(thread_id, username, vote, req,res);
+    }else {
+        res.send("No estas logueado, hazlo porfavor.");
+    }
 });
 
-router.post('/vote/comment', function(req,res,next){
+router.post('/api/vote/comment', function(req,res,next){
 
     var comment_id = req.body.id;
     var vote = req.body.val;

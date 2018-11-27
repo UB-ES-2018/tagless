@@ -13,8 +13,6 @@ exports.postThread = function(user,t_title,t_text) {
         const Like = likeModel(sequelize, DataTypes);
         var success = true;
 
-        console.log("_UUUUUUUUUUUUUUUUUUUSER");
-        console.log(user);
         //Check if the content or the title of the thread are not empty
         if(!((t_title.replace(/\s/g, "")) && (t_text.replace(/\s/g, "")))){
             resolve(!success);
