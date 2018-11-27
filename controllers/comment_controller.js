@@ -64,3 +64,31 @@ exports.createComment = function(threadId, text, autor, reply){
             });
     });
 };
+
+exports.searchComment = function(threadId,commentId){
+
+    return new Promise(function(resolve, reject){
+        var UserModel = User(sequelize, DataTypes);
+        var CommentModel = Comment(sequelize, DataTypes);
+
+        if (threadId != ""){
+
+            UserModel.hasMany(CommentModel, {foreignKey: "userId"});
+            CommentModel.belongsTo(UserModel, {foreignKey: "userId"});
+
+            CommentModel.findOne({ where: { threadId : threadId, id:commentId}, include: [UserModel] })
+                .then(function(data){
+                    if(data === null) {
+                        resolve("no comments");
+                    }else {
+                        resolve(data);
+                    }
+                }, function(err){
+                    reject(err);
+                });
+
+        }else{
+            reject("Thread is null");
+        }
+    });
+};

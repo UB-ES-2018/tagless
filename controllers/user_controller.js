@@ -207,5 +207,5 @@ exports.getUserByAPIKey = function(u_APIKey){
             })
     });
 
-}
+};
 

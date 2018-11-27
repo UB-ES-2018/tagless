@@ -23,7 +23,6 @@ async function asyncCheckAPIKey(req,res,next){
     }
 }
 
-
 router.get('/user/username/:user',asyncCheckAPIKey, function(req,res,next){
     var username = req.url.substr((req.url.indexOf("/",6)+1),req.url.length);
     ctl_user.getUserByUsername(username).then( user =>{
@@ -216,20 +215,30 @@ router.get('/thread/:id/likes', asyncCheckAPIKey ,function (req, res, next) {
 });
 
 router.get('/thread/:id/comments/:comment', asyncCheckAPIKey ,function (req, res, next) {
+    var threadId = parseInt(req.url.substr(req.url.indexOf("/",1)+1,req.url.indexOf("/",req.url.indexOf("/",1)+1)));
     var commentId = req.url.substr(req.url.indexOf("/",1)+12,req.url.length);
-    console.log(commentId);
+
     ctl_likecomment.findallLikesfromComment(commentId)
-        .then(function(success) {
-            if (success){
-                res.json({
-                    success:true,
-                    num_likes: success,
-                })
-            }else{
-                res.json({
-                    success: false,
-                })
-            }
+        .then(function(likes) {
+            ctl_comment.searchComment(threadId,commentId)
+                .then( function (data) {
+                    if (data == "no comments" ) {
+                        res.json({
+                            success: false,
+                        });
+                    }else {
+                        res.json({
+                            success:true,
+                            id:data['id'],
+                            content: data['body'],
+                            createdAt: data['createdAt'],
+                            updatedAt: data['updatedAt'],
+                            threadId: data['threadId'],
+                            userId: data['userId'],
+                            num_likes: likes,
+                        })
+                    }
+                });
          });
 });
 
@@ -320,7 +329,16 @@ router.post('/createCommentInThread', asyncCheckAPIKey, function (req, res, next
         });
 });
 
-
+/* As headers we have:
+ * api-key : "Api key provided in the profile"
+ * Content-Type : application/x-www-form-urlencoded
+ *
+ * As x-www-form-urlencoded data we have 2 keys:
+ * username
+ * password
+ *
+ * Return: True (if comment created) False (can not create comment)
+ */
 router.post('/login', asyncCheckAPIKey, function (req, res, next) {
 
     ctl_user.userController_Login(req.body['username'], req.body['password'],
@@ -341,6 +359,17 @@ router.post('/login', asyncCheckAPIKey, function (req, res, next) {
         });
 });
 
+/* As headers we have:
+ * api-key : "Api key provided in the profile"
+ * Content-Type : application/x-www-form-urlencoded
+ *
+ * As x-www-form-urlencoded data we have 3 keys:
+ * description
+ * picturelink
+ * privacity
+ *
+ * Return: True (if profile updated) False (can not update profile)
+ */
 router.post('/updateProfile', asyncCheckAPIKey, function (req, res, next) {
 
     ctl_user.getUserByAPIKey(req.headers['api-key'])
@@ -357,8 +386,5 @@ router.post('/updateProfile', asyncCheckAPIKey, function (req, res, next) {
                 });
         });
 });
-
-
-
 
 module.exports = router;
