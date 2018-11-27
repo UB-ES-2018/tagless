@@ -49,6 +49,24 @@ router.get('/user/username/:user',asyncCheckAPIKey, function(req,res,next){
 
 });
 
+router.get('/user/id/:user/activity',asyncCheckAPIKey, function(req,res,next){
+
+    var substruser = req.url.substr((req.url.indexOf("/",6)+1),req.url.length);
+    var username = substruser.substr(0,substruser.indexOf("/"));
+
+    console.log(username);
+
+    ctl_user.getCommentedThreadsByUser(username).then(function (threads) {
+        return res.json({
+            threads: threads
+        });
+    }, function (err) {
+        console.log(err);
+        res.status(500).send("Internal server error");
+    });
+});
+
+
 router.get('/user/id/:user',asyncCheckAPIKey, function(req,res,next){
     var userid = parseInt(req.url.substr(req.url.indexOf("/",6)+1,req.url.length));
 

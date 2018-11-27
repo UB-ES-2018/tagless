@@ -70,7 +70,6 @@ async function asyncGetThreadById(req, res, next){
     var thread = await ctl_thread.getThreadById(threadId);
     thread.karma = await ctl_like.findallLikesfromThread(threadId, req, res);
 
-            
     var comments = await comment_ctl.getAllByThreadId(threadId);
     for(i in comments){
         
@@ -78,10 +77,7 @@ async function asyncGetThreadById(req, res, next){
         if(!votos){
             votos=0;
         }
-        console.log("PROMISE: ",votos);
         comments[i].karma=votos;
-        console.log(comments[i]);
-
   }
 
     res.render('thread', {thread, 'comments': comments});
@@ -90,8 +86,6 @@ async function asyncGetThreadById(req, res, next){
 router.get('/:thread_id/comments', function(req, res, next) {
     //process req
     asyncGetThreadById(req, res, next);
-    
-
 });
 
 /* POST Create a comment */

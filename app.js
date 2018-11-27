@@ -27,7 +27,7 @@ const User = sequelize.define('User',{
   pass: Sequelize.STRING,
   createdAt: Sequelize.DATE,
   updatedAt: Sequelize.DATE,
-})
+});
 
 sequelize.query('SELECT * FROM Users')
     .then(user => console.log(user));
@@ -35,7 +35,6 @@ sequelize.query('SELECT * FROM Users')
 var data = User.findAll({
     attributes: ['username', 'pass']});
 
-console.log(data.valueOf());
 //test ----
 
 // view engine setup
@@ -75,7 +74,6 @@ app.use((req, res, next) => {
             res.locals.logged_username = req.session.user;
         }
     }
-    console.log(res.locals.is_logged);
     next();
 });
 
