@@ -3,17 +3,20 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "test": "mocha"
   },
   "dependencies": {
     "bcrypt": "^3.0.2",
     "body-parser": "^1.18.3",
+    "chai": "^4.2.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "express": "~4.16.0",
     "express-fileupload": "^1.0.0",
     "express-session": "^1.15.6",
     "http-errors": "~1.6.2",
+    "mocha": "^5.2.0",
     "mocha-jsdom": "^2.0.0",
     "morgan": "^1.9.1",
     "mysql": "^2.16.0",
@@ -26,6 +29,8 @@
     "sqlite3": "^4.0.2"
   },
   "devDependencies": {
-    "sequelize-cli": "^4.1.1"
+    "sequelize-cli": "^4.1.1",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0"
   }
 }
