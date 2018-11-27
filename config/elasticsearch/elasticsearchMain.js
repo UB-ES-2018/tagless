@@ -1,5 +1,6 @@
 const fs = require('fs');
 const elasticClient = require('./elasticsearchConnection');
+const elasticMapping = require('./elasticsearchMappings');
 const sequelize = require('../sequelizeConnection');
 const sequelizeClient = sequelize.sequelize;
 const path = require('path');
@@ -74,6 +75,7 @@ async function make(indexName, tableName) {
        console.log("Bulk content prepared");
        indexall(indexName, response, function(resp) {
          console.log("AFTER INDEXALL", resp);
+         bulk = [];
        });
      });
    }catch (error) {
@@ -96,7 +98,16 @@ setUp = function(indexNames, tableNames) {
         console.log("AFTER DELETE INDEX " + indexNames[i] + " OF TABLE " + tableNames[i]);
         elasticClient.indices.create({index: indexNames[i]}, function(err, resp, status){
           console.log("AFTER CREATE INDEX " + indexNames[i] + " OF TABLE " + tableNames[i]);
-          make(indexNames[i], tableNames[i]);
+          if (elasticMapping.hasMapping(tableNames[i])) {
+            // Apply mapping
+            elasticClient.indices.putMapping(eval("elasticMapping.get" + tableNames[i] +"Mapping()"),
+                function(err, resp) {
+                  console.log("AFTER APPLY MAPPING OF " + tableNames[i]);
+                  make(indexNames[i], tableNames[i]);
+                });
+          }else{
+            make(indexNames[i], tableNames[i]);
+          }
         });
       });
     } catch (err) {
@@ -165,4 +176,6 @@ module.exports.delDocument = function(indexName, id) {
     console.log(resp);
   });
 };
+
+this.mapElasticsearch();
 

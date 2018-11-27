@@ -50,13 +50,13 @@ client.count({index: 'user', type: 'user'}, function(err,resp,status) {
  */
 client.indices.getMapping({
       index: 'comment',
-      type: 'comments',
+      type: 'comment',
     },
     function (error,response) {
       if (error){
         console.log(error.message);
       }
       else {
-        console.log('Mappings:\n',response.comment.mappings.comments.properties);
+        console.log('Mappings:\n',response.comment.mappings.comment.properties);
       }
 });
