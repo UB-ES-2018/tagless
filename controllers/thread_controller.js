@@ -12,31 +12,35 @@ exports.postThread = function(user,t_title,t_text) {
         const Thread = threadModel(sequelize, DataTypes);
         const Like = likeModel(sequelize, DataTypes);
         var success = true;
-
-        //Check if the content or the title of the thread are not empty
-        if(!((t_title.replace(/\s/g, "")) && (t_text.replace(/\s/g, "")))){
-            resolve(!success);
-        }
-        else {
-            userController.getUserByUsername(user['username'])
-                .then(function(user){
-                    //With this id, the title and the text we create the model to the database.
-                    Thread.create({
-                        userId : user['id'],
-                        userName : user['username'],
-                        title: t_title,
-                        description: t_text,
-                    }).then( threadCreated => {
-                        Like.create({
-                            userId: threadCreated.userId,
-                            thread_id: threadCreated.id,
-                            vote: 1,
+        if (user){
+            //Check if the content or the title of the thread are not empty
+            if(!((t_title.replace(/\s/g, "")) && (t_text.replace(/\s/g, "")))){
+                resolve(!success);
+            }
+            else {
+                userController.getUserByUsername(user['username'])
+                    .then(function(user){
+                        //With this id, the title and the text we create the model to the database.
+                        Thread.create({
+                            userId : user['id'],
+                            userName : user['username'],
+                            title: t_title,
+                            description: t_text,
+                        }).then( threadCreated => {
+                            Like.create({
+                                userId: threadCreated.userId,
+                                thread_id: threadCreated.id,
+                                vote: 1,
+                            });
                         });
+                        resolve(success);
+                    }, function(err){
+                        resolve(!success);
                     });
-                    resolve(success);
-                }, function(err){
-                    resolve(!success);
-                });
+            }
+        }
+        else{
+            resolve(!success);
         }
     });
 };
@@ -64,7 +68,7 @@ exports.getThreadById = function(threadId){
         var sequelize = sequelizeConnection.sequelize;
         var ThreadModel = threadModel(sequelize, DataTypes);
 
-        ThreadModel.find({where : {id : threadId} })
+        ThreadModel.findOne({where : {id : threadId} })
             .then(function(thread){
                 resolve(thread);
             }, function(err){

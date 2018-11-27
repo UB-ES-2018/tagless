@@ -132,7 +132,7 @@ exports.getUserByUsername = function (u_username) {
         var sequelize = sequelizeConnection.sequelize;
         var UserModel = userModel(sequelize, DataTypes);
 
-        UserModel.find({where: {username: u_username}})
+        UserModel.findOne({where: {username: u_username}})
             .then(function (user) {
                 resolve(user);
             }, function (err) {
@@ -207,5 +207,5 @@ exports.getUserByAPIKey = function(u_APIKey){
             })
     });
 
-};
+}
 
