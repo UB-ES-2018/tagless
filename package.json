@@ -4,20 +4,32 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "mocha"
+    "test": "mocha --timeout 10000 --exit",
+    "_comment": "Note: --exit in the test element is to force the test program to exit after finishing in case we use done()",
+    "coverage": "nyc --reporter=lcov --reporter=text-lcov npm test"
+  },
+  "nyc": {
+    "_comment": "Purpose of this part: to do code coverage within Mocha/Chai using Istanbul",
+    "register": "babel-register",
+    "include": [
+      "**/*.js",
+      "./*.js"
+    ],
+    "exclude": [
+      "./node_modules/**",
+      "./test/**",
+      "./coverage/**"
+    ],
+    "all": true
   },
   "dependencies": {
     "bcrypt": "^3.0.2",
-    "body-parser": "^1.18.3",
-    "chai": "^4.2.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
-    "express": "~4.16.0",
     "express-fileupload": "^1.0.0",
     "express-session": "^1.15.6",
     "hat": "0.0.3",
     "http-errors": "~1.6.2",
-    "mocha": "^5.2.0",
     "mocha-jsdom": "^2.0.0",
     "morgan": "^1.9.1",
     "mysql": "^2.16.0",
@@ -30,6 +42,11 @@
     "sqlite3": "^4.0.2"
   },
   "devDependencies": {
+    "body-parser": "^1.18.3",
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.0",
+    "express": "^4.16.4",
+    "mocha": "^5.2.0",
     "sequelize-cli": "^4.1.1"
   }
 }
