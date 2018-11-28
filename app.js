@@ -38,7 +38,7 @@ var sequelize = sequelizeConnection.sequelize; //instance to query
   createdAt: Sequelize.DATE,
   updatedAt: Sequelize.DATE,
 })
-
+*/
 sequelize.query('SELECT * FROM Users')
     .then(users => {
             console.log("Generating User XML");
@@ -62,7 +62,7 @@ sequelize.query('SELECT * FROM Users')
         )
     ).then( () => sitemap.clearCache());
 
-
+/*
 var data = User.findAll({
     attributes: ['username', 'pass']});
 
