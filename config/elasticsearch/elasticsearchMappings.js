@@ -13,7 +13,7 @@ var client = require('./elasticsearchConnection');
  ***/
 
 
-const maps = ['Comments']
+const maps = ['Comments'];
 
 module.exports.hasMapping = function(tableName) {
   return maps.indexOf(tableName) !== -1; // return true if table has mapping function, false if not
