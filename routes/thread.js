@@ -84,7 +84,7 @@ async function asyncGetThreadById(req, res, next){
         console.log(comments[i]);
 
   }
-
+    console.log(thread);
     res.render('thread', {thread, 'comments': comments});
 }
 
