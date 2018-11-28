@@ -30,13 +30,13 @@ sitemap = sm.createSitemap ({
 var sequelize = sequelizeConnection.sequelize; //instance to query
 
 //test ----
-const User = sequelize.define('User',{
-    userId : Sequelize.INTEGER,
-    email: Sequelize.STRING,
-    username: Sequelize.STRING,
-    pass: Sequelize.STRING,
-    createdAt: Sequelize.DATE,
-    updatedAt: Sequelize.DATE,
+/*const User = sequelize.define('User',{
+  userId : Sequelize.INTEGER, 
+  email: Sequelize.STRING,
+  username: Sequelize.STRING,
+  pass: Sequelize.STRING,
+  createdAt: Sequelize.DATE,
+  updatedAt: Sequelize.DATE,
 })
 
 sequelize.query('SELECT * FROM Users')
@@ -66,7 +66,7 @@ sequelize.query('SELECT * FROM Users')
 var data = User.findAll({
     attributes: ['username', 'pass']});
 
-console.log(data.valueOf());
+console.log(data.valueOf());*/
 //test ----
 
 // view engine setup
