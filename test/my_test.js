@@ -75,3 +75,17 @@ it('Get de todos los threads', function(){
     });
 });
 
+it('Get de threads de un user existente', function(){
+    ctl_thread.getUserThreads('arnau')
+    .then( function(success) {
+        expect(success).to.contains(Promise);
+    });
+});
+
+
+it('Get de threads de un user inexistente', function(){
+    ctl_thread.getUserThreads('fbvjibd')
+    .then( function(success) {
+        expect(success).to.contains(Promise);
+    });
+});
