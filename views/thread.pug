@@ -34,12 +34,10 @@ block main
   //img.img-fluid.rounded(src='http://placehold.it/900x300' alt='')
   hr
   // Post Content
-  | #{thread.description}
+  | !{thread.description}
   hr
   include elements/comment_submit
 
   include elements/comment
   each comment in comments
     +comment(comment)
-
-

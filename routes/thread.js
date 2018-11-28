@@ -79,7 +79,7 @@ async function asyncGetThreadById(req, res, next){
         }
         comments[i].karma=votos;
   }
-
+    console.log(thread);
     res.render('thread', {thread, 'comments': comments});
 }
 
