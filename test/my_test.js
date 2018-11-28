@@ -4,13 +4,14 @@ var ctl_user = require('../controllers/user_controller');
 var ctl_thread = require('../controllers/thread_controller');
 
 
-
+/*
 it('Main page status', function(done) {
     request('http://localhost:3000' , function(error, response, body) {
         expect(response.statusCode).to.equal(200);
         done();
     });
 });
+*/
 
 it('Signup de un usuario NUEVO', function(){
     ctl_user.userController_Signup("arnau@gmail.com", "arnau", "arnau")
