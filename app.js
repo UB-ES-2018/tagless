@@ -18,6 +18,9 @@ var commentsRouter = require('./routes/comments');
 var app = express();
 var sequelize = sequelizeConnection.sequelize; //instance to query
 
+const mapElastic = require('./config/elasticsearch/elasticsearchMain');
+mapElastic.mapElasticsearch();
+
 //test ----
 /*const User = sequelize.define('User',{
   userId : Sequelize.INTEGER, 
