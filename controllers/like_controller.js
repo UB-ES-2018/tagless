@@ -1,7 +1,10 @@
 var sequelizeConnection = require("../config/sequelizeConnection");
 var sequelize = sequelizeConnection.sequelize;
+var threadModel = require('../models/thread');
+var DataTypes = require('sequelize/lib/data-types');
 
-exports.findallLikesfromThread = function(thread_id, req, res) {
+
+exports.findallLikesfromThread = function (thread_id, req, res) {
 
     return new Promise(function (resolve, reject) {
         var sequelize = sequelizeConnection.sequelize;
@@ -34,15 +37,15 @@ exports.getMostLikedThreads = function () {
 
     return new Promise(function (resolve, reject) {
         var sequelize = sequelizeConnection.sequelize;
+        var ThreadModel = threadModel(sequelize, DataTypes);
+
         sequelize.query(
             'SELECT SUM(vote) as total, thread_id ' +
             'FROM tagless.likes ' +
             'GROUP BY thread_id ' +
             'ORDER BY total DESC ' +
             'LIMIT 10;',
-            {
-                type: sequelize.QueryTypes.SELECT
-            })
+            {model: ThreadModel})
             .then(result => {
                 if (result) {
                     console.log(result);
