@@ -18,6 +18,8 @@ exports.findallLikesfromComment = function(comment_id, req, res) {
             type: sequelize.QueryTypes.SELECT
         })
             .then(result => {
+                console.log(comment_id);
+                console.log(result);
                 if (result) {
                     resolve(result[0]);
                 }

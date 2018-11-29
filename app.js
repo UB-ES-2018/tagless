@@ -13,6 +13,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var threadRouter = require('./routes/thread');
 var commentsRouter = require('./routes/comments');
+var APIRouter = require('./API/API-file');
 
 
 var app = express();
@@ -22,14 +23,14 @@ const mapElastic = require('./config/elasticsearch/elasticsearchMain');
 mapElastic.mapElasticsearch();
 
 //test ----
-/*const User = sequelize.define('User',{
+const User = sequelize.define('User',{
   userId : Sequelize.INTEGER, 
   email: Sequelize.STRING,
   username: Sequelize.STRING,
   pass: Sequelize.STRING,
   createdAt: Sequelize.DATE,
   updatedAt: Sequelize.DATE,
-})
+});
 
 sequelize.query('SELECT * FROM Users')
     .then(user => console.log(user));
@@ -37,7 +38,6 @@ sequelize.query('SELECT * FROM Users')
 var data = User.findAll({
     attributes: ['username', 'pass']});
 
-console.log(data.valueOf());*/
 //test ----
 
 // view engine setup
@@ -77,7 +77,6 @@ app.use((req, res, next) => {
             res.locals.logged_username = req.session.user;
         }
     }
-    console.log(res.locals.is_logged);
     next();
 });
 
@@ -86,6 +85,7 @@ app.use('/users', usersRouter);
 app.use('/thread', threadRouter);
 app.use('/static', express.static('public'));
 app.use('/static/open-iconic', express.static('node_modules/open-iconic'));
+app.use('/API', APIRouter);
 
 
 //test
