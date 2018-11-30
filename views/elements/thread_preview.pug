@@ -1,7 +1,8 @@
 mixin thread(thread)
     // Blog thread
     .card.mb-4
-        //img.card-img-top(src='http://placehold.it/750x300' alt='Card image cap')
+        if(hasImage)
+            img.card-img-top(src=pictureLink alt='Card image cap')
         .card-body
             .container-fluid
                 .row

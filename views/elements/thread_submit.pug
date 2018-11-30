@@ -8,3 +8,15 @@ div.card.my-4
         textarea#text.form-control(type='text',  placeholder='Post whatever you want' name='text')
       div.form-group
         button.btn.btn-primary(type='submit') Submit
+        button.btn.btn-primary(type='button' data-toggle='modal' data-target='#modalImagen') Open modal
+
+div.modal.fade#modalImagen
+  div.modal-dialog
+    div.modal-content
+      div.modal-header
+        div.modal-title <b>Upload an image</b>
+          div.form-group
+          label Change profile picture
+          .custom-file
+              input#input_file_thread.custom-file-input(type='file', name="image" accept=".png, .jpg, .jpeg")
+              label.custom-file-label(for='input_file_thread') Choose file
