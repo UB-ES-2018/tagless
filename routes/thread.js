@@ -4,12 +4,12 @@ var comment_ctl = require('../controllers/comment_controller');
 var ctl_thread = require('../controllers/thread_controller');
 var ctl_like = require('../controllers/like_controller');
 var ctl_like_c = require('../controllers/Like_comment_controller');
+var ctl_user = require('../controllers/user_controller');
 
 
-
-async function asyncCallPostThread(userLogedName, req,res) {
+async function asyncCallPostThread(user, req,res) {
   console.log('calling');
-  var result = await ctl_thread.postThread(userLogedName,req.body['title'],req.body['text']);
+  var result = await ctl_thread.postThread(user,req.body['title'],req.body['text']);
 
   console.log("resultado del async",result.id);
   if (result){
@@ -49,20 +49,19 @@ async function asyncCallLike(thread_id, username, vote, req,res) {
     // expected output: 'resolved'
 }
 
-
-
 /* POST Create a thread */
 router.post('/submit', function(req, res, next) {
 
   userLogedName = req.session.user;
-  if (userLogedName){
-    asyncCallPostThread(userLogedName,req,res);
-  }
-  else{
-    res.send("No estas logueado, logueate");
 
-  }
-
+  ctl_user.getUserByUsername(userLogedName).then( user =>{
+        if(user){
+            asyncCallPostThread(user,req,res);
+        }
+        else{
+            res.send("Debes loguearte primero");
+        }
+    });
 });
 
 async function asyncGetThreadById(req, res, next){
@@ -71,7 +70,6 @@ async function asyncGetThreadById(req, res, next){
     var thread = await ctl_thread.getThreadById(threadId);
     thread.karma = await ctl_like.findallLikesfromThread(threadId, req, res);
 
-            
     var comments = await comment_ctl.getAllByThreadId(threadId);
     for(i in comments){
         
@@ -79,10 +77,7 @@ async function asyncGetThreadById(req, res, next){
         if(!votos){
             votos=0;
         }
-        console.log("PROMISE: ",votos);
         comments[i].karma=votos;
-        console.log(comments[i]);
-
   }
     console.log(thread);
     res.render('thread', {thread, 'comments': comments});
@@ -91,8 +86,6 @@ async function asyncGetThreadById(req, res, next){
 router.get('/:thread_id/comments', function(req, res, next) {
     //process req
     asyncGetThreadById(req, res, next);
-    
-
 });
 
 /* POST Create a comment */

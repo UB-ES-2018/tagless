@@ -19,3 +19,8 @@
 		h5.card-header Description
 		.card-body
 			| #{user.description}
+
+	if is_logged && user.username===logged_username
+		.card.my-4
+			h5.card-header ApiKey for Developer
+			.card-body 	#{user.apiKey}

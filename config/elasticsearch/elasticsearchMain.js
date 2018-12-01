@@ -11,14 +11,14 @@ const fetch = require("node-fetch");
  ***/
 
 
-var bulk = [];
-
 /*
  makebulk: prepare bulk array pushing every document inside to later on be included in
  a specific index.
  */
 var makebulk = async function(indexName, tableName, entityList, callback){
   console.log("MAKEBULK OF " + tableName);
+
+  var bulk = [];
 
   var description = await sequelizeClient.queryInterface.describeTable(tableName);
   var attributes = Object.keys(description);
@@ -35,6 +35,9 @@ var makebulk = async function(indexName, tableName, entityList, callback){
         properties
     );
   }
+
+
+  console.log("BULK OF ", bulk, tableName);
   callback(bulk);
 };
 
@@ -50,7 +53,7 @@ var indexall = function(indexName, madebulk, callback) {
     body: madebulk
   },function(err,resp,status) {
     if (err) {
-      console.log(err);
+      console.log("Error ocurred during [indexall] method. IndexName -> ", indexName, err.response);
     }
     else {
       callback(resp.items);
@@ -67,21 +70,17 @@ async function make(indexName, tableName) {
      // Getting all data from our Database
      let dataModel = await sequelizeClient.query("SELECT * FROM " + tableName);
      console.log("------------" + tableName + "---------------");
-     console.log(dataModel[0]);
-     console.log("index Names ", indexName);
 
      // Make bulk
      makebulk(indexName, tableName, dataModel[0], function(response) {
        console.log("Bulk content prepared");
        indexall(indexName, response, function(resp) {
          console.log("AFTER INDEXALL", resp);
-         bulk = [];
        });
      });
    }catch (error) {
-     console.log(error)
+     console.log(error.parent.code, tableName);
    }
-
 }
 
 
@@ -103,15 +102,21 @@ setUp = function(indexNames, tableNames) {
             elasticClient.indices.putMapping(eval("elasticMapping.get" + tableNames[i] +"Mapping()"),
                 function(err, resp) {
                   console.log("AFTER APPLY MAPPING OF " + tableNames[i]);
-                  make(indexNames[i], tableNames[i]);
+                  return make(indexNames[i], tableNames[i])
+
                 });
           }else{
-            make(indexNames[i], tableNames[i]);
+            return make(indexNames[i], tableNames[i])
+
           }
         });
       });
     } catch (err) {
-      console.log("Error: " + err);
+      if (err.code) {
+        console.log(err.code);
+      }else{
+        console.log(err.message);
+      }
     }
   }
 };
@@ -123,26 +128,31 @@ setUp = function(indexNames, tableNames) {
  elasticsearch database with our MySQL database.
  */
 module.exports.mapElasticsearch =  function() {
-  fs.readdir('../../models/', function(err, files) {
+
+  fs.readdir('./models/', function(err, files) {
     if (err) {
       console.log(err);
     }
     else {
-      // Manage mapping of each entity in models
-      var indexNames = [];
-      for (var i = 0; i < files.length; i++) {
-        files[i] = path.parse(files[i]).name;
-        indexNames.push(files[i]);
-        files[i] = files[i].capitalize();
-        // Pluralize name to get Table Name
-        if (files[i].charAt((files[i].length - 1)) !== 's') {
-          files[i] = files[i] + 's';
+      var promise = new Promise(function(resolve, reject) {
+        // Manage mapping of each entity in models
+        var indexNames = [];
+        for (var i = 0; i < files.length; i++) {
+          files[i] = path.parse(files[i]).name;
+          indexNames.push(files[i]);
+          files[i] = files[i].capitalize();
+          // Pluralize name to get Table Name
+          if (files[i].charAt((files[i].length - 1)) !== 's') {
+            files[i] = files[i] + 's';
+          }
         }
-      }
-      console.log(files);
-      console.log(indexNames);
 
-      setUp(indexNames, files);
+        resolve([indexNames, files]);
+      });
+
+      promise.then(function(success) {
+        setUp(success[0], success[1]);
+      });
     }
   });
 };
@@ -177,5 +187,4 @@ module.exports.delDocument = function(indexName, id) {
   });
 };
 
-this.mapElasticsearch();
-
+//this.mapElasticsearch();

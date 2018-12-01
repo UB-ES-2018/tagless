@@ -5,45 +5,48 @@ var Comment = require('../models/comment');
 var Thread = require('../models/thread');
 var DataTypes = require('sequelize/lib/data-types');
 const bcrypt = require('bcrypt');
-
+var hat = require('hat');
 
 exports.userController_Signup = function (u_email, u_name, u_pass) {
 
-    //create user into database.
+    return new Promise(function(resolve,reject){
+        var sequelize = sequelizeConnection.sequelize;
+        const saltRounds = 10;
+        var UserModel = userModel(sequelize, DataTypes);
+        var success = true;
 
-    var sequelize = sequelizeConnection.sequelize;
-    const User = userModel(sequelize,DataTypes);
-    const saltRounds = 10;
-
-
-    console.log("hasta aquí he llegado");
-    userController_OnBD(u_email, u_name, function (err, content) {
-        if (err) {
-            return next("Mysql error, check your query");
-        } else {
-            console.log(content);
-            if (content == true) {
-                console.log("El usuario ya esta en la lista");
-            }
-            else {
-                bcrypt.genSalt(saltRounds, function (err, salt) {
-                    bcrypt.hash(u_pass, salt, function (err, hash) {
-                        User.create({
-                            email: u_email,
-                            username: u_name,
-                            pass: hash,
-                        }).then(user => {
-                            console.log("User created and added to sitexml");
-                            sitemap.add({url: 'users/' + user.username});
-                            sitemap.clearCache();
+        UserModel.findOne({ where : { username: u_name, email:u_email } })
+            .then(function(user){
+                if(user) {
+                    console.log("El usuario ya esta en la lista");
+                    resolve(!success);
+                }
+                else {
+                    bcrypt.genSalt(saltRounds, function (err, salt) {
+                        bcrypt.hash(u_pass, salt, function (err, hash) {
+                            //Generamos API key:
+                            var apikey = hat();
+                            UserModel.create({
+                                email: u_email,
+                                username: u_name,
+                                pass: hash,
+                                apiKey: apikey,
+                                privacity : 0,
+                            }).then(user => {
+                              console.log("User created and added to sitexml");
+                              sitemap.add({url: 'users/' + user.username});
+                              sitemap.clearCache();
+                            });
                         });
                     });
-                });
-            }
-        }
+
+                    resolve(success);
+                }
+            },function(err){
+                reject("Mysql error, check your query"+err);
+            });
     });
 };
-
 
 
 exports.userController_Login = function (u_name, u_pass, callback) {
@@ -71,18 +74,6 @@ exports.userController_Login = function (u_name, u_pass, callback) {
         callback(err);
     });
 };
-
-function userController_OnBD(u_email, u_name, callback) {
-
-    var sequelize = sequelizeConnection.sequelize;
-
-    sequelize.query('SELECT count(*) AS count FROM Users WHERE (Users.username = (?) OR Users.email = (?))',
-        {replacements: [u_name, u_email], type: sequelize.QueryTypes.SELECT})
-        .then(result => {
-                callback(null, result[0]['count'] > 0);
-            }
-        );
-}
 
 exports.getUser = function (u_name, callback) {
 
@@ -144,7 +135,7 @@ exports.getUserByUsername = function (u_username) {
         var sequelize = sequelizeConnection.sequelize;
         var UserModel = userModel(sequelize, DataTypes);
 
-        UserModel.find({where: {username: u_username}})
+        UserModel.findOne({where: {username: u_username}})
             .then(function (user) {
                 resolve(user);
             }, function (err) {
@@ -204,4 +195,20 @@ exports.getCommentedThreadsByUser = function (userId) {
         }
     });
 };
+exports.getUserByAPIKey = function(u_APIKey){
+    
+    return new Promise(function (resolve, reject) {
+        var sequelize = sequelizeConnection.sequelize;
+        var UserModel = userModel(sequelize, DataTypes);
+
+        UserModel.findOne({where: {apiKey: u_APIKey}})
+            .then(function (user) {
+                resolve(user);
+            }, function (err) {
+                console.log("Error ocurred: " + err);
+                reject(err);
+            })
+    });
+
+}
 

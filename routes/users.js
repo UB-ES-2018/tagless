@@ -27,7 +27,6 @@ router.get('/logout', (req, res) => {
 
 /* POST user login. */
 router.post('/login', sessionChecker, function (req, res, next) {
-    console.log(req.body);
 
     //Get data from request and log user
     ctl_user.userController_Login(req.body['username'], req.body['password'],
@@ -54,10 +53,18 @@ router.get('/signup', function (req, res, next) {
 router.post('/signup', function (req, res, next) {
     //TODO
     //Get data from request and log user
-    var user = ctl_user.userController_Signup(req.body['email'], req.body['username'], req.body['password']);
-    //router.put('/profileView/:userId', ctl_user.updateProfile); //To validate from merge
-    console.log(user);
-    res.redirect("/");
+    ctl_user.userController_Signup(req.body['email'], req.body['username'], req.body['password'])
+        .then(function(success){
+            if (success instanceof Error){
+                return res.send(success.message); // - WIDGET ERRO AL CREAR -
+            }
+            if(success){
+                res.redirect('/');
+            }
+        }, function (err) {
+            console.log(err);
+            res.status(500).send("Internal server error");
+        });
 });
 
 router.get('/:username/', function (req, res) {
