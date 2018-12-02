@@ -8,6 +8,7 @@ var models = require('./config/models');
 var session = require ('express-session');
 var sequelizeConnection = require("./config/sequelizeConnection");
 var FileStore = require('session-file-store')(session);
+var device = require('express-device');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -17,25 +18,6 @@ var commentsRouter = require('./routes/comments');
 
 var app = express();
 var sequelize = sequelizeConnection.sequelize; //instance to query
-
-//test ----
-/*const User = sequelize.define('User',{
-  userId : Sequelize.INTEGER, 
-  email: Sequelize.STRING,
-  username: Sequelize.STRING,
-  pass: Sequelize.STRING,
-  createdAt: Sequelize.DATE,
-  updatedAt: Sequelize.DATE,
-})
-
-sequelize.query('SELECT * FROM Users')
-    .then(user => console.log(user));
-
-var data = User.findAll({
-    attributes: ['username', 'pass']});
-
-console.log(data.valueOf());*/
-//test ----
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -55,7 +37,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     cookie: {
-        expires: 600000000000
+        expires: 60*60*24*7,
     }
 }));
 
@@ -83,6 +65,7 @@ app.use('/users', usersRouter);
 app.use('/thread', threadRouter);
 app.use('/static', express.static('public'));
 app.use('/static/open-iconic', express.static('node_modules/open-iconic'));
+app.use(device.capture());
 
 
 //test
