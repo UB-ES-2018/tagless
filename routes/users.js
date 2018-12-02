@@ -1,10 +1,11 @@
 var express = require('express');
 var router = express.Router();
 var ctl_user = require('../controllers/user_controller');
-var ctl_device = require('../controllers/device_controller');
 var fileUpload = require("express-fileupload");
 var path = require('path');
 var fs = require('fs');
+var device = require('express-device');
+var ctl_device = require('../controllers/device_controller');
 
 router.use(fileUpload());
 
@@ -41,6 +42,7 @@ var deviceChecker = (req,res,next) => {
 
 /* POST user login. */
 router.post('/login', sessionChecker, deviceChecker, function (req, res, next) {
+    console.log(req.body);
 
     //Get data from request and log user
     ctl_user.userController_Login(req.body['username'], req.body['password'],

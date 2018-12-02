@@ -60,6 +60,7 @@ app.use((req, res, next) => {
             res.locals.logged_username = req.session.user;
         }
     }
+    console.log(res.locals.is_logged);
     next();
 });
 
