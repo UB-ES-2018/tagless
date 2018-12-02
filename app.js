@@ -19,6 +19,9 @@ var APIRouter = require('./API/API-file');
 var app = express();
 var sequelize = sequelizeConnection.sequelize; //instance to query
 
+const mapElastic = require('./config/elasticsearch/elasticsearchMain');
+mapElastic.mapElasticsearch();
+
 //test ----
 const User = sequelize.define('User',{
   userId : Sequelize.INTEGER, 

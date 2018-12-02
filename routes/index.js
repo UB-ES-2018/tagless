@@ -63,6 +63,11 @@ router.get('/', function(req, res, next) {
   asyncCallToShowAllThreads(req, res, next);
 });
 
+async function asyncCallToShowMostLikedThreads() {
+    var result = await ctl_like.getMostLikedThreads();
+    return result;
+}
+
 async function asyncCallALLlike(thread_id,req,res) {
     var result = await ctl_like.findallLikesfromThread(thread_id,req,res);
     return result;
