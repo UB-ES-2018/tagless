@@ -14,7 +14,7 @@ var usersRouter = require('./routes/users');
 var threadRouter = require('./routes/thread');
 var commentsRouter = require('./routes/comments');
 var APIRouter = require('./API/API-file');
-
+var device = require('express-device');
 
 var app = express();
 var sequelize = sequelizeConnection.sequelize; //instance to query
@@ -22,23 +22,6 @@ var sequelize = sequelizeConnection.sequelize; //instance to query
 const mapElastic = require('./config/elasticsearch/elasticsearchMain');
 mapElastic.mapElasticsearch();
 
-//test ----
-const User = sequelize.define('User',{
-  userId : Sequelize.INTEGER, 
-  email: Sequelize.STRING,
-  username: Sequelize.STRING,
-  pass: Sequelize.STRING,
-  createdAt: Sequelize.DATE,
-  updatedAt: Sequelize.DATE,
-});
-
-sequelize.query('SELECT * FROM Users')
-    .then(user => console.log(user));
-
-var data = User.findAll({
-    attributes: ['username', 'pass']});
-
-//test ----
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -58,7 +41,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     cookie: {
-        expires: 600000000000
+        expires: 60*60*24*7,
     }
 }));
 
@@ -86,7 +69,7 @@ app.use('/thread', threadRouter);
 app.use('/static', express.static('public'));
 app.use('/static/open-iconic', express.static('node_modules/open-iconic'));
 app.use('/API', APIRouter);
-
+app.use(device.capture());
 
 //test
 app.use('/comments', commentsRouter);
