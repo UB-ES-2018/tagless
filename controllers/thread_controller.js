@@ -26,6 +26,11 @@ exports.postThread = function(user,t_title,t_text) {
                             userName : user['username'],
                             title: t_title,
                             description: t_text,
+                        }).then(thread => {
+                            console.log("Thread created and added to sitexml");
+                            sitemap.add({url: 'thread/' + thread.id + '/comments'});
+                            sitemap.clearCache();
+                            return thread;
                         }).then( threadCreated => {
                             Like.create({
                                 userId: threadCreated.userId,
