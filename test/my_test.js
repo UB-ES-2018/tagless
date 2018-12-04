@@ -29,7 +29,7 @@ it('Signup de un usuario EXISTENTE', function(){
 
 it('Post de thread con usuario EXISTENTE', function(){
     ctl_user.getUserByUsername("arnau").then( user =>{
-        ctl_thread.postThread(user, "test1", "test")
+        ctl_thread.postThread(user, "test1", "test",null)
         .then( function(success) {
             expect(success).to.equal(true);
         });
@@ -39,7 +39,7 @@ it('Post de thread con usuario EXISTENTE', function(){
 
 it('Post de thread con usuario INEXISTENTE', function(){
     ctl_user.getUserByUsername("arnau12").then( user =>{
-        ctl_thread.postThread(user, "test1", "test")
+        ctl_thread.postThread(user, "test1", "test",null)
         .then( function(success) {
             expect(success).to.equal(false);
         });

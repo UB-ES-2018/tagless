@@ -6,7 +6,7 @@ var likeModel = require('../models/like');
 var DataTypes = require('sequelize/lib/data-types');
 
 
-exports.postThread = function(user,t_title,t_text) {
+exports.postThread = function(user,t_title,t_text, comunity) {
 
     return new Promise(function(resolve,reject) {
         const Thread = threadModel(sequelize, DataTypes);
@@ -88,6 +88,25 @@ exports.getUserThreads = function(u_username){
     return new Promise(function(resolve, reject){
         var Threads = threadModel(sequelize, DataTypes);
         Threads.findAll({where : {username : u_username},
+            order: [ [ 'updatedAt', 'DESC' ]] })
+        .then(result => {
+            var i = 0;
+            var list = [];
+            while(i < 5 && i< result.length){
+                list.push(result[i]);
+                i++;
+            }
+            resolve(list);
+        });
+    });
+};
+
+/* Return the 5 most recently threads posted in the comunity */
+
+exports.getComunityThreads = function(c_comunity){
+    return new Promise(function(resolve, reject){
+        var Threads = threadModel(sequelize, DataTypes);
+        Threads.findAll({where : {comunity : c_comunity},
             order: [ [ 'updatedAt', 'DESC' ]] })
         .then(result => {
             var i = 0;

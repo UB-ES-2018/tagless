@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
       userId: DataTypes.INTEGER,
       userName: DataTypes.STRING,
       title: DataTypes.STRING,
+      comunity: DataTypes.STRING,
       description: DataTypes.TEXT,
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE,

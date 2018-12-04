@@ -9,7 +9,7 @@ var ctl_user = require('../controllers/user_controller');
 
 async function asyncCallPostThread(user, req,res) {
   console.log('calling');
-  var result = await ctl_thread.postThread(user,req.body['title'],req.body['text']);
+  var result = await ctl_thread.postThread(user,req.body['title'],req.body['text'],null);
 
   console.log("resultado del async",result.id);
   if (result){
