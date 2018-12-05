@@ -85,6 +85,7 @@ app.use('/users', usersRouter);
 app.use('/thread', threadRouter);
 app.use('/static', express.static('public'));
 app.use('/static/open-iconic', express.static('node_modules/open-iconic'));
+app.use('/static/npm/typeahead', express.static('node_modules/typeahead.js'));
 app.use('/API', APIRouter);
 
 

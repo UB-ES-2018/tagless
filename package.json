@@ -30,8 +30,8 @@
     "express": "~4.16.0",
     "express-fileupload": "^1.0.0",
     "express-session": "^1.15.6",
-    "hat": "0.0.3",
     "get-json": "^1.0.1",
+    "hat": "0.0.3",
     "http-errors": "~1.6.2",
     "mocha-jsdom": "^2.0.0",
     "morgan": "^1.9.1",
@@ -43,7 +43,8 @@
     "pug": "2.0.0-beta11",
     "sequelize": "^4.39.0",
     "session-file-store": "^1.2.0",
-    "sqlite3": "^4.0.2"
+    "sqlite3": "^4.0.2",
+    "typeahead.js": "git+https://github.com/twitter/typeahead.js.git"
   },
   "devDependencies": {
     "body-parser": "^1.18.3",
