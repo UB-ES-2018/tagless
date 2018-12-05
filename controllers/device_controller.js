@@ -55,7 +55,6 @@ exports.DevicesfromUser = function(username) {
 
         Device.findAll({ where : { username: username } })
             .then(function(data) {
-
                 var contenido =  [];
 
                 for (let i in data){
@@ -64,7 +63,7 @@ exports.DevicesfromUser = function(username) {
                         "success":data[i]['success'],
                         "ip":data[i]['ipadress'],
                         "username":data[i]['username'],
-                        "date":data[i]['createdAt'].parseDate()});
+                        "date":data[i]['createdAt']});
                 }
                 console.log(contenido);
                 resolve(contenido);

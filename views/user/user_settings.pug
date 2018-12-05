@@ -39,23 +39,23 @@ block main
 				if !devices
 					tbody
 						tr
-							td No loggin attemps
+							td No login attemps
 				else
 					thead
 						tr
-							th Date
 							th Ip
 							th Device
-							th Loggin Success
+							th Login Success
+							th Date
 
 
 					tbody
 						each device in devices
 							tr
-								td #{device.date}
 								td #{device.ip}
 								td #{device.device}
 								if device.success
 									td True
 								else
 									td False
+								td #{device.date}
