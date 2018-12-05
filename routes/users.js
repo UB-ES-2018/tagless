@@ -93,6 +93,7 @@ router.get('/:username/proves', function(req,res,next) {
     ctl_device.DevicesfromUser(username)
         .then(function(devices){
             console.log(devices);
+            res.status(200).send("OK");
         });
 });
 
@@ -135,9 +136,13 @@ router.get('/:username/settings', function (req, res) {
     //Implementation
     ctl_user.getUserByUsername(username)
         .then(function(user){
-            res.render('user/user_settings', {
-                user:user.dataValues
-            });
+            ctl_device.DevicesfromUser(user.username)
+                .then(function(devices){
+                    res.render('user/user_settings', {
+                        user:user.dataValues,
+                        devices:devices
+                    });
+                });
         }, function(err){
             console.log(err);
             res.status(500).send("Internal server error");

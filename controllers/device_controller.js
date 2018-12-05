@@ -58,8 +58,13 @@ exports.DevicesfromUser = function(username) {
 
                 var contenido =  [];
 
-                for (i in data){
-                    contenido.push([data[i]['id'],data[i]['title'],data[i]['success'],data[i]['ipadress'],data[i]['username'],data[i]['createdAt']]);
+                for (let i in data){
+                    contenido.push({"id":data[i]['id'],
+                        "device":data[i]['title'],
+                        "success":data[i]['success'],
+                        "ip":data[i]['ipadress'],
+                        "username":data[i]['username'],
+                        "date":data[i]['createdAt'].parseDate()});
                 }
                 console.log(contenido);
                 resolve(contenido);
