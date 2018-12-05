@@ -8,6 +8,7 @@ var models = require('./config/models');
 var session = require ('express-session');
 var sequelizeConnection = require("./config/sequelizeConnection");
 var FileStore = require('session-file-store')(session);
+var sm = require('sitemap')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -17,11 +18,20 @@ var APIRouter = require('./API/API-file');
 var device = require('express-device');
 
 var app = express();
+
+sitemap = sm.createSitemap ({
+    hostname: 'http://tagless.moe',
+    cacheTime: 600000,  // 600 sec cache period
+    urls: [
+        { url: '/',  changefreq: 'hourly',  priority: 1 },
+        { url: '/users/signup', changefreq: 'never', priority: 0.6 }
+    ]
+});
+
 var sequelize = sequelizeConnection.sequelize; //instance to query
 
 const mapElastic = require('./config/elasticsearch/elasticsearchMain');
 mapElastic.mapElasticsearch();
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -73,23 +83,29 @@ app.use('/static/npm/datatables', express.static('node_modules/datatables'));
 app.use('/API', APIRouter);
 app.use(device.capture());
 
+app.get('/sitemap.xml', function(req, res) {
+    res.header('Content-Type', 'application/xml');
+    res.send( sitemap.toString() );
+});
+
+
 //test
 app.use('/comments', commentsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
+    next(createError(404));
 });
 
 // error handler
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+    // render the error page
+    res.status(err.status || 500);
+    res.render('error');
 });
 
 module.exports = app;
