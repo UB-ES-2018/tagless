@@ -13,6 +13,9 @@ module.exports = (sequelize, DataTypes) => {
       success: {
           type: DataTypes.INTEGER
       },
+      ipadress: {
+          type: DataTypes.STRING
+      },
       username: {
           allowNull: false,
           primaryKey: true,
