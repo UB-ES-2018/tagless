@@ -15,7 +15,7 @@ var usersRouter = require('./routes/users');
 var threadRouter = require('./routes/thread');
 var commentsRouter = require('./routes/comments');
 var APIRouter = require('./API/API-file');
-
+var device = require('express-device');
 
 var app = express();
 
@@ -32,44 +32,6 @@ var sequelize = sequelizeConnection.sequelize; //instance to query
 
 const mapElastic = require('./config/elasticsearch/elasticsearchMain');
 mapElastic.mapElasticsearch();
-
-//test ----
-const User = sequelize.define('User',{
-  userId : Sequelize.INTEGER, 
-  email: Sequelize.STRING,
-  username: Sequelize.STRING,
-  pass: Sequelize.STRING,
-  createdAt: Sequelize.DATE,
-  updatedAt: Sequelize.DATE,
-});
-
-sequelize.query('SELECT * FROM Users')
-    .then(users => {
-            console.log("Generating User XML");
-            if (users && users.length) {
-                users[0].forEach(user => {
-                    if (user.privacity===0)
-                        sitemap.add({url: 'users/' + user.username})
-                });
-            }
-        }
-    ).then( () =>
-    sequelize.query('SELECT * FROM Threads')
-        .then(threads => {
-                if (threads && threads.length) {
-                    threads[0].forEach(thread => {
-                        sitemap.add({url: 'thread/' + thread.id + "/comments"})
-                    });
-                    sitemap.clearCache();
-                }
-            }
-        )
-    ).then( () => sitemap.clearCache());
-
-var data = User.findAll({
-    attributes: ['username', 'pass']});
-
-//test ----
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -89,7 +51,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     cookie: {
-        expires: 600000000000
+        expires: 60*60*24*7,
     }
 }));
 
@@ -108,6 +70,7 @@ app.use((req, res, next) => {
             res.locals.logged_username = req.session.user;
         }
     }
+    console.log(res.locals.is_logged);
     next();
 });
 
@@ -116,12 +79,15 @@ app.use('/users', usersRouter);
 app.use('/thread', threadRouter);
 app.use('/static', express.static('public'));
 app.use('/static/open-iconic', express.static('node_modules/open-iconic'));
+app.use('/static/npm/datatables', express.static('node_modules/datatables'));
 app.use('/API', APIRouter);
+app.use(device.capture());
 
 app.get('/sitemap.xml', function(req, res) {
     res.header('Content-Type', 'application/xml');
     res.send( sitemap.toString() );
 });
+
 
 //test
 app.use('/comments', commentsRouter);
