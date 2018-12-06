@@ -6,7 +6,7 @@ var likeModel = require('../models/like');
 var DataTypes = require('sequelize/lib/data-types');
 
 
-exports.postThread = function(user,t_title,t_text, comunity) {
+exports.postThread = function(user,t_title,t_text, c_comunity) {
 
     return new Promise(function(resolve,reject) {
         const Thread = threadModel(sequelize, DataTypes);
@@ -26,6 +26,7 @@ exports.postThread = function(user,t_title,t_text, comunity) {
                             userName : user['username'],
                             title: t_title,
                             description: t_text,
+                            comunity: c_comunity,
                         }).then(thread => {
                             console.log("Thread created and added to sitexml");
                             sitemap.add({url: 'thread/' + thread.id + '/comments'});
@@ -101,7 +102,6 @@ exports.getUserThreads = function(u_username){
     });
 };
 
-/* Return the 5 most recently threads posted in the comunity */
 
 exports.getComunityThreads = function(c_comunity){
     return new Promise(function(resolve, reject){
@@ -109,11 +109,10 @@ exports.getComunityThreads = function(c_comunity){
         Threads.findAll({where : {comunity : c_comunity},
             order: [ [ 'updatedAt', 'DESC' ]] })
         .then(result => {
-            var i = 0;
+
             var list = [];
-            while(i < 5 && i< result.length){
+            for (i in result){
                 list.push(result[i]);
-                i++;
             }
             resolve(list);
         });

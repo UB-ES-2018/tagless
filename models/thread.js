@@ -13,7 +13,10 @@ module.exports = (sequelize, DataTypes) => {
       comunity: DataTypes.STRING,
       description: DataTypes.TEXT,
       createdAt: DataTypes.DATE,
-      updatedAt: DataTypes.DATE,
+      updatedAt:{
+          type: DataTypes.DATE,
+          allowNull: false,
+      } 
   }, {});
   Thread.associate = function(models) {
     // associations can be defined here
