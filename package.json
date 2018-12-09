@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node ./bin/www",
     "test": "mocha --timeout 10000 --exit",
-    "coverage": "nyc --reporter=text mocha",
+    "coverage": "nyc --reporter=text mocha"
   },
   "dependencies": {
     "bcrypt": "^3.0.2",
