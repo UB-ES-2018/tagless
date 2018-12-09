@@ -13,25 +13,30 @@ exports.postComunity = function(c_comunityName,c_description) {
         const Comunity_Model = comunityModel(sequelize, DataTypes);
         var success = true;
         
-        Comunity_Model.findOne({ where : { comunityName: c_comunityName } }).then(comunity =>{
-
-            if(comunity) {
-                console.log("La comunidad ya existe");
-                resolve(!success);
-            }
-            else{
-                Comunity_Model.create({
-                    comunityName: c_comunityName,
-                    description: c_description,
-                }).then( comunity_result =>{
-                    sitemap.add({url: 'comunity/' + comunity_result.comunityName});
-                    sitemap.clearCache();
-                });
-                resolve(success);
-            }
-        },function(err){
-            reject("Mysql error, check your query"+err);
-        });
+        if(!(c_comunityName.replace(/\s/g, ""))){
+            resolve(!success);
+        }
+        else{
+            Comunity_Model.findOne({ where : { comunityName: c_comunityName } })
+            .then(comunity =>{
+                if(comunity) {
+                    console.log("La comunidad ya existe");
+                    resolve(!success);
+                }
+                else{
+                    Comunity_Model.create({
+                        comunityName: c_comunityName,
+                        description: c_description,
+                    }).then( comunity_result =>{
+                        sitemap.add({url: 'comunity/' + comunity_result.comunityName});
+                        sitemap.clearCache();
+                    });
+                    resolve(success);
+                }
+            },function(err){
+                reject("Mysql error, check your query"+err);
+            });
+        }
     });
 };
 
@@ -40,7 +45,7 @@ exports.updateComunity = function(c_comunityName, c_description){
     return new Promise(function(resolve,reject){
         var Comunity_Model = comunityModel(sequelize, DataTypes);
 
-        Comunity_Model.find({ where : { comunityName: c_comunityName } })
+        Comunity_Model.findOne({ where : { comunityName: c_comunityName } })
             .then(comunity => {
                 comunity.updateAttributes({
                     description: c_description
@@ -54,14 +59,28 @@ exports.updateComunity = function(c_comunityName, c_description){
 
 exports.getComunityThreads = function(c_comunityName){
 
-     UserModel.hasMany(CommentModel, {foreignKey: "comunity"});
-     CommentModel.belongsTo(UserModel, {foreignKey: "comunityName"});
+    return new Promise(function(resolve, reject){
+        var thread_Model = threadModel(sequelize, DataTypes);
+        thread_Model.findAll({ where: { comunityName : c_comunityName } })
+            .then(result =>{
+                resolve(result);
+            }, function(err){
+                reject(err);
+            });
+        });
+}
 
+exports.getComunityByName = function(c_comunityName){
+    return new Promise(function(resolve,reject){
 
-     CommentModel.findAll({ where: { threadId : threadId }, include: [UserModel] })
-         .then(function(data){
-           resolve(data);
-         }, function(err){
-           reject(err);
-         });
+        var Comunity_Model = comunityModel(sequelize, DataTypes);
+
+        Comunity_Model.findOne({where : { comunityName : c_comunityName}
+        }).then( comunity => {
+            resolve(comunity);
+        }, function(err){
+            reject(err);
+        });
+    });
+
 }

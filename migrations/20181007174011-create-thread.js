@@ -17,7 +17,7 @@ module.exports = {
       title: {
         type: Sequelize.STRING
       },
-      comunity: {
+      comunityName: {
         type: Sequelize.STRING,
         allowNull: false,
       },
