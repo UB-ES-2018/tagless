@@ -109,4 +109,13 @@ router.post('/:thread_id/comment/submit', function (req, res, next) {
     }
 });
 
+router.post('/images/threads', function(req,res,next){
+    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+    // AQUI SE DEBERIAN TRATAR LAS IMAGENES DE TINYMCE
+
+    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+
+});
+
+
 module.exports = router;
