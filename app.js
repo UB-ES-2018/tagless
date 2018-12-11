@@ -113,7 +113,7 @@ app.use((req, res, next) => {
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/thread', threadRouter);
+app.use('/c/', threadRouter);
 app.use('/static', express.static('public'));
 app.use('/static/open-iconic', express.static('node_modules/open-iconic'));
 app.use('/API', APIRouter);

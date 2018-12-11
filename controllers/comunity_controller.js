@@ -21,7 +21,7 @@ exports.postComunity = function(c_comunityName,c_description) {
             .then(comunity =>{
                 if(comunity) {
                     console.log("La comunidad ya existe");
-                    resolve(!success);
+                    reject("La comunidad ya existe");
                 }
                 else{
                     Comunity_Model.create({
@@ -30,8 +30,10 @@ exports.postComunity = function(c_comunityName,c_description) {
                     }).then( comunity_result =>{
                         sitemap.add({url: 'comunity/' + comunity_result.comunityName});
                         sitemap.clearCache();
+                        resolve(comunity_result);
+                    }, function(err){
+                        reject("Mysql error, check your query"+err);
                     });
-                    resolve(success);
                 }
             },function(err){
                 reject("Mysql error, check your query"+err);
