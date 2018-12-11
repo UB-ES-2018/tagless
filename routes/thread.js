@@ -9,7 +9,7 @@ var ctl_user = require('../controllers/user_controller');
 
 async function asyncCallPostThread(user, req,res) {
   console.log('calling');
-  var result = await ctl_thread.postThread(user,req.body['title'],req.body['text']);
+  var result = await ctl_thread.postThread(req, user,req.body['title'],req.body['text']);
 
   console.log("resultado del async",result.id);
   if (result){
@@ -53,7 +53,8 @@ async function asyncCallLike(thread_id, username, vote, req,res) {
 router.post('/submit', function(req, res, next) {
 
   userLogedName = req.session.user;
-
+  console.log(Object.keys(req.files));
+  console.log("--------+-+-+-+--------------------------");
   ctl_user.getUserByUsername(userLogedName).then( user =>{
         if(user){
             asyncCallPostThread(user,req,res);

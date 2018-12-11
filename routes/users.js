@@ -132,6 +132,10 @@ router.post('/:username/settings', function (req, res, next) {
     var privacity = req.body.privacity;
     var appDir = path.dirname(require.main.filename);
 
+    console.log(req);
+    console.log(Object.keys(req.files));
+    console.log("--------+-+-+-+--------------------------");
+
     //Implementation
     ctl_user.getUserByUsername(username)
         .then(function(user){

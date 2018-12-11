@@ -5,8 +5,21 @@ var threadModel = require('../models/thread');
 var likeModel = require('../models/like');
 var DataTypes = require('sequelize/lib/data-types');
 
+var fileUpload = require("express-fileupload");
+var path = require('path');
+var fs = require('fs');
 
-exports.postThread = function(user,t_title,t_text) {
+function moveFile(file, somePlace) {
+    return new Promise((resolve, reject) => {
+        file.mv(somePlace, function (err) {
+            if (err) return reject(err);
+
+            resolve();
+        });
+    });
+}
+
+exports.postThread = function(req, user,t_title,t_text) {
 
     return new Promise(function(resolve,reject) {
         const Thread = threadModel(sequelize, DataTypes);
@@ -32,6 +45,42 @@ exports.postThread = function(user,t_title,t_text) {
                                 thread_id: threadCreated.id,
                                 vote: 1,
                             });
+
+                            var appDir = path.dirname(require.main.filename);
+                            console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+                            console.log(appDir);
+                            console.log(req.files);
+                            console.log(req);
+                            console.log(Object.keys(req.files.input_file_thread).length);
+                            console.log(req);
+
+                            console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+
+                            try {
+                                if (Object.keys(req.files).length > 0) {
+                                    let filepath = appDir + "/../public/images/threads/" + threadCreated.id;
+                                    console.log(filepath);
+                                    if (!fs.existsSync(filepath)) {
+                                        fs.mkdirSync(filepath, {recursive: true}, (err) => {
+                                            if (err) throw err;
+                                        });
+                                    }
+                                    const fileMovePromise =
+                                        req.files ? moveFile(req.files.image, filepath + '/thread'+ threadCreated.id) : Promise.resolve('No file present');
+
+                                    fileMovePromise
+                                        .then(() => {
+                                            //TODO:
+                                            res.redirect("/");
+                                        })
+                                        .catch(err => {
+                                            console.log(err);
+                                            res.status(500).json(err);
+                                        });
+                                }
+                            } catch (err){
+                                res.status(500).send(err);
+                            }
                         });
                         resolve(success);
                     }, function(err){
