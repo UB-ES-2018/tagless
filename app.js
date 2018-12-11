@@ -13,6 +13,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var threadRouter = require('./routes/thread');
 var commentsRouter = require('./routes/comments');
+var searchRouter = require('./routes/search');
 var APIRouter = require('./API/API-file');
 
 
@@ -83,6 +84,7 @@ app.use((req, res, next) => {
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/thread', threadRouter);
+app.use('/search', searchRouter);
 app.use('/static', express.static('public'));
 app.use('/static/open-iconic', express.static('node_modules/open-iconic'));
 app.use('/API', APIRouter);
