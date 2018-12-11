@@ -37,8 +37,21 @@ async function asyncCallPostThread(user, req,res) {
 
             if (Object.keys(req.files).length > 0) {
                 let filepath = appDir + "/../public/images/thread/" + result;
+
                 console.log(filepath);
+                console.log("Exists folder? ", fs.existsSync(filepath));
+                
                 if (!fs.existsSync(filepath)) {
+
+                // **********************************************
+                // **********************************************
+                // problema aqui peta por unhandled promise.
+                // Peta en el existsSync o en el mkdirSync
+                // pero ninguno usa promises porque son sincronos
+                // **********************************************
+                // **********************************************
+                
+
                     console.log(2);
                     fs.mkdirSync(filepath, {recursive: true}, (err) => {
                         if (err) throw err;

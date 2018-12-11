@@ -150,18 +150,9 @@ router.post('/:username/settings', function (req, res, next) {
         if (Object.keys(req.files).length > 0) {
             let filepath = appDir + "/../public/images/users/" + username;
 
-            console.log("Exists folder? ", fs.existsSync(filepath));
+            
 
             if (!fs.existsSync(filepath)) {
-
-                // **********************************************
-                // **********************************************
-                // problema aqui peta por unhandled promise.
-                // Peta en el existsSync o en el mkdirSync
-                // pero ninguno usa promises porque son sincronos
-                // **********************************************
-                // **********************************************
-                
 
 
                 fs.mkdirSync(filepath, {recursive: true}, (err) => {
