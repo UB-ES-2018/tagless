@@ -32,8 +32,7 @@ const User = sequelize.define('User',{
   updatedAt: Sequelize.DATE,
 });
 
-sequelize.query('SELECT * FROM Users')
-    .then(user => console.log(user));
+//sequelize.query('SELECT * FROM Users').then(user => console.log(user));
 
 var data = User.findAll({
     attributes: ['username', 'pass']});

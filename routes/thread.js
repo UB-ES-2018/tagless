@@ -6,19 +6,70 @@ var ctl_like = require('../controllers/like_controller');
 var ctl_like_c = require('../controllers/Like_comment_controller');
 var ctl_user = require('../controllers/user_controller');
 
+var fileUpload = require("express-fileupload");
+var path = require('path');
+var fs = require('fs');
+
+router.use(fileUpload());
+
+
+function moveFile(file, somePlace) {
+    return new Promise((resolve, reject) => {
+        file.mv(somePlace, function (err) {
+            if (err) return reject(err);
+
+            resolve();
+        });
+    });
+}
 
 async function asyncCallPostThread(user, req,res) {
-  console.log('calling');
-  var result = await ctl_thread.postThread(user,req.body['title'],req.body['text']);
+    console.log('calling');
 
-  console.log("resultado del async",result.id);
-  if (result){
-    res.redirect('/');
-  }
-  else{
-    res.send("El mensaje no es valido");
-  }
-  // expected output: 'resolved'
+    var appDir = path.dirname(require.main.filename);
+
+    var result = await ctl_thread.postThread(user,req.body['title'],req.body['text']);
+
+    console.log("resultado del async thread_id: ",result);
+
+    if (result){
+        try {
+
+            if (Object.keys(req.files).length > 0) {
+                let filepath = appDir + "/../public/images/thread/" + result;
+                console.log(filepath);
+                if (!fs.existsSync(filepath)) {
+                    console.log(2);
+                    fs.mkdirSync(filepath, {recursive: true}, (err) => {
+                        if (err) throw err;
+                    });
+                    console.log(3);
+                }
+                console.log(4);
+                const fileMovePromise =
+                    req.files ? moveFile(req.files.image, filepath + '/picture.jpg') : Promise.resolve('No file present');
+                console.log(5);
+                fileMovePromise
+                    .then(() => {
+                        console.log(6);
+                        //TODO:
+                        
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        res.status(500).json(err);
+                    });
+            }
+
+        } catch (err){
+            res.status(500).send(err);
+        }
+        return res.redirect("/");
+    }
+    else{
+        res.send("El mensaje no es valido");
+    }
+    // expected output: 'resolved'
 }
 
 async function asyncCallPostLike(thread_id, req,res) {
@@ -57,6 +108,7 @@ router.post('/submit', function(req, res, next) {
   ctl_user.getUserByUsername(userLogedName).then( user =>{
         if(user){
             asyncCallPostThread(user,req,res);
+
         }
         else{
             res.send("Debes loguearte primero");
@@ -79,7 +131,7 @@ async function asyncGetThreadById(req, res, next){
         }
         comments[i].karma=votos;
   }
-    console.log(thread);
+    //console.log(thread);
     res.render('thread', {thread, 'comments': comments});
 }
 

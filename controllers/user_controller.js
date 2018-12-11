@@ -18,7 +18,6 @@ exports.userController_Signup = function (u_email, u_name, u_pass) {
         UserModel.findOne({ where : { username: u_name, email:u_email } })
             .then(function(user){
                 if(user) {
-                    console.log("El usuario ya esta en la lista");
                     resolve(!success);
                 }
                 else {
@@ -55,7 +54,6 @@ exports.userController_Login = function (u_name, u_pass, callback) {
     var sql = 'SELECT pass FROM Users WHERE (Users.username = (?))';
     sequelize.query(sql, {replacements: [u_name], type: sequelize.QueryTypes.SELECT})
         .then(results => {
-            console.log(results);
             if (results.length == 0) throw new Error("User not foud");
             real_pass = results[0].pass;
             bcrypt.compare(u_pass, real_pass, function (err, res) {

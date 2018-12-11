@@ -1,22 +1,14 @@
 div.card.my-4
   h5.card-header Make a thread:
   div.card-body
-    form(method='POST' action='/thread/submit')
+    form(method='POST' action='/thread/submit' encType="multipart/form-data")
       div.form-group
         input#title.form-control(type='text', placeholder='Title' name='title')
       div.form-group
         textarea#text.form-control(type='text',  placeholder='Post whatever you want' name='text')
       div.form-group
+        .custom-file
+          input#input_file.custom-file-input(type='file', name="image" accept=".png, .jpg, .jpeg")
+          label.custom-file-label(for='input_file') Choose file
+      div.form-group
         button.btn.btn-primary(type='submit') Submit
-        button.btn.btn-primary(type='button' data-toggle='modal' data-target='#modalImagen') Open modal
-
-div.modal.fade#modalImagen
-  div.modal-dialog
-    div.modal-content
-      div.modal-header
-        div.modal-title <b>Upload an image</b>
-          div.form-group
-          label Change profile picture
-          .custom-file
-              input#input_file_thread.custom-file-input(type='file', name="image" accept=".png, .jpg, .jpeg")
-              label.custom-file-label(for='input_file_thread') Choose file

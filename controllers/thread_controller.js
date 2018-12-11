@@ -18,6 +18,7 @@ exports.postThread = function(user,t_title,t_text) {
                 resolve(!success);
             }
             else {
+                var thread_new_id;
                 userController.getUserByUsername(user['username'])
                     .then(function(user){
                         //With this id, the title and the text we create the model to the database.
@@ -27,13 +28,14 @@ exports.postThread = function(user,t_title,t_text) {
                             title: t_title,
                             description: t_text,
                         }).then( threadCreated => {
+                            thread_new_id = threadCreated.id;
                             Like.create({
                                 userId: threadCreated.userId,
                                 thread_id: threadCreated.id,
                                 vote: 1,
                             });
+                            resolve(thread_new_id);
                         });
-                        resolve(success);
                     }, function(err){
                         resolve(!success);
                     });

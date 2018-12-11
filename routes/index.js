@@ -33,7 +33,7 @@ async function asyncCallCommentLikeDislike(comment_id, username, vote, req, res)
 async function asyncCallToShowAllThreads(req,res,next) {
 
   var allThreads = await ctl_thread.getAllThreads()
-  console.log("ALLTHREADS: ",allThreads);
+  //console.log("ALLTHREADS: ",allThreads);
   showList= [];
   
   for(i in allThreads){
@@ -49,7 +49,7 @@ async function asyncCallToShowAllThreads(req,res,next) {
       "username":allThreads[i]['userName'],
       "karma": karma
     };
-    console.log("PROMISE: ",karma);
+    //console.log("PROMISE: ",karma);
     showList.push(threadList);
 
   }
