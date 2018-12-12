@@ -44,6 +44,6 @@ $(document).ready(function () {
     $('#autocomplete').typeahead(
         typeahead_config, datasets
     ).on("typeahead:select", function (e, datum) {
-        window.location.href = "/thread/" + datum._source.id + "/comments";
+        window.location.href = "/c/"+ datum._source.comunityName +"/" + datum._source.id + "/comments";
     });
 });
