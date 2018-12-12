@@ -73,7 +73,7 @@ exports.getAllThreads = function(logged_username, community){
             'group by thread_id ' +
         ') as karma on karma.thread_id=Threads.id ';
         if (community !== undefined) sql+='where comunities.comunityName = (?) ';
-        sql+='order by Threads.createdAt desc';
+        sql+='order by karma.total desc';
         sequelize.query(sql, { replacements: [logged_username, community], type: sequelize.QueryTypes.SELECT})
             .then(result => {
                 console.log(result);
