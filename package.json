@@ -5,30 +5,18 @@
   "scripts": {
     "start": "node ./bin/www",
     "test": "mocha --timeout 10000 --exit",
-    "_comment": "Note: --exit in the test element is to force the test program to exit after finishing in case we use done()",
-    "coverage": "nyc --reporter=lcov --reporter=text-lcov npm test"
-  },
-  "nyc": {
-    "_comment": "Purpose of this part: to do code coverage within Mocha/Chai using Istanbul",
-    "register": "babel-register",
-    "include": [
-      "**/*.js",
-      "./*.js"
-    ],
-    "exclude": [
-      "./node_modules/**",
-      "./test/**",
-      "./coverage/**"
-    ],
-    "all": true
+    "coverage": "nyc --reporter=text mocha"
   },
   "dependencies": {
     "bcrypt": "^3.0.2",
     "cookie-parser": "~1.4.3",
+    "datatables": "^1.10.18",
     "debug": "~2.6.9",
     "elasticsearch": "^15.2.0",
     "express": "~4.16.0",
+    "express-device": "^0.4.2",
     "express-fileupload": "^1.0.0",
+    "express-ip": "^1.0.3",
     "express-session": "^1.15.6",
     "get-json": "^1.0.1",
     "hat": "0.0.3",
@@ -43,6 +31,7 @@
     "pug": "2.0.0-beta11",
     "sequelize": "^4.39.0",
     "session-file-store": "^1.2.0",
+    "sitemap": "^2.1.0",
     "sqlite3": "^4.0.2",
     "typeahead.js": "git+https://github.com/twitter/typeahead.js.git"
   },

@@ -42,6 +42,9 @@ client.count({index: 'user', type: 'user'}, function(err,resp,status) {
   console.log('users', resp);
 });
 
+client.count({index: 'device', type: 'device'}, function(err,resp,status) {
+    console.log('device', resp);
+});
 /*
   Here we can visualize mappings related with each index.
 
