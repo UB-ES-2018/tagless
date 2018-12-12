@@ -37,9 +37,12 @@ exports.postThread = function(user,t_title,t_text, c_comunityName) {
                             userId: threadCreated.userId,
                             thread_id: threadCreated.id,
                             vote: 1,
-                        });
+                          }).then(like=>{
+                            resolve(like.thread_id);
+                          });
+                    }, function(err){
+                        reject(er);
                     });
-                    resolve(success);
                 },function(err){
                     resolve(!success);
                 });

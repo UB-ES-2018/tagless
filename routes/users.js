@@ -101,7 +101,7 @@ router.get('/:username/', function (req, res) {
     var username=req.params.username;
     ctl_user.getUserByUsername(username)
         .then(function(user){
-            console.log(user);
+            //console.log(user);
             if (!user) return res.status(404).send("User Not found");
             let show_user;
             if (user.privacity === 0) show_user = true;
@@ -183,8 +183,12 @@ router.post('/:username/settings', function (req, res, next) {
 
         if (Object.keys(req.files).length > 0) {
             let filepath = appDir + "/../public/images/users/" + username;
+
+            
             console.log(filepath);
             if (!fs.existsSync(filepath)) {
+
+
                 fs.mkdirSync(filepath, {recursive: true}, (err) => {
                     if (err) throw err;
                 });

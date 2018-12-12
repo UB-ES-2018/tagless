@@ -7,6 +7,9 @@ var ctl_like = require('../controllers/like_controller');
 var ctl_like_c = require('../controllers/Like_comment_controller');
 var ctl_user = require('../controllers/user_controller');
 
+var fileUpload = require("express-fileupload");
+var path = require('path');
+var fs = require('fs');
 router.get('/:community_name', function(req, res, next) {
     let  c_name = req.params.community_name;
     console.log(c_name);
@@ -19,6 +22,19 @@ router.get('/:community_name', function(req, res, next) {
             res.status(404).send("Community not found");
     });
 });
+
+router.use(fileUpload());
+
+
+function moveFile(file, somePlace) {
+    return new Promise((resolve, reject) => {
+        file.mv(somePlace, function (err) {
+            if (err) return reject(err);
+
+            resolve();
+        });
+    });
+}
 
 router.get('/:community_name/:thread_id/comments', function(req, res, next) {
     //process req
@@ -69,14 +85,41 @@ async function asyncCallPostThread(user, req,res) {
   //Hay que cambiarlo
   var result = await ctl_thread.postThread(user,req.body['title'],req.body['text'],c_name);
 
-  console.log("resultado del async",result.id);
-  if (result){
-    res.redirect('/c/'+c_name);
-  }
-  else{
-    res.send("El mensaje no es valido");
-  }
-  // expected output: 'resolved'
+    var appDir = path.dirname(require.main.filename);
+
+    if (result){
+
+        if (Object.keys(req.files).length > 0) {
+            let filepath = appDir + "/../public/images/thread/" + result;
+
+            console.log("Exists folder? ", fs.existsSync(filepath));
+                
+            if (!fs.existsSync(filepath)) {
+                console.log("No existe, lo creamos");
+            
+                fs.mkdirSync(filepath, {recursive: true}, (err) => {
+                    if (err) throw err;
+                });
+                console.log("Exists folder? ", fs.existsSync(filepath));
+            }
+            const fileMovePromise = 
+            req.files ? moveFile(req.files.image, filepath + '/picture.jpg') : Promise.resolve('No file present');
+
+            fileMovePromise.then(() => {
+              res.redirect('/c/'+c_name);
+            }).catch(err => {
+                console.log(err);
+                res.status(500).json(err);
+            });
+        }else{
+          res.redirect('/c/'+c_name);
+        }
+    }
+    else{
+        res.send("El mensaje no es valido");
+    }
+    // expected output: 'resolved'
+    
 }
 
 async function asyncCallPostLike(thread_id, req,res) {
