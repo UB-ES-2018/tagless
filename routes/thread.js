@@ -33,51 +33,29 @@ async function asyncCallPostThread(user, req,res) {
     console.log("resultado del async thread_id: ",result);
 
     if (result){
-        try {
 
-            if (Object.keys(req.files).length > 0) {
-                let filepath = appDir + "/../public/images/thread/" + result;
+        if (Object.keys(req.files).length > 0) {
+            let filepath = appDir + "/../public/images/thread/" + result;
 
-                console.log(filepath);
+            console.log("Exists folder? ", fs.existsSync(filepath));
+                
+            if (!fs.existsSync(filepath)) {
+                console.log("No existe, lo creamos");
+            
+                fs.mkdirSync(filepath, {recursive: true}, (err) => {
+                    if (err) throw err;
+                });
                 console.log("Exists folder? ", fs.existsSync(filepath));
-                
-                if (!fs.existsSync(filepath)) {
-
-                // **********************************************
-                // **********************************************
-                // problema aqui peta por unhandled promise.
-                // Peta en el existsSync o en el mkdirSync
-                // pero ninguno usa promises porque son sincronos
-                // **********************************************
-                // **********************************************
-                
-
-                    console.log(2);
-                    fs.mkdirSync(filepath, {recursive: true}, (err) => {
-                        if (err) throw err;
-                    });
-                    console.log(3);
-                }
-                console.log(4);
-                const fileMovePromise =
-                    req.files ? moveFile(req.files.image, filepath + '/picture.jpg') : Promise.resolve('No file present');
-                console.log(5);
-                fileMovePromise
-                    .then(() => {
-                        console.log(6);
-                        //TODO:
-                        
-                    })
-                    .catch(err => {
-                        console.log(err);
-                        res.status(500).json(err);
-                    });
             }
+            const fileMovePromise = 
+            req.files ? moveFile(req.files.image, filepath + '/picture.jpg') : Promise.resolve('No file present');
 
-        } catch (err){
-            res.status(500).send(err);
+            fileMovePromise.then(() => {   
+            }).catch(err => {
+                console.log(err);
+                res.status(500).json(err);
+            });
         }
-        return res.redirect("/");
     }
     else{
         res.send("El mensaje no es valido");
@@ -120,8 +98,14 @@ router.post('/submit', function(req, res, next) {
 
   ctl_user.getUserByUsername(userLogedName).then( user =>{
         if(user){
-            asyncCallPostThread(user,req,res);
 
+            try {
+                asyncCallPostThread(user,req,res);
+            } catch (err){
+                res.status(500).send(err);
+            }
+
+            return res.redirect("/");
         }
         else{
             res.send("Debes loguearte primero");

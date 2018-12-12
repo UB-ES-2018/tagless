@@ -31,7 +31,8 @@ block main
   p Posted on #{thread.createdAt}
   hr
   // Preview Image
-  //img.img-fluid.rounded(src='http://placehold.it/900x300' alt='')
+  img.image(src="/static/images/thread/"+thread.id+"/picture.jpg"
+          alt="" onerror="this.onerror=null;this.src='';")
   hr
   // Post Content
   | !{thread.description}

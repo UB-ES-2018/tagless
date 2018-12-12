@@ -151,7 +151,7 @@ router.post('/:username/settings', function (req, res, next) {
             let filepath = appDir + "/../public/images/users/" + username;
 
             
-
+            console.log(filepath);
             if (!fs.existsSync(filepath)) {
 
 
