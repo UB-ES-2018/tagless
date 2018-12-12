@@ -13,7 +13,7 @@ var client = require('./elasticsearchConnection');
  ***/
 
 
-const maps = ['Comments'];
+const maps = ['Comments', 'Threads'];
 
 module.exports.hasMapping = function(tableName) {
   return maps.indexOf(tableName) !== -1; // return true if table has mapping function, false if not
@@ -33,6 +33,27 @@ module.exports.getCommentsMapping = function() {
         },
         'userId': {
           'type': 'integer'
+        }
+      }
+    }
+  }
+};
+
+
+/*
+ Mapping configuration of thread
+ */
+module.exports.getThreadsMapping = function() {
+  return {
+    index: 'thread',
+    type: 'thread',
+    body: {
+      properties: {
+        'title': {
+            'type': 'text'
+        },
+        'description': {
+            'type': 'text'
         }
       }
     }

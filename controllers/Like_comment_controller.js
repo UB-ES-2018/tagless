@@ -18,8 +18,8 @@ exports.findallLikesfromComment = function(comment_id, req, res) {
             type: sequelize.QueryTypes.SELECT
         })
             .then(result => {
-                console.log(comment_id);
-                console.log(result);
+                //console.log(comment_id);
+                //console.log(result);
                 if (result) {
                     resolve(result[0]);
                 }
@@ -35,7 +35,7 @@ exports.addPositiveorNegativeLikesComments = function(comment_id, username, vote
         sequelize.query('INSERT INTO Like_comments (comment_id, userId, vote, createdAt, updatedAt) VALUES((?), (SELECT id FROM Users WHERE username=(?)), (?), (?), (?)) ON DUPLICATE KEY UPDATE vote=(?), updatedAt=(?)',{
             replacements: [comment_id, username, vote, new Date(), new Date(), vote, new Date()]
         }).spread((results, metadata) => {
-            console.log(metadata);
+            //console.log(metadata);
             resolve(results);
         });
     });

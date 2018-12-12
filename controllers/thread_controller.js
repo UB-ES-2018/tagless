@@ -37,9 +37,12 @@ exports.postThread = function(user,t_title,t_text, c_comunityName) {
                             userId: threadCreated.userId,
                             thread_id: threadCreated.id,
                             vote: 1,
-                        });
+                          }).then(like=>{
+                            resolve(like.thread_id);
+                          });
+                    }, function(err){
+                        reject(er);
                     });
-                    resolve(success);
                 },function(err){
                     resolve(!success);
                 });
@@ -73,7 +76,7 @@ exports.getAllThreads = function(logged_username, community){
             'group by thread_id ' +
         ') as karma on karma.thread_id=Threads.id ';
         if (community !== undefined) sql+='where comunities.comunityName = (?) ';
-        sql+='order by karma.total desc';
+        sql+='order by karma.total desc, Threads.createdAt desc';
         sequelize.query(sql, { replacements: [logged_username, community], type: sequelize.QueryTypes.SELECT})
             .then(result => {
                 console.log(result);

@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node ./bin/www",
     "test": "mocha --timeout 10000 --exit",
+    "test-with-coverage": "nyc --reporter=text mocha",
     "coverage": "nyc --reporter=text mocha"
   },
   "dependencies": {
@@ -26,13 +27,13 @@
     "mysql": "^2.16.0",
     "mysql2": "^1.6.1",
     "node-fetch": "^2.3.0",
-    "nyc": "^13.1.0",
     "open-iconic": "^1.1.1",
     "pug": "2.0.0-beta11",
     "sequelize": "^4.39.0",
     "session-file-store": "^1.2.0",
     "sitemap": "^2.1.0",
-    "sqlite3": "^4.0.2"
+    "sqlite3": "^4.0.2",
+    "typeahead.js": "git+https://github.com/twitter/typeahead.js.git"
   },
   "devDependencies": {
     "body-parser": "^1.18.3",
@@ -40,6 +41,7 @@
     "chai-http": "^4.2.0",
     "express": "^4.16.4",
     "mocha": "^5.2.0",
+    "nyc": "^13.1.0",
     "sequelize-cli": "^4.1.1"
   }
 }

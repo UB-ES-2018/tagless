@@ -14,6 +14,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var threadRouter = require('./routes/thread');
 var commentsRouter = require('./routes/comments');
+var searchRouter = require('./routes/search');
 var APIRouter = require('./API/API-file');
 var device = require('express-device');
 
@@ -76,10 +77,12 @@ app.use((req, res, next) => {
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/search', searchRouter);
 app.use('/c/', threadRouter);
 app.use('/static', express.static('public'));
 app.use('/static/open-iconic', express.static('node_modules/open-iconic'));
 app.use('/static/npm/datatables', express.static('node_modules/datatables'));
+app.use('/static/npm/typeahead', express.static('node_modules/typeahead.js'));
 app.use('/API', APIRouter);
 app.use(device.capture());
 
