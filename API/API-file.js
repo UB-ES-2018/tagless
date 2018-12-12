@@ -318,7 +318,7 @@ router.post('/signup', function (req, res, next) {
 router.post('/createThread', asyncCheckAPIKey, function (req, res, next) {
     ctl_user.getUserByAPIKey(req.headers['api-key'])
         .then(function(user) {
-            ctl_thread.postThread(user,req.body['title'],req.body['text'])
+            ctl_thread.postThread(user,req.body['title'],req.body['text'],req.body['comunity'])
                 .then(function(success){
                     if(success){
                         res.json({

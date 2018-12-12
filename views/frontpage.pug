@@ -1,0 +1,16 @@
+extends base/layout_complex
+block main
+  br
+  h2 FrontPage
+  include elements/community_submit
+  include elements/thread_preview
+  
+  each thread in threads
+    +thread(thread)
+
+  // Pagination
+  ul.pagination.justify-content-center.mb-4
+    li.page-item
+      a.page-link(href='#') &larr; Older
+    li.page-item.disabled
+      a.page-link(href='#') Newer &rarr;

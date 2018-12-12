@@ -1,0 +1,10 @@
+div.card.my-4
+  h5.card-header Make a community:
+  div.card-body
+    form(method='POST' action='/community/submit')
+      div.form-group
+        input#title.form-control(type='text', placeholder='Title' name='name')
+      div.form-group
+        textarea#text.form-control(placeholder='Post whatever you want' name='description')
+      div.form-group
+        button.btn.btn-primary(type='submit') Submit

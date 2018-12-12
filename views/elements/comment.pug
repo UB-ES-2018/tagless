@@ -20,6 +20,7 @@ mixin comment(comment)
                     small(id="comment-karma"+comment.id ) #{comment.karma.total}
                     small &nbsp;points
                 else
-                    small(id="comment-karma"+comment.id ) 0 points
+                    small(id="comment-karma"+comment.id ) 0
+                    small &nbsp;points
                 br
             | !{comment.body}

@@ -2,18 +2,7 @@
 .card.my-4
   h5.card-header Leave a Comment:
   .card-body
-    form(id='sub' method='POST' action='')
+    form(id='sub' method='POST' action='/c/' + community + '/' + thread.id + '/comments/submit')
       .form-group
         textarea.form-control(rows='3', name="text")
       button.btn.btn-primary(type='submit') Submit
-
-  script.
-    function actionURI() {
-      if (document) {
-        var form = document.getElementById('sub');
-        var URISplit = document.URL.toString().split('/');
-        console.log(URISplit);
-        form.setAttribute('action', '/thread/' + URISplit[4] + '/comment/submit');
-      }
-    }
-    actionURI();

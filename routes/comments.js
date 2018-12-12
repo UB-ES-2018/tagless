@@ -15,10 +15,10 @@ router.get('/:threadId/all', function(req,res,next){
   comment_ctl.getAllByThreadId(threadId)
       .then(function(comments){
         res.json(comments);
-      }, function(err){
+      }).catch( function(err){
         console.log(err);
         res.status(500).send(err);
-      })
+      });
 });
 
 router.post('/:threadId', function(req,res,next){

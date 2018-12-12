@@ -75,31 +75,13 @@ exports.userController_Login = function (u_name, u_pass, callback) {
     });
 };
 
-exports.getUser = function (u_name, callback) {
-
-    var sequelize = sequelizeConnection.sequelize;
-
-    sequelize.query('SELECT id FROM Users WHERE (Users.username = (?))',
-        {replacements: [u_name], type: sequelize.QueryTypes.SELECT})
-        .then(result => {
-
-            if (result[0]['id']){
-                callback(null,result[0]['id']);
-
-            }
-            else{
-                callback(null,null);
-            }
-        });
-};
-
 exports.updateProfile = function(userId, description, pictureLink, privacity){
 
     return new Promise(function(resolve,reject){
         var sequelize = sequelizeConnection.sequelize;
         var UserModel = userModel(sequelize, DataTypes);
 
-        UserModel.find({ where : { id: userId } })
+        UserModel.findOne({ where : { id: userId } })
             .then(function(user){
                 user.updateAttributes({
                     pictureLink: pictureLink,
