@@ -10,6 +10,7 @@ var ctl_user = require('../controllers/user_controller');
 var fileUpload = require("express-fileupload");
 var path = require('path');
 var fs = require('fs');
+
 router.get('/:community_name', function(req, res, next) {
     let  c_name = req.params.community_name;
     console.log(c_name);
@@ -19,7 +20,7 @@ router.get('/:community_name', function(req, res, next) {
             console.log("CNAME => " + c_name);
             res.render("page", {threads: threads, community:c_name});
         }).catch(function (err) {
-            res.status(404).send("Community not found");
+        res.status(404).send("Community not found");
     });
 });
 
@@ -82,44 +83,47 @@ router.post('/:community_name/:thread_id/comments/submit', function (req, res, n
 
 async function asyncCallPostThread(user, req,res) {
     let  c_name = req.params.community_name;
-  //Hay que cambiarlo
-  var result = await ctl_thread.postThread(user,req.body['title'],req.body['text'],c_name);
+    //Hay que cambiarlo
+    var result = await ctl_thread.postThread(user,req.body['title'],req.body['text'],c_name);
 
     var appDir = path.dirname(require.main.filename);
 
     if (result){
 
         if (Object.keys(req.files).length > 0) {
-            let filepath = appDir + "/../public/images/thread/" + result;
 
-            console.log("Exists folder? ", fs.existsSync(filepath));
-                
+            let filepath = appDir + "/../public/images/thread/";
             if (!fs.existsSync(filepath)) {
-                console.log("No existe, lo creamos");
-            
-                fs.mkdirSync(filepath, {recursive: true}, (err) => {
+                fs.mkdirSync(filepath, (err) => {
                     if (err) throw err;
                 });
-                console.log("Exists folder? ", fs.existsSync(filepath));
             }
-            const fileMovePromise = 
-            req.files ? moveFile(req.files.image, filepath + '/picture.jpg') : Promise.resolve('No file present');
+
+            filepath = appDir + "/../public/images/thread/" + result;
+            if (!fs.existsSync(filepath)) {
+                fs.mkdirSync(filepath, (err) => {
+                    if (err) throw err;
+                });
+            }
+
+            const fileMovePromise =
+                req.files ? moveFile(req.files.image, filepath + '/picture.jpg') : Promise.resolve('No file present');
 
             fileMovePromise.then(() => {
-              res.redirect('/c/'+c_name);
+                res.redirect('/c/'+c_name);
             }).catch(err => {
                 console.log(err);
                 res.status(500).json(err);
             });
         }else{
-          res.redirect('/c/'+c_name);
+            res.redirect('/c/'+c_name);
         }
     }
     else{
         res.send("El mensaje no es valido");
     }
     // expected output: 'resolved'
-    
+
 }
 
 async function asyncCallPostLike(thread_id, req,res) {
@@ -161,13 +165,13 @@ async function asyncGetThreadById(req, res, next){
 
     var comments = await comment_ctl.getAllByThreadId(threadId);
     for(i in comments){
-        
+
         var votos = await ctl_like_c.findallLikesfromComment(comments[i]['id'], req, res);
         if(!votos){
             votos=0;
         }
         comments[i].karma=votos;
-  }
+    }
     console.log(thread);
     res.render('thread', {thread, 'comments': comments, 'community':c_name});
 }
