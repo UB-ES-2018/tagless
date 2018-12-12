@@ -33,7 +33,7 @@ block main
       | Posted on #{thread.createdAt}
 
   // Preview Image
-  img.image(src="/static/images/thread/"+thread.id+"/picture.jpg"
+  img.img-fluid(src="/static/images/thread/"+thread.id+"/picture.jpg"
           alt="" onerror="this.onerror=null;this.src='';")
   hr
   // Post Content
