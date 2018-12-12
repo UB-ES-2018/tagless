@@ -60,6 +60,32 @@ client.indices.getMapping({
         console.log(error.message);
       }
       else {
-        console.log('Mappings:\n',response.comment.mappings.comment.properties);
+        console.log('Comments Mappings:\n',response.comment.mappings.comment.properties);
+      }
+});
+
+client.indices.getMapping({
+      index: 'user',
+      type: 'user',
+    },
+    function (error,response) {
+      if (error){
+        console.log(error.message);
+      }
+      else {
+        console.log('Users Mappings:\n',response.user.mappings.user.properties);
+      }
+});
+
+client.indices.getMapping({
+      index: 'thread',
+      type: 'thread',
+    },
+    function (error,response) {
+      if (error){
+        console.log(error.message);
+      }
+      else {
+        console.log('Threads Mappings:\n',response.thread.mappings.thread.properties);
       }
 });

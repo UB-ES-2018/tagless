@@ -32,7 +32,8 @@
     "sequelize": "^4.39.0",
     "session-file-store": "^1.2.0",
     "sitemap": "^2.1.0",
-    "sqlite3": "^4.0.2"
+    "sqlite3": "^4.0.2",
+    "typeahead.js": "git+https://github.com/twitter/typeahead.js.git"
   },
   "devDependencies": {
     "body-parser": "^1.18.3",
