@@ -1,4 +1,15 @@
 extends ../base/layout_user
+
+block append stylesheets
+	link(href='/static/npm/datatables/media/css/jquery.dataTables.css')
+	link(href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css")
+	link(href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css")
+block append script
+	script(src='/static/npm/datatables/media/js/jquery.dataTables.js')
+	script(src='/static/javascripts/datatable_device.js')
+	script(src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js")
+
+
 block main
 	div.card.my-4
 		h5.card-header Settings
@@ -21,3 +32,30 @@ block main
 						option(value=2 selected= 2===user.privacity) Private
 				hr
 				button.btn.btn-secondary(type='submit') Save changes
+	div.card.my-4
+		h5.card-header Login Attemps
+		div.card-body
+			table#devices.table.table-hover
+				if !devices
+					tbody
+						tr
+							td No login attemps
+				else
+					thead
+						tr
+							th Ip
+							th Device
+							th Login Success
+							th Date
+
+
+					tbody
+						each device in devices
+							tr
+								td #{device.ip}
+								td #{device.device}
+								if device.success
+									td True
+								else
+									td False
+								td #{device.date}

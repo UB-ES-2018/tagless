@@ -42,6 +42,9 @@ client.count({index: 'user', type: 'user'}, function(err,resp,status) {
   console.log('users', resp);
 });
 
+client.count({index: 'device', type: 'device'}, function(err,resp,status) {
+    console.log('device', resp);
+});
 /*
   Here we can visualize mappings related with each index.
 
@@ -57,6 +60,32 @@ client.indices.getMapping({
         console.log(error.message);
       }
       else {
-        console.log('Mappings:\n',response.comment.mappings.comment.properties);
+        console.log('Comments Mappings:\n',response.comment.mappings.comment.properties);
+      }
+});
+
+client.indices.getMapping({
+      index: 'user',
+      type: 'user',
+    },
+    function (error,response) {
+      if (error){
+        console.log(error.message);
+      }
+      else {
+        console.log('Users Mappings:\n',response.user.mappings.user.properties);
+      }
+});
+
+client.indices.getMapping({
+      index: 'thread',
+      type: 'thread',
+    },
+    function (error,response) {
+      if (error){
+        console.log(error.message);
+      }
+      else {
+        console.log('Threads Mappings:\n',response.thread.mappings.thread.properties);
       }
 });

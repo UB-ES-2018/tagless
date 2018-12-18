@@ -18,7 +18,6 @@ exports.userController_Signup = function (u_email, u_name, u_pass) {
         UserModel.findOne({ where : { username: u_name, email:u_email } })
             .then(function(user){
                 if(user) {
-                    console.log("El usuario ya esta en la lista");
                     resolve(!success);
                 }
                 else {
@@ -32,8 +31,11 @@ exports.userController_Signup = function (u_email, u_name, u_pass) {
                                 pass: hash,
                                 apiKey: apikey,
                                 privacity : 0,
+                            }).then(user => {
+                              console.log("User created and added to sitexml");
+                              sitemap.add({url: 'users/' + user.username});
+                              sitemap.clearCache();
                             });
-
                         });
                     });
 
@@ -55,7 +57,6 @@ exports.userController_Login = function (u_name, u_pass, callback) {
     var sql = 'SELECT pass FROM Users WHERE (Users.username = (?))';
     sequelize.query(sql, {replacements: [u_name], type: sequelize.QueryTypes.SELECT})
         .then(results => {
-            console.log(results);
             if (results.length == 0) throw new Error("User not foud");
             real_pass = results[0].pass;
             bcrypt.compare(u_pass, real_pass, function (err, res) {
@@ -72,31 +73,13 @@ exports.userController_Login = function (u_name, u_pass, callback) {
     });
 };
 
-exports.getUser = function (u_name, callback) {
-
-    var sequelize = sequelizeConnection.sequelize;
-
-    sequelize.query('SELECT id FROM Users WHERE (Users.username = (?))',
-        {replacements: [u_name], type: sequelize.QueryTypes.SELECT})
-        .then(result => {
-
-            if (result[0]['id']){
-                callback(null,result[0]['id']);
-
-            }
-            else{
-                callback(null,null);
-            }
-        });
-};
-
 exports.updateProfile = function(userId, description, pictureLink, privacity){
 
     return new Promise(function(resolve,reject){
         var sequelize = sequelizeConnection.sequelize;
         var UserModel = userModel(sequelize, DataTypes);
 
-        UserModel.find({ where : { id: userId } })
+        UserModel.findOne({ where : { id: userId } })
             .then(function(user){
                 user.updateAttributes({
                     pictureLink: pictureLink,

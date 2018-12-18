@@ -24,7 +24,7 @@ exports.findallLikesfromThread = function (thread_id, req, res) {
             })
             .then(result => {
                 if (result) {
-                    console.log(result);
+                    //console.log(result);
                     resolve(result[0]);
                 }
             }, function (err) {
@@ -48,7 +48,7 @@ exports.getMostLikedThreads = function () {
             {model: ThreadModel})
             .then(result => {
                 if (result) {
-                    console.log(result);
+                    //console.log(result);
                     resolve(result);
                 }
             }, function (err) {
@@ -63,7 +63,7 @@ exports.addPositiveorNegativeLikes = function (thread_id, username, vote) {
         sequelize.query('INSERT INTO Likes (thread_id, userId, vote, createdAt, updatedAt) VALUES((?), (SELECT id FROM Users WHERE username=(?)), (?), (?), (?)) ON DUPLICATE KEY UPDATE vote=(?), updatedAt=(?)', {
             replacements: [thread_id, username, vote, new Date(), new Date(), vote, new Date()]
         }).spread((results, metadata) => {
-            console.log(metadata);
+            //console.log(metadata);
             resolve(results);
         });
     });
