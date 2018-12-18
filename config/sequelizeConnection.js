@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
-const settings = require('config')
+const settings = require('./config.json');
+
 
 module.exports.sequelize = new Sequelize('tagless', settings.development.username, settings.development.password, {
     host: settings.development.host,
