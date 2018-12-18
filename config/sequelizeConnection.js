@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const settings = require('./config.json');
 
 
-module.exports.sequelize = new Sequelize('tagless', settings.development.username, settings.development.password, {
+module.exports.sequelize = new Sequelize(settings.development.database, settings.development.username, settings.development.password, {
     host: settings.development.host,
     dialect: 'mysql',
     operatorsAliases: false,
