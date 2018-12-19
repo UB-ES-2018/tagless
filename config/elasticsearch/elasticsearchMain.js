@@ -16,7 +16,7 @@ const fetch = require("node-fetch");
  a specific index.
  */
 var makebulk = async function(indexName, tableName, entityList, callback){
-  console.log("MAKEBULK OF " + tableName);
+  console.log("MAKEBULK OF " + tableName +" with indexName " + indexName);
 
   var bulk = [];
 
@@ -140,10 +140,12 @@ module.exports.mapElasticsearch =  function() {
         for (var i = 0; i < files.length; i++) {
           files[i] = path.parse(files[i]).name;
           indexNames.push(files[i]);
-          files[i] = files[i].capitalize();
           // Pluralize name to get Table Name
-          if (files[i].charAt((files[i].length - 1)) !== 's') {
+          if (files[i].charAt((files[i].length - 1)) !== 's' && files[i].charAt((files[i].length - 1)) !== 'y') {
             files[i] = files[i] + 's';
+          }
+          if (files[i].charAt((files[i].length - 1)) === 'y') {
+            files[i] = files[i].substring(0, files[i].length-1) + "es";
           }
         }
 
@@ -173,7 +175,11 @@ module.exports.addDocument = function(indexName, document) {
     type: indexName,
     body: document,
   }, function (err, resp, status) {
-    console.log(resp);
+    if (err) {
+      console.log("elasticsearch FAILED CREATE/UPDATE", err);
+    }else {
+      console.log("elasticsearch SUCCESS CREATE/UPDATE", resp);
+    }
   });
 };
 
@@ -183,7 +189,11 @@ module.exports.delDocument = function(indexName, id) {
     id: id,
     type: indexName
   }, function (err, resp, status) {
-    console.log(resp);
+    if (err) {
+      console.log("elasticsearch FAILED DELETE", err);
+    }else {
+      console.log("elasticsearch SUCESS DELETE", resp);
+    }
   });
 };
 

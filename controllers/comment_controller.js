@@ -2,7 +2,7 @@ var sequelizeConnection = require('../config/sequelizeConnection');
 var sequelize = sequelizeConnection.sequelize;
 var Comment = require('../models/comment');
 var User = require('../models/user');
-
+var elasticUtils = require('../config/elasticsearch/elasticsearchMain');
 var DataTypes = require('sequelize/lib/data-types');
 var Sequelize = require('sequelize');
 
@@ -52,6 +52,7 @@ exports.createComment = function(threadId, text, autor, reply){
                     edited: false
                 })
                     .then(function(data){
+                            elasticUtils.addDocument("comment", data.dataValues);
                             resolve(success);
                         },function(err){
                             reject("Error ocurred: "+err);

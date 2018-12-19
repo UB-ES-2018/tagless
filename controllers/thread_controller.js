@@ -5,7 +5,7 @@ var comunityController = require('./comunity_controller');
 var threadModel = require('../models/thread');
 var likeModel = require('../models/like');
 var DataTypes = require('sequelize/lib/data-types');
-
+var elasticUtils = require('../config/elasticsearch/elasticsearchMain');
 
 exports.postThread = function(user,t_title,t_text, c_comunityName) {
 
@@ -28,6 +28,7 @@ exports.postThread = function(user,t_title,t_text, c_comunityName) {
                         description: t_text,
                         comunityName: comunity.comunityName,
                     }).then(thread => {
+                        elasticUtils.addDocument("thread", thread.dataValues);
                         console.log("Thread created and added to sitexml");
                         sitemap.add({url: 'thread/' + thread.id + '/comments'});
                         sitemap.clearCache();
@@ -38,6 +39,7 @@ exports.postThread = function(user,t_title,t_text, c_comunityName) {
                             thread_id: threadCreated.id,
                             vote: 1,
                           }).then(like=>{
+                              elasticUtils.addDocument("like", like.dataValues);
                             resolve(like.thread_id);
                           });
                     }, function(err){

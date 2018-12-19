@@ -3,7 +3,7 @@ var sequelize = sequelizeConnection.sequelize;
 
 var DataTypes = require('sequelize/lib/data-types');
 var Sequelize  = require('sequelize');
-
+var elasticUtils = require('../config/elasticsearch/elasticsearchMain');
 var comunityModel = require('../models/comunity');
 var threadModel = require('../models/thread');
 
@@ -28,6 +28,7 @@ exports.postComunity = function(c_comunityName,c_description) {
                         comunityName: c_comunityName,
                         description: c_description,
                     }).then( comunity_result =>{
+                        elasticUtils.addDocument("comunity", comunity_result.dataValues);
                         sitemap.add({url: 'comunity/' + comunity_result.comunityName});
                         sitemap.clearCache();
                         resolve(comunity_result);

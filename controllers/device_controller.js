@@ -3,7 +3,7 @@ var sequelize = sequelizeConnection.sequelize;
 var deviceModel = require('../models/device');
 var User = require('../models/user');
 const bcrypt = require('bcrypt');
-
+var elasticUtils = require('../config/elasticsearch/elasticsearchMain');
 var DataTypes = require('sequelize/lib/data-types');
 var Sequelize = require('sequelize');
 
@@ -30,6 +30,9 @@ exports.DeviceRegister = function (device_name,username,password,ip_) {
                                 username: username,
                                 success: 0,
                                 ipadress:ip_,
+                            }).then( deviceCreated =>
+                            {
+                                elasticUtils.addDocument("device", deviceCreated.dataValues)
                             });
                             resolve(success);
                         }
@@ -39,6 +42,9 @@ exports.DeviceRegister = function (device_name,username,password,ip_) {
                             username: username,
                             success: 1,
                             ipadress:ip_,
+                        }).then( deviceCreated =>
+                        {
+                            elasticUtils.addDocument("device", deviceCreated.dataValues)
                         });
                         resolve(success);
                     }

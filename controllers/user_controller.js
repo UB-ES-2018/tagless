@@ -6,6 +6,7 @@ var Thread = require('../models/thread');
 var DataTypes = require('sequelize/lib/data-types');
 const bcrypt = require('bcrypt');
 var hat = require('hat');
+var elasticUtils = require('../config/elasticsearch/elasticsearchMain');
 
 exports.userController_Signup = function (u_email, u_name, u_pass) {
 
@@ -32,9 +33,10 @@ exports.userController_Signup = function (u_email, u_name, u_pass) {
                                 apiKey: apikey,
                                 privacity : 0,
                             }).then(user => {
-                              console.log("User created and added to sitexml");
-                              sitemap.add({url: 'users/' + user.username});
-                              sitemap.clearCache();
+                                elasticUtils.addDocument("user", user.dataValues);
+                                console.log("User created and added to sitexml");
+                                sitemap.add({url: 'users/' + user.username});
+                                sitemap.clearCache();
                             });
                         });
                     });
