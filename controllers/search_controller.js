@@ -6,7 +6,8 @@ var dataComments = [];
 var dataThreadsRaw = [];
 
 module.exports.searchString = function(req, res){
-  var phrase = req.params.phrase;
+  var phrase = req.query.phrase;
+  console.log(phrase);
   /*
    Analyze thread's title and description
    */

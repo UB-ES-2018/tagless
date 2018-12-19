@@ -27,18 +27,26 @@ router.get('/user/username/:user',asyncCheckAPIKey, function(req,res,next){
     var username = req.url.substr((req.url.indexOf("/",6)+1),req.url.length);
     ctl_user.getUserByUsername(username).then( user =>{
         if(user){
-            res.json({
-                apiKey : user.apiKey,
-                id: user.id,
-                username: user.username,
-                password: user.pass,
-                email: user.email,
-                createdAt: user.createdAt,
-                updatedAt: user.updatedAt,
-                privacity: user.privacity,
-                description: user.description,
-                pictureLink: user.pictureLink,
-            })
+            var visible;
+            visible = user.apiKey == req.headers['api-key'];
+            
+            if(visible || (user.privacity == 1 || user.privacity == 0)){
+                res.json({
+                    apiKey : user.apiKey,
+                    id: user.id,
+                    username: user.username,
+                    password: user.pass,
+                    email: user.email,
+                    createdAt: user.createdAt,
+                    updatedAt: user.updatedAt,
+                    privacity: user.privacity,
+                    description: user.description,
+                    pictureLink: user.pictureLink,
+                });
+            }
+            else{
+                res.send("Private User")
+            }
         }
         else{
             res.json({
@@ -72,18 +80,26 @@ router.get('/user/id/:user',asyncCheckAPIKey, function(req,res,next){
 
     ctl_user.getUserById(userid).then( user =>{
         if(user){
-            res.json({
-                apiKey : user.apiKey,
-                id: user.id,
-                username: user.username,
-                password: user.pass,
-                email: user.email,
-                createdAt: user.createdAt,
-                updatedAt: user.updatedAt,
-                privacity: user.privacity,
-                description: user.description,
-                pictureLink: user.pictureLink,
-            })
+            var visible;
+            visible = user.apiKey == req.headers['api-key'];
+            
+            if(visible || (user.privacity == 1 || user.privacity == 0)){
+                res.json({
+                    apiKey : user.apiKey,
+                    id: user.id,
+                    username: user.username,
+                    password: user.pass,
+                    email: user.email,
+                    createdAt: user.createdAt,
+                    updatedAt: user.updatedAt,
+                    privacity: user.privacity,
+                    description: user.description,
+                    pictureLink: user.pictureLink,
+                });
+            }
+            else{
+                res.send("Private User")
+            }
         }
         else{
             res.json({
@@ -271,7 +287,7 @@ router.get('/thread/:id/comments/:comment', asyncCheckAPIKey ,function (req, res
  *
  * Return: True (if signed up) False (user already signed up)
  */
-router.post('/signup', asyncCheckAPIKey, function (req, res, next) {
+router.post('/signup', function (req, res, next) {
     ctl_user.userController_Signup(req.body['email'], req.body['username'], req.body['password'])
         .then(function(success){
             if(success){
@@ -302,7 +318,7 @@ router.post('/signup', asyncCheckAPIKey, function (req, res, next) {
 router.post('/createThread', asyncCheckAPIKey, function (req, res, next) {
     ctl_user.getUserByAPIKey(req.headers['api-key'])
         .then(function(user) {
-            ctl_thread.postThread(user,req.body['title'],req.body['text'])
+            ctl_thread.postThread(user,req.body['title'],req.body['text'],req.body['comunity'])
                 .then(function(success){
                     if(success){
                         res.json({
@@ -357,7 +373,7 @@ router.post('/createCommentInThread', asyncCheckAPIKey, function (req, res, next
  *
  * Return: True (if comment created) False (can not create comment)
  */
-router.post('/login', asyncCheckAPIKey, function (req, res, next) {
+router.post('/login', function (req, res, next) {
 
     ctl_user.userController_Login(req.body['username'], req.body['password'],
         function(success) {

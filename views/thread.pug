@@ -2,6 +2,10 @@ extends base/layout_complex
 
 
 block main
+  br
+  h2
+    a(href="/c/"+community) #{community}
+  br
   .card.mb-4
     .card-body
       .container-fluid
@@ -23,19 +27,17 @@ block main
               span.vote.thread.downvote.oi.oi-arrow-bottom(title="downvote" data-thread-id=thread.id role="button" aria-hidden="true")
           .div
             a(href="/users/" + thread.userName)
-              small Posted by users/#{thread.userName}
+              small Posted by #{thread.userName}
             h4.card-text #{thread.title}
+    .card-footer
+      | Posted on #{thread.createdAt}
 
-  hr
-  // Date/Time
-  p Posted on #{thread.createdAt}
-  hr
   // Preview Image
-  //img.img-fluid.rounded(src='http://placehold.it/900x300' alt='')
+  img.img-fluid(src="/static/images/thread/"+thread.id+"/picture.jpg"
+          alt="" onerror="this.onerror=null;this.src='';")
   hr
   // Post Content
   | !{thread.description}
-  hr
   include elements/comment_submit
 
   include elements/comment

@@ -1,7 +1,9 @@
 const Sequelize = require('sequelize');
+const settings = require('./config.json');
 
-module.exports.sequelize = new Sequelize('tagless', 'root', '1234', {
-    host: 'localhost',
+
+module.exports.sequelize = new Sequelize(settings.development.database, settings.development.username, settings.development.password, {
+    host: settings.development.host,
     dialect: 'mysql',
     operatorsAliases: false,
 

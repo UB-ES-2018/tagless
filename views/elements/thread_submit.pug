@@ -1,10 +1,14 @@
 div.card.my-4
   h5.card-header Make a thread:
   div.card-body
-    form(method='POST' action='/thread/submit')
+    form(method='POST' action='/c/'+ community +'/thread/submit' encType="multipart/form-data")
       div.form-group
         input#title.form-control(type='text', placeholder='Title' name='title')
       div.form-group
         textarea#text.form-control(type='text',  placeholder='Post whatever you want' name='text')
+      div.form-group
+        .custom-file
+          input#input_file.custom-file-input(type='file', name="image" accept=".png, .jpg, .jpeg")
+          label.custom-file-label(for='input_file') Choose file
       div.form-group
         button.btn.btn-primary(type='submit') Submit
