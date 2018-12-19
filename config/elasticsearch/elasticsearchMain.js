@@ -173,7 +173,11 @@ module.exports.addDocument = function(indexName, document) {
     type: indexName,
     body: document,
   }, function (err, resp, status) {
-    console.log(resp);
+      if(err) {
+        console.log("elasticsearch FAILED CREATION/UPDATE", err);
+      }else {
+        console.log("elasticsearch SUCCESS CREATION/UPDATE", resp);
+      }
   });
 };
 
@@ -183,7 +187,12 @@ module.exports.delDocument = function(indexName, id) {
     id: id,
     type: indexName
   }, function (err, resp, status) {
-    console.log(resp);
+    if (err) {
+      console.log("elasticsearch FAILED DELETE", err);
+    }else {
+      console.log("elasticsearch SUCCESS DELETE", resp);
+    }
+
   });
 };
 

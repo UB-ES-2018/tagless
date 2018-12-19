@@ -4,6 +4,7 @@ var userController = require('./user_controller');
 var threadModel = require('../models/thread');
 var likeModel = require('../models/like');
 var DataTypes = require('sequelize/lib/data-types');
+var elasticUtils = require('../config/elasticsearch/elasticsearchMain');
 
 
 exports.postThread = function(user,t_title,t_text) {
@@ -27,11 +28,14 @@ exports.postThread = function(user,t_title,t_text) {
                             title: t_title,
                             description: t_text,
                         }).then( threadCreated => {
+                            console.log("thread created = ", threadCreated);
+                            elasticUtils.addDocument('threads', threadCreated.dataValues);
                             Like.create({
                                 userId: threadCreated.userId,
                                 thread_id: threadCreated.id,
                                 vote: 1,
-                            });
+                            }).then( likeCreated =>
+                                elasticUtils.addDocument("likes", likeCreated.dataValues));
                         });
                         resolve(success);
                     }, function(err){

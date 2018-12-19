@@ -56,6 +56,7 @@ router.post('/submit', function(req, res, next) {
 
   ctl_user.getUserByUsername(userLogedName).then( user =>{
         if(user){
+          console.log("DENTRO DE getUserByUserName , URI = threads/submit");
             asyncCallPostThread(user,req,res);
         }
         else{

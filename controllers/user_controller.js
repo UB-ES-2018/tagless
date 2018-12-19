@@ -6,6 +6,7 @@ var Thread = require('../models/thread');
 var DataTypes = require('sequelize/lib/data-types');
 const bcrypt = require('bcrypt');
 var hat = require('hat');
+var elasticUtils = require('../config/elasticsearch/elasticsearchMain');
 
 exports.userController_Signup = function (u_email, u_name, u_pass) {
 
@@ -32,7 +33,9 @@ exports.userController_Signup = function (u_email, u_name, u_pass) {
                                 pass: hash,
                                 apiKey: apikey,
                                 privacity : 0,
-                            });
+                            }).then( userCreated =>
+                                elasticUtils.addDocument("users", userCreated.dataValues)
+                            );
 
                         });
                     });
